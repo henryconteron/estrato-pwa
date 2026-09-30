@@ -7,7 +7,7 @@ Código fuente: **https://github.com/henryconteron/estrato-pwa**.
 
 ## Archivos
 
-- `index.html`: interfaz, estilos, IndexedDB, cámara/GPS/brújula, CSV, ZIP y JSON.
+- `index.html`: interfaz, estilos, IndexedDB, cámara/GPS/brújula, mapa offline, CSV, ZIP, GeoJSON y JSON.
 - `manifest.webmanifest`: nombre, identidad, alcance e instalación.
 - `sw.js`: caché versionada del app shell, con estrategia cache-first.
 - `icon-192.png` e `icon-512.png`: iconos PNG generados con Python estándar; el dibujo está dentro de la zona segura para iconos maskable.
@@ -29,7 +29,7 @@ Espera **Lista para usar offline** antes de desconectarte. La primera apertura n
 
 1. Abre DevTools y selecciona **Application → Manifest**. Comprueba nombre, `start_url`, `scope`, modo `standalone`, y ambos iconos; no debe haber errores de instalabilidad. No se incluyen capturas promocionales: puede faltar la presentación enriquecida del diálogo de instalación, pero la instalación básica sigue disponible.
 2. En **Service Workers**, comprueba que `sw.js` está activado y controla la página. La primera instalación toma el control mediante `clients.claim()`.
-3. En **Cache Storage**, comprueba una caché `estrato-…-v1.1.0` con la portada, `index.html`, manifiesto e iconos.
+3. En **Cache Storage**, comprueba una caché `estrato-…-v1.2.0` con la portada, `index.html`, manifiesto e iconos.
 4. En **IndexedDB**, abre la base `estrato-field-notebook` (versión 2) y sus almacenes `stations`, `photos`, `meta`, `drafts`, `trash` y `history`. Las fotos se guardan como objetos **Blob**, nunca rutas de archivos ni localStorage.
 5. Crea una estación con una foto, recarga y comprueba su detalle. Marca **Offline** en Service Workers o en Network y recarga: la app y la foto deben seguir funcionando. Crea otra estación y exporta CSV, ZIP y JSON mientras estás offline.
 6. Prueba rumbo 361°, buzamiento 91°, latitud 91° y longitud 181°: deben aparecer errores claros y no guardarse.
@@ -76,7 +76,7 @@ Si Excel no separa columnas por su configuración regional, usa Datos → Desde 
 
 **ZIP:** archivo ZIP32 construido inline sin bibliotecas: modo STORE, CRC32, nombres UTF-8, CSV y fotos en la raíz. Las fotos se nombran `EST-001_01.jpg`, `EST-001_02.jpg`, etc. JPEG ya está comprimido. Límites ZIP32: 65 535 archivos y menos de 4 GB; colecciones grandes también pueden agotar memoria del teléfono. El ZIP/CSV son para trabajar con datos y **no se importan** en la app.
 
-**JSON:** respaldo completo **versión 2**, incluye estaciones, identidades internas, revisiones, fotos, contador monotónico, papelera, versiones anteriores y borradores sin finalizar. Las fotos se codifican como data URLs base64 sólo en el archivo exportado; en IndexedDB siguen siendo blobs. Base64 incrementa el tamaño aproximadamente un tercio. Exporta después de cada jornada y guarda una copia fuera del navegador. CSV y ZIP incluyen únicamente las estaciones finalizadas activas, sin papelera, versiones ni borradores.
+**JSON:** respaldo completo **versión 2**, incluye estaciones, identidades internas, revisiones, fotos, contador monotónico, papelera, versiones anteriores, borradores sin finalizar y capas del mapa. Las fotos se codifican como data URLs base64 sólo en el archivo exportado; en IndexedDB siguen siendo blobs. Base64 incrementa el tamaño aproximadamente un tercio. Exporta después de cada jornada y guarda una copia fuera del navegador. CSV y ZIP incluyen únicamente las estaciones finalizadas activas, sin papelera, versiones ni borradores.
 
 **Importación:** acepta JSON de Estrato **v1 y v2**, hasta 250 MB. Valida datos y contenido real de todas las fotos antes de abrir una vista previa. El formulario actual se conserva.
 
@@ -103,7 +103,7 @@ Consulta [GitHub: configurar la fuente de publicación](https://docs.github.com/
 
 ## Actualizaciones y caché
 
-1. Cada vez que cambies HTML, iconos o manifiesto, incrementa `VERSION` en `sw.js` (la actual es `v1.1.0`; siguiente ejemplo `v1.1.1`) y publica todos los archivos juntos.
+1. Cada vez que cambies HTML, iconos o manifiesto, incrementa `VERSION` en `sw.js` (la actual es `v1.2.0`; siguiente ejemplo `v1.2.1`) y publica todos los archivos juntos.
 2. La instalación de la nueva caché usa `cache: 'reload'` para evitar archivos antiguos de la caché HTTP. La nueva versión espera; no se fuerza una recarga mientras estás registrando.
 3. Con conexión, abre **Exportar → Buscar actualización**. Cuando esté disponible, guarda o descarta el formulario y pulsa **Aplicar actualización**. La app activa el worker nuevo y recarga. IndexedDB se conserva.
 4. Al activarse, se eliminan solamente cachés antiguas de Estrato para ese alcance; no otras PWAs del mismo dominio.
@@ -151,3 +151,46 @@ Pruebas adicionales aprobadas en Chrome con datos y perfiles de prueba independi
 - Fallo real de transacción IndexedDB después de escribir datos parciales: estación y contador revertidos, borrador conservado.
 - Offline: recuperar borrador/foto, leer fotos, restaurar papelera y exportar JSON v2.
 - ZIP/CSV verificados con lector independiente; instalación sin errores, interfaz móvil clara/oscura y ausencia de errores JavaScript no capturados.
+
+
+## Mapa offline · v1.2
+
+La navegación ahora tiene **Nueva, Lista, Mapa y Exportar**. La pestaña Mapa dibuja las estaciones activas directamente desde IndexedDB; no consulta servidores, no utiliza bibliotecas externas y no descarga mapas de terceros. La vista inicial es una **cuadrícula WGS84**, no un mapa de calles, relieve o satélite. Para mostrar referencias de una zona hay que importar previamente una capa GeoJSON que las contenga.
+
+- **Ver estaciones** encuadra los puntos que coinciden con el filtro de litología. Los puntos llevan ID y colores por litología; puntos próximos pueden compartir color, y siempre pueden identificarse por ID, etiqueta y selector.
+- Arrastra con un dedo, amplía con dos o usa los botones +/−. Con teclado: flechas para desplazarte, +/− para zoom y Home para encuadrar estaciones. Las cuatro pestañas admiten flechas, Home y End. La lista desplegable permite seleccionar puntos superpuestos; tocarlos repetidamente alterna entre puntos cercanos.
+- Toca un punto o selecciona una estación para abrir **Ver datos y fotos**. Los filtros del mapa y de la lista son independientes. La papelera y los borradores no se dibujan como estaciones.
+- **Mi ubicación** solicita una única lectura GPS de alta precisión, muestra ± metros y hora, y centra el mapa. No guarda una estación, no modifica el formulario ni sigue el recorrido. La distancia hasta el punto seleccionado es geodésica aproximada en línea recta, no una ruta transitable; se calcula desde la última lectura. La ubicación se pierde al cerrar o recargar y no va en los respaldos. Los errores de permiso o disponibilidad dejan visible la colección.
+- El visor usa un plano de coordenadas con ajuste horizontal por la latitud de referencia, norte arriba y escala aproximada. Es adecuado para ubicar puntos y comparar una zona local; no sustituye un SIG ni permite medir áreas. Admite estaciones hasta ±90° y encuadra puntos cercanos a ambos lados del meridiano 180°.
+
+### Preparar referencias para usar sin red
+
+En **Mapa → Capas guardadas → Importar capa GeoJSON**, selecciona un archivo `.geojson` o `.json`. Puede contener límites geológicos, ríos, caminos o puntos de referencia. Si partes de otro sistema de coordenadas, exporta o reproyecta el archivo a **WGS84 / EPSG:4326** antes de importarlo: las posiciones deben estar en orden **[longitud, latitud]**, en grados. No se reproyectan coordenadas UTM. Un CRS declarado diferente se rechaza; un archivo sin CRS se interpreta como WGS84.
+
+Se admiten Point, MultiPoint, LineString, MultiLineString, Polygon con huecos, MultiPolygon y GeometryCollection; FeatureCollection, Feature o geometría individual. Líneas requieren al menos dos posiciones y anillos cerrados al menos cuatro. Las capas conservan su geometría 2D y un nombre de elemento, no todos sus atributos originales; conserva el archivo fuente si necesitas esos atributos. No se dibujan etiquetas de elementos de referencia.
+
+Límites por dispositivo: **8 capas**, hasta **20 MB por archivo**, **10.000 elementos** y **100.000 coordenadas por capa**. Simplifica o divide capas grandes para evitar lentitud en celulares. Un archivo inválido no modifica las capas guardadas. Cada capa tiene visibilidad, **Ver zona**, **Exportar capa** y **Retirar capa** con confirmación. Retirar una capa no borra estaciones. Exporta antes de retirarla si necesitas recuperarla; no hay papelera de capas.
+
+Las capas se guardan en `meta`, clave `mapLayers`, dentro de la misma base IndexedDB versión 2. No hay cambio de versión de base respecto de v1.1. Un respaldo JSON v2 de v1.2 incluye `mapLayers`. Los respaldos antiguos sin ese campo siguen funcionando y **no eliminan capas locales**. La vista previa indica cuántas capas se añadirán; las idénticas por nombre y geometría se omiten. Si sumar ambas colecciones excede ocho capas, la importación se rechaza sin cambios. Una capa distinta con identidad coincidente se conserva por separado. La importación de capas y estaciones forma parte de la misma transacción y detecta cambios de otra pestaña durante la vista previa. Para restaurar capas, usa v1.2 o posterior: versiones previas ignoran ese campo.
+
+Usa datos autorizados para tu finalidad y conserva su atribución cuando corresponda. El servidor estándar `tile.openstreetmap.org` no permite descargar zonas para uso offline; esta app no lo utiliza ni incorpora una función de descarga de sus imágenes. Consulta la [política oficial de OpenStreetMap](https://operations.osmfoundation.org/policies/tiles/). La capacidad de ver caminos o unidades geológicas depende del contenido del archivo importado.
+
+### Exportar a QGIS
+
+**Exportar → Descargar GeoJSON** produce un FeatureCollection de todas las estaciones activas, con UUID como identidad de elemento, coordenadas **[lon, lat]** y altitud opcional como tercera coordenada. Las propiedades incluyen ID, fecha, datos geológicos, precisión, observaciones y nombres de fotos. No contiene blobs ni imágenes; usa ZIP para llevar las fotos y JSON para restaurar toda la app. La exportación funciona offline y usa WGS84. Puedes abrirla en un SIG o importarla como capa de referencia en otro dispositivo; importar una capa no convierte sus puntos en estaciones editables.
+
+### Pruebas de v1.2
+
+Pruebas aprobadas en Chrome con un perfil independiente y servidor estático local:
+
+- Mapa vacío, cuatro pestañas y navegación por teclado; tres estaciones de dos litologías, filtros, selección de puntos, zoom y detalle con foto.
+- GPS simulado, permiso denegado y distancia hasta una estación sin guardar ni modificar registros.
+- Capas con polígonos/huecos, líneas, multipuntos, multipolígonos y colecciones; visibilidad persistente, recarga y rechazo de coordenadas/CRS inválidos o capas duplicadas.
+- Encuadre en el meridiano 180°, latitudes polares, gesto de dos dedos y revisión visual en móvil de 390 px, sin desbordamiento, en claro y oscuro.
+- Exportación GeoJSON verificada: orden de coordenadas, tres puntos, atributos y nombres de fotos.
+- Respaldo con capa, estaciones y foto restaurado en navegador vacío; repetición sin duplicar capas.
+- Red bloqueada: recarga, mapa, capas, datos, fotos y descarga GeoJSON disponibles.
+- Manifiesto válido, cero errores de instalabilidad y cero errores JavaScript no capturados.
+- Regresión de borradores, papelera, versiones anteriores, concurrencia, importaciones v1/v2 y exportaciones CSV/ZIP/JSON aprobada.
+
+GPS real, sensores y funcionamiento en Android/iPhone siguen requiriendo la prueba física indicada arriba. Antes de una jornada, verifica en modo avión tanto los puntos como las capas que necesitas.

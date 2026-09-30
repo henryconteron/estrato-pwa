@@ -1,5 +1,5 @@
 /* Increment VERSION on every release that changes any shell file. */
-const VERSION = 'v1.1.0';
+const VERSION = 'v1.2.0';
 // Scope-specific prefix: another PWA on the same origin keeps its own caches.
 const PREFIX = 'estrato-' + encodeURIComponent(self.registration.scope) + '-';
 const CACHE = PREFIX + VERSION;
