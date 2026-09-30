@@ -29,7 +29,7 @@ Espera **Lista para usar offline** antes de desconectarte. La primera apertura n
 
 1. Abre DevTools y selecciona **Application → Manifest**. Comprueba nombre, `start_url`, `scope`, modo `standalone`, y ambos iconos; no debe haber errores de instalabilidad. No se incluyen capturas promocionales: puede faltar la presentación enriquecida del diálogo de instalación, pero la instalación básica sigue disponible.
 2. En **Service Workers**, comprueba que `sw.js` está activado y controla la página. La primera instalación toma el control mediante `clients.claim()`.
-3. En **Cache Storage**, comprueba una caché `estrato-…-v1.6.0` con la portada, `index.html`, manifiesto e iconos.
+3. En **Cache Storage**, comprueba una caché `estrato-…-v1.7.0` con la portada, `index.html`, manifiesto e iconos.
 4. En **IndexedDB**, abre la base `estrato-field-notebook` (versión 2) y sus almacenes `stations`, `photos`, `meta`, `drafts`, `trash` y `history`. Las fotos se guardan como objetos **Blob**, nunca rutas de archivos ni localStorage.
 5. Crea una estación con una foto, recarga y comprueba su detalle. Marca **Offline** en Service Workers o en Network y recarga: la app y la foto deben seguir funcionando. Crea otra estación y exporta CSV, ZIP y JSON mientras estás offline.
 6. Prueba rumbo 361°, buzamiento 91°, latitud 91° y longitud 181°: deben aparecer errores claros y no guardarse.
@@ -275,3 +275,21 @@ El caché es **v1.6.0**; la base sigue en IndexedDB **versión 2**. Actualiza co
 ### Verificación
 
 Chrome con servidor estático local y perfiles aislados: demo aditiva/idempotente con estación y borrador previos intactos, medición por toque/teclado, recarga con red bloqueada y fondo/opacidad recuperados, informe autónomo con 3 fichas/2 bolsas/5 fotos y campaña filtrada, imágenes cargadas offline, diseño de impresión y textos escapados. Respaldo v4 restaurado en perfil vacío y reimportado sin duplicados; rechazo de mapas corruptos, bordes inválidos, dimensiones incorrectas y referencias inexistentes. Importación de una imagen de 3000 px reducida a 2560 y retiro sin borrar estaciones. Diseño claro/oscuro a 320/390/768 px sin desbordamiento, instalabilidad sin errores y cero errores JavaScript. Actualización real v1.5 → v1.6 conserva campaña, identidad, fechas, muestra y ambas fotos. Se repitieron las pruebas de guías, calidad, borradores, papelera, historial e importación concurrente. Sensores físicos de Android/iPhone e impresión desde cada sistema siguen requiriendo prueba en esos dispositivos.
+
+## Análisis estructural · v1.7
+
+En **Mapa → Análisis estructural · Rosa de rumbos** compara los rumbos guardados. La selección toma los filtros de campaña y litología de Mapa, incluyendo puntos fuera de la vista. Elige estratificación, falla, diaclasa, foliación, todas las estructuras de plano o explícitamente Otra (solo si representa el rumbo de un plano). No se analiza la papelera, historial ni borradores.
+
+La rosa es **axial**: se agrupa el rumbo módulo 180° y se refleja el mismo sector al lado opuesto. 0°, 180° y 360° equivalen; cada estación cuenta una sola vez en el total. Puedes usar intervalos de 10°, 15° o 30°, que incluyen el borde inicial y excluyen el final. Un 10° exacto entra en 10–20° con intervalos de 10°. Un valor vacío o inválido se excluye y no se sustituye por 0°. No se inventa un buzamiento ni se requiere para contar un rumbo válido ya registrado.
+
+El área de los sectores es proporcional al recuento: radio = radio máximo × raíz cuadrada(recuento / máximo). El anillo exterior representa el máximo de medidas en un intervalo; los anillos interiores representan 25%, 50% y 75% de esa frecuencia por área. La tabla accesible conserva recuentos, porcentajes y los IDs ordenados. El total de la tabla es n, aunque visualmente haya sectores opuestos. El resumen muestra rumbos válidos, faltantes, estaciones excluidas por tipo e intervalos con mayor frecuencia (incluyendo empates). Con menos de cinco medidas se indica que la muestra es pequeña. El pico depende del ancho de los intervalos; esta herramienta describe registros y no infiere esfuerzo, sentido de deslizamiento ni tendencias regionales.
+
+**Descargar rosa PNG** genera una imagen de 1200 × 1240 px, en colores claros para imprimir, con tipo, n, intervalo y referencia de selección. **Descargar recuentos CSV** conserva UTF-8 con BOM, selección, tipo, intervalos, rangos opuestos, recuentos, porcentajes e IDs; su suma de recuentos es n. El análisis y las descargas funcionan sin conexión y no modifican los registros.
+
+El informe de campaña incluye rosas separadas por estratificación, falla, diaclasa y foliación que tengan estaciones registradas. Usa intervalos fijos de 10° y todas las estaciones de la selección de Exportar, sin depender de filtros temporales del mapa. Otra no entra en el informe estructural. Si no hay rumbos válidos, se indica explícitamente; no se genera una orientación ficticia.
+
+Concepto de rumbo de un plano: [USGS, Strike](https://www.usgs.gov/media/images/strikegif). La representación axial y los intervalos descritos arriba son las decisiones de implementación de Estrato; no representan un estándar de interpretación o certificación.
+
+La base sigue en IndexedDB **v2**, los respaldos completos en JSON **v4**, y el caché pasa a **v1.7.0**. Actualiza con conexión desde Exportar → Buscar actualización → Aplicar actualización. Los registros e imágenes existentes se conservan. No se añaden datos de demostración automáticamente.
+
+Verificación en Chrome local con perfiles aislados: límites 0/180/360 y bordes de intervalos, valores faltantes, grupos 10/15/30°, filtros campaña/litología/tipo, Otra solo explícita, empates y muestra pequeña. Recuentos e IDs trazables, CSV con BOM, PNG 1200 × 1240 px, actualización tras borrar/restaurar, informe con rosas del snapshot de campaña, recarga y descarga offline con red bloqueada. Diseño claro/oscuro a 320/390/768 px, tabla accesible, instalabilidad sin errores y cero errores JavaScript. Los datos sintéticos se usan solo en perfiles de prueba separados, sin agregarlos al navegador del usuario.
