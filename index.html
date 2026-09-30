@@ -25,10 +25,11 @@ dialog{border:2px solid var(--ink);border-top:5px solid var(--accent);border-rad
 @media(min-width:650px){main{padding-top:35px}.card{padding:28px}h1{font-size:43px}.brand-name{font-size:42px}.strata-art{height:30px}}
 @media(max-width:360px){main{padding-right:16px;padding-left:16px}h1{font-size:33px}.brand-name{font-size:34px}.brand-sub{letter-spacing:1px}.brand-mark{width:39px;height:39px}.version{padding:5px 7px}nav button{font-size:10px}#field-map{height:340px}.card{padding:19px}}
 .sample-card{min-width:0;margin:20px 0;padding:16px;border:1px solid var(--ink);border-left:4px solid var(--ochre);background:var(--field)}.sample-card legend{font:700 14px var(--mono);padding:0 8px}.sample-card img{display:block;width:100%;margin:12px 0}.sample-card p{white-space:pre-wrap;overflow-wrap:anywhere}#campaign-error{color:var(--error)}
+.quality-box{border:1px solid var(--ink);border-left:5px solid var(--ochre);background:var(--soft);padding:16px;margin:18px 0;overflow-wrap:anywhere}.quality-box h3{font:700 14px var(--mono);margin:0 0 12px}.quality-box ul,#template-guide ul{padding-left:22px}.quality-box li,#template-guide li{margin:10px 0}.quality-tag{border-color:var(--ink);white-space:normal}#quality-summary{padding:12px 0;font:12px/1.7 var(--mono)}
 </style>
 </head>
 <body>
-<header><div class="inner brand"><svg class="brand-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M7 10h34M7 19h30M7 28h24M7 37h20M7 10v27" stroke="currentColor" stroke-width="3.5"/><path class="fault" d="m33 6-14 36" stroke-width="3"/><path d="m31 21 9 4m-12 5 9 4" stroke="currentColor" stroke-width="3.5"/></svg><div><div class="brand-name">estrato</div><div class="brand-sub">Geología de campo</div></div><span class="version">v1.4</span></div><svg class="strata-art" viewBox="0 0 620 40" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d="M-10 11c55-20 91 25 145 7s75-22 120-7 73 21 118 3 87-15 131-2 72 9 126-6M-10 24c55-20 91 25 145 7s75-22 120-7 73 21 118 3 87-15 131-2 72 9 126-6M-10 37c55-20 91 25 145 7s75-22 120-7 73 21 118 3 87-15 131-2 72 9 126-6" stroke="currentColor" stroke-width="1.2"/><path d="m436-8-30 57" stroke="currentColor" stroke-width="2.5"/></svg></header>
+<header><div class="inner brand"><svg class="brand-mark" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M7 10h34M7 19h30M7 28h24M7 37h20M7 10v27" stroke="currentColor" stroke-width="3.5"/><path class="fault" d="m33 6-14 36" stroke-width="3"/><path d="m31 21 9 4m-12 5 9 4" stroke="currentColor" stroke-width="3.5"/></svg><div><div class="brand-name">estrato</div><div class="brand-sub">Geología de campo</div></div><span class="version">v1.5</span></div><svg class="strata-art" viewBox="0 0 620 40" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d="M-10 11c55-20 91 25 145 7s75-22 120-7 73 21 118 3 87-15 131-2 72 9 126-6M-10 24c55-20 91 25 145 7s75-22 120-7 73 21 118 3 87-15 131-2 72 9 126-6M-10 37c55-20 91 25 145 7s75-22 120-7 73 21 118 3 87-15 131-2 72 9 126-6" stroke="currentColor" stroke-width="1.2"/><path d="m436-8-30 57" stroke="currentColor" stroke-width="2.5"/></svg></header>
 <div class="status"><div class="status-inner"><span id="network">Comprobando conexión</span><span id="storage">Abriendo almacenamiento…</span><span id="offline-ready">Preparando uso offline…</span></div></div>
 <main>
 <noscript>Activa JavaScript para registrar y guardar estaciones.</noscript>
@@ -37,6 +38,7 @@ dialog{border:2px solid var(--ink);border-top:5px solid var(--accent);border-rad
 <div class="eyebrow">Registro en terreno</div><h1 id="form-title">Nueva estación</h1><p class="intro">Observa, mide y guarda. Tus datos se quedan en este dispositivo.</p>
 <section id="draft-recovery" hidden aria-labelledby="recovery-title"><h2 id="recovery-title">Borradores recuperables</h2><p class="hint">Recupera un formulario pendiente, incluyendo sus fotos. Cada pestaña mantiene su propio borrador.</p><div id="recovery-list"></div></section><p id="draft-status" class="info-strip" role="status">El borrador se guarda automáticamente al escribir.</p>
 <form id="station-form" novalidate>
+<details class="card" id="quick-entry"><summary>Registro rápido y guías</summary><p class="hint">Reutiliza el contexto de la última estación de esta campaña o elige una guía de observación.</p><button type="button" id="reuse-last" class="full">Reutilizar geología anterior</button><p id="reuse-hint" class="hint"></p><label for="field-template">Guía de observación</label><select id="field-template"><option value="">Sin guía</option><option value="sedimentaria">Sedimentaria</option><option value="ignea">Ígnea</option><option value="metamorfica">Metamórfica</option></select><div id="template-guide"></div><button type="button" id="insert-guide" class="full" disabled>Añadir guía a las notas</button><p class="hint">Solo añade apartados para completar. No asigna litología ni medidas. Las notas existentes se conservan.</p></details>
 <div class="card"><h2><span class="section-number">01</span>Estación y ubicación</h2>
 <label for="campaign">Campaña de campo</label><select id="campaign"><option value="">Sin campaña</option></select><button type="button" id="manage-campaigns" class="full" style="margin-top:12px">Gestionar campañas</button><p class="hint">Separa proyectos y jornadas. Las estaciones anteriores quedan sin campaña.</p>
 <label for="station-id">ID de estación</label><input id="station-id" readonly aria-describedby="id-hint"><p id="id-hint" class="hint">El ID definitivo se asigna al guardar.</p>
@@ -61,9 +63,10 @@ dialog{border:2px solid var(--ink);border-top:5px solid var(--accent);border-rad
 <p class="hint" id="photo-count">0 de 5 fotos · Se reducen a 1280 px y se guardan localmente.</p><p class="hint">Si no se abre la cámara o galería, habilita sus permisos en los ajustes del navegador. Puedes seguir registrando sin fotos.</p><div id="photos"></div>
 </div>
 <div class="card"><h2><span class="section-number">04</span>Muestras y bolsas</h2><p class="hint">Código propio o automático al guardar. Los códigos son únicos dentro de esta estación; identifica la bolsa también con su ID de estación.</p><button type="button" id="add-sample" class="full">＋ Añadir muestra</button><p id="sample-count" class="count"></p><div id="samples"></div></div>
+<div id="form-quality" role="status" aria-live="polite"></div>
 <div class="buttons"><button id="save" type="submit" class="primary">Guardar estación</button><button id="save-as-new" type="button" hidden>Guardar como nueva</button><button id="reset" type="button">Limpiar formulario</button></div><p class="hint">* Campos obligatorios. El borrador se guarda automáticamente; «Guardar estación» finaliza el registro.</p>
 </form></section>
-<section id="panel-list" role="tabpanel" aria-labelledby="tab-list" hidden><div class="eyebrow">Tu archivo de campo</div><h1>Estaciones</h1><p class="intro">Cada punto, con su contexto. Disponible sin conexión.</p><button id="list-manage-campaigns" class="full">Gestionar campañas</button><label for="list-campaign">Filtrar por campaña</label><select id="list-campaign"><option value="">Todas las campañas</option></select><label for="search">Buscar estaciones</label><input type="search" id="search" placeholder="ID, litología, notas o código de muestra"><label for="filter">Filtrar por litología</label><select id="filter"><option value="">Todas las litologías</option></select><p id="list-count" class="count"></p><div id="stations"></div><details id="trash-section" class="card"><summary>Papelera · <span id="trash-count">0 estaciones</span></summary><p class="hint">Las estaciones y fotos se conservan hasta que decidas eliminarlas definitivamente. Se incluyen en el respaldo JSON.</p><div id="trash-list"></div></details></section>
+<section id="panel-list" role="tabpanel" aria-labelledby="tab-list" hidden><div class="eyebrow">Tu archivo de campo</div><h1>Estaciones</h1><p class="intro">Cada punto, con su contexto. Disponible sin conexión.</p><button id="list-manage-campaigns" class="full">Gestionar campañas</button><label for="list-campaign">Filtrar por campaña</label><select id="list-campaign"><option value="">Todas las campañas</option></select><label for="search">Buscar estaciones</label><input type="search" id="search" placeholder="ID, litología, notas o código de muestra"><label for="filter">Filtrar por litología</label><select id="filter"><option value="">Todas las litologías</option></select><label for="quality-filter">Revisión de campo</label><select id="quality-filter"><option value="">Todas las estaciones</option><option value="review">Con avisos de revisión</option><option value="duplicates">Con códigos de bolsa repetidos</option></select><p id="quality-summary" role="status"></p><p id="list-count" class="count"></p><div id="stations"></div><details id="trash-section" class="card"><summary>Papelera · <span id="trash-count">0 estaciones</span></summary><p class="hint">Las estaciones y fotos se conservan hasta que decidas eliminarlas definitivamente. Se incluyen en el respaldo JSON.</p><div id="trash-list"></div></details></section>
 <section id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
 <div class="eyebrow">Tu recorrido de campo</div><h1>Mapa offline</h1><p class="intro">Tus estaciones y capas, disponibles sin conexión.</p>
 <p class="info-strip">Cuadrícula offline. Añade referencias de tu zona en «Capas guardadas».</p>
@@ -85,7 +88,7 @@ dialog{border:2px solid var(--ink);border-top:5px solid var(--accent);border-rad
 <div class="card export-card"><span class="badge">SIG / QGIS</span><h2 style="margin-top:12px">Estaciones en GeoJSON</h2><p>Puntos WGS84 con datos geológicos y nombres de fotos. Abre el archivo en QGIS o impórtalo como capa de referencia. No incluye las imágenes.</p><button id="export-geojson" class="full primary">Descargar GeoJSON</button></div>
 <div class="card export-card"><span class="badge">RESPALDO COMPLETO</span><h2 style="margin-top:12px">Protege tu trabajo</h2><p>El JSON contiene campañas, estaciones, muestras, todas sus fotos, borradores, papelera, versiones anteriores y capas del mapa. Guarda una copia fuera del navegador después de cada jornada.</p><div class="buttons"><button id="export-json" class="accent">Descargar respaldo JSON</button><button id="import-json">Importar respaldo JSON</button></div><input id="backup-input" type="file" accept=".json,application/json" hidden><p class="hint">La importación muestra una vista previa. IDs iguales de distintos celulares se conservan con una numeración nueva. Admite respaldos v1, v2 y v3. El respaldo v3 requiere Estrato v1.4 o posterior.</p></div>
 <div class="card export-card"><h2>Este dispositivo</h2><p id="storage-detail">Calculando uso…</p><p id="persistence">Comprobando protección del almacenamiento…</p><div class="buttons"><button id="persist">Pedir almacenamiento persistente</button><button id="install">Cómo instalar la app</button><button id="update">Buscar actualización</button><button id="apply-update" hidden class="accent">Aplicar actualización</button></div><p id="update-status" class="hint" role="status"></p><details><summary>Antes de salir al campo</summary><p>Abre la app con conexión y espera «Lista para usar offline». Instálala y prueba abrirla en modo avión. No borres los datos del sitio ni uses modo privado. El navegador puede negar el almacenamiento persistente; mantén respaldos JSON externos.</p><p>Para instalar en iPhone: abre en Safari, usa Compartir → Añadir a pantalla de inicio. En Android: menú de Chrome → Instalar app.</p></details></div>
-<footer>Estrato v1.4 · Sin cuenta, sin servidor, sin seguimiento.</footer></section>
+<footer>Estrato v1.5 · Sin cuenta, sin servidor, sin seguimiento.</footer></section>
 </main>
 <nav role="tablist" aria-label="Secciones del cuaderno"><div class="nav-inner"><button id="tab-new" role="tab" aria-controls="panel-new" aria-selected="true" data-tab="new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nueva</button><button id="tab-list" role="tab" aria-controls="panel-list" aria-selected="false" data-tab="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/></svg>Lista</button><button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false" data-tab="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Zm6-3v15M15 6v15"/></svg>Mapa</button><button id="tab-export" role="tab" aria-controls="panel-export" aria-selected="false" data-tab="export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Exportar</button></div></nav>
 <dialog id="detail-dialog" aria-labelledby="detail-title"><div class="dialog-title"><h2 id="detail-title">Estación</h2><button type="button" id="close-detail" aria-label="Cerrar detalle">Cerrar</button></div><div id="detail-content"></div><div class="buttons"><button id="detail-edit" class="primary">Editar estación</button><button id="restore-history" hidden>Recuperar versión anterior</button></div></dialog>
@@ -188,7 +191,7 @@ async function saveRecord(record,items,existingId,expected={}) {
 }
 function draftSnapshot() {
   const values={};FIELDS.forEach(key=>values[key]=$(key).value);
-  return {key:draftKey,editingId,editingUid,editingRevision,draftDate,values,campaignUid:$('campaign').value||null,samples:structuredClone(draftSamples),photos:[...draftPhotos],savedAt:new Date().toISOString()};
+  return {key:draftKey,editingId,editingUid,editingRevision,draftDate,values,campaignUid:$('campaign').value||null,templateKey:$('field-template').value,samples:structuredClone(draftSamples),photos:[...draftPhotos],savedAt:new Date().toISOString()};
 }
 function persistDraft() {
   clearTimeout(draftTimer);if(!db||!dirty)return draftWrites;
@@ -199,7 +202,7 @@ function persistDraft() {
   job.then(()=>{if(epoch===draftEpoch&&data.key===draftKey&&dirty)$('draft-status').textContent='Borrador guardado en este dispositivo · '+readableDate(data.savedAt);},e=>{if(epoch===draftEpoch){$('draft-status').textContent='No se pudo guardar el borrador. Guarda la estación o descarga un respaldo.';notify(friendlyError(e),true);}});
   return job;
 }
-function markDirty() { dirty=true;$('draft-status').textContent='Cambios pendientes de guardar en el borrador…';clearTimeout(draftTimer);draftTimer=setTimeout(()=>persistDraft().catch(()=>{}),350); }
+function markDirty() {scheduleQuality();dirty=true;$('draft-status').textContent='Cambios pendientes de guardar en el borrador…';clearTimeout(draftTimer);draftTimer=setTimeout(()=>persistDraft().catch(()=>{}),350); }
 async function forgetCurrentDraft() {
   clearTimeout(draftTimer);await draftWrites.catch(()=>{});
   const key=draftKey;await writeTransaction('drafts',tx=>{tx.objectStore('drafts').delete(key);});draftKey=newUID();
@@ -218,10 +221,10 @@ async function restoreDraft(key) {
   try{
     clearTimeout(draftTimer);await draftWrites.catch(()=>{});const target=newUID(),oldKey=draftKey;
     const d=await writeTransaction('drafts',async tx=>{const store=tx.objectStore('drafts'),source=await request(store.get(key));if(!source)throw new Error('Este borrador ya se recuperó en otra pestaña.');const moved={...source,key:target};store.put(moved);store.delete(key);store.delete(oldKey);return moved;});
-    draftEpoch++;stopCompass();closeCamera();draftKey=target;editingId=d.editingId;editingUid=d.editingUid;editingRevision=d.editingRevision;draftDate=d.draftDate;draftPhotos=d.photos;draftSamples=structuredClone(d.samples||[]);selectFormCampaign(d.campaignUid);renderSamples();dirty=true;
+    draftEpoch++;stopCompass();closeCamera();draftKey=target;editingId=d.editingId;editingUid=d.editingUid;editingRevision=d.editingRevision;draftDate=d.draftDate;draftPhotos=d.photos;draftSamples=structuredClone(d.samples||[]);$('field-template').value=d.templateKey||'';renderTemplate();selectFormCampaign(d.campaignUid);renderSamples();dirty=true;
     FIELDS.forEach(field=>$(field).value=d.values[field]??'');$('station-id').value=editingId||await nextId();$('date-display').value=readableDate(draftDate);
     $('form-title').textContent=editingId?'Editar estación':'Nueva estación';$('save').textContent=editingId?'Guardar cambios':'Guardar estación';$('save-as-new').hidden=!editingId;$('reset').textContent=editingId?'Cancelar edición':'Limpiar formulario';
-    clearErrors();renderPhotos();$('draft-status').textContent='Borrador recuperado, incluyendo fotos. Pulsa Guardar para finalizar.';await refresh();switchTab('new');notify('Borrador recuperado.');
+    clearErrors();renderPhotos();renderQuickEntry();scheduleQuality();$('draft-status').textContent='Borrador recuperado, incluyendo fotos. Pulsa Guardar para finalizar.';await refresh();switchTab('new');notify('Borrador recuperado.');
   }finally{setBusy(false);}
 }
 async function discardDraft(key) {
@@ -289,7 +292,8 @@ function validateRecord(r,legacy=false) {
   const fields={id:r.id,fecha:r.fecha};FIELDS.forEach(key=>fields[key]=r[key]);
   if(Object.keys(validation(fields)).length)throw new Error(r.id+': datos geológicos o coordenadas inválidos.');
   if(!legacy&&(!validUID(r.uid)||!Number.isSafeInteger(r.revision)||r.revision<1||!validDate(r.updatedAt)))throw new Error(r.id+': identidad o versión inválida.');
-  return {...fields,campaignUid:r.campaignUid||null,uid:legacy?null:r.uid,revision:legacy?1:r.revision,updatedAt:legacy?r.fecha:r.updatedAt,...(validID(r.originalId)?{originalId:r.originalId}:{}),...(validUID(r.copyOfUid)?{copyOfUid:r.copyOfUid}:{})};
+  if(r.templateKey!=null&&!validTemplate(r.templateKey))throw new Error('Guía de observación inválida.');
+  return {...fields,templateKey:r.templateKey||'',campaignUid:r.campaignUid||null,uid:legacy?null:r.uid,revision:legacy?1:r.revision,updatedAt:legacy?r.fecha:r.updatedAt,...(validID(r.originalId)?{originalId:r.originalId}:{}),...(validUID(r.copyOfUid)?{copyOfUid:r.copyOfUid}:{})};
 }
 async function validateBackup(raw) {
   if(!raw||raw.app!=='estrato'||![1,2,3].includes(raw.version)||!Array.isArray(raw.stations)||!Number.isSafeInteger(raw.sequence)||raw.sequence<0||raw.sequence>=Number.MAX_SAFE_INTEGER)throw new Error('Se requiere un respaldo JSON de Estrato, versión 1, 2 o 3.');
@@ -300,14 +304,14 @@ async function validateBackup(raw) {
     if(!Array.isArray(raw.trash)||!Array.isArray(raw.history)||!Array.isArray(raw.drafts))throw new Error('El respaldo v2 debe incluir papelera, versiones y borradores.');
     for(const e of raw.trash){const record=validateRecord(e.record);record.samples=await decodeSamples(e.record.samples);if(e.uid!==record.uid||uids.has(e.uid)||!validDate(e.deletedAt))throw new Error('Entrada de papelera inválida o repetida.');uids.add(e.uid);max=Math.max(max,idNumber(record.id));const photos=await decodePhotos(e.photos,'Papelera '+record.id);trash.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,deletedAt:e.deletedAt});}
     const historyUids=new Set();for(const e of raw.history){const record=validateRecord(e.record);record.samples=await decodeSamples(e.record.samples);if(e.uid!==record.uid||historyUids.has(e.uid)||!validDate(e.savedAt)||!uids.has(e.uid))throw new Error('Versión anterior inválida o sin estación asociada.');historyUids.add(e.uid);const photos=await decodePhotos(e.photos,'Versión '+record.id);history.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,savedAt:e.savedAt});}
-    const draftKeys=new Set();for(const d of raw.drafts){if(!d||!validUID(d.key)||draftKeys.has(d.key)||!validDate(d.savedAt)||!validDate(d.draftDate)||!d.values||FIELDS.some(key=>typeof d.values[key]!=='string'||d.values[key].length>(key==='observaciones'?20000:key==='litologia'?200:100))||!TYPES.includes(d.values.tipo)||!(d.editingId===null||validID(d.editingId))||!(d.editingUid===null||validUID(d.editingUid))||!(d.editingRevision===null||(Number.isSafeInteger(d.editingRevision)&&d.editingRevision>0)))throw new Error('Borrador inválido.');draftKeys.add(d.key);const values={};FIELDS.forEach(key=>values[key]=d.values[key]);drafts.push({key:d.key,editingId:d.editingId,editingUid:d.editingUid,editingRevision:d.editingRevision,draftDate:d.draftDate,values,campaignUid:d.campaignUid||null,samples:await decodeSamples(d.samples,true),photos:await decodePhotos(d.photos,'Borrador'),savedAt:d.savedAt});}
+    const draftKeys=new Set();for(const d of raw.drafts){if(!d||!validUID(d.key)||draftKeys.has(d.key)||!validDate(d.savedAt)||!validDate(d.draftDate)||!d.values||FIELDS.some(key=>typeof d.values[key]!=='string'||d.values[key].length>(key==='observaciones'?20000:key==='litologia'?200:100))||!TYPES.includes(d.values.tipo)||!(d.editingId===null||validID(d.editingId))||!(d.editingUid===null||validUID(d.editingUid))||!(d.editingRevision===null||(Number.isSafeInteger(d.editingRevision)&&d.editingRevision>0)))throw new Error('Borrador inválido.');draftKeys.add(d.key);const values={};FIELDS.forEach(key=>values[key]=d.values[key]);drafts.push({key:d.key,editingId:d.editingId,editingUid:d.editingUid,editingRevision:d.editingRevision,draftDate:d.draftDate,values,templateKey:validTemplate(d.templateKey)?d.templateKey:'',campaignUid:d.campaignUid||null,samples:await decodeSamples(d.samples,true),photos:await decodePhotos(d.photos,'Borrador'),savedAt:d.savedAt});}
   }
   if(max>=Number.MAX_SAFE_INTEGER)throw new Error('El contador está fuera de rango.');const importedCampaigns=validateCampaigns(raw.campaigns);for(const r of [...records,...trash.map(e=>e.record),...history.map(e=>e.record),...drafts])if(r.campaignUid&&!importedCampaigns.some(c=>c.uid===r.campaignUid))throw new Error('Una estación o borrador refiere a una campaña inexistente.');return {records,sequence:max,trash,history,drafts,legacy,mapLayers:validateMapLayers(raw.mapLayers),campaigns:importedCampaigns};
 }
 async function fingerprint(r) {
   const fields=[r.fecha,...FIELDS.map(k=>r[k])],photos=[];
   for(const p of r.photos){const hash=await crypto.subtle.digest('SHA-256',await p.blob.arrayBuffer());photos.push([...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join(''));}
-  const samples=[];for(const s of r.samples||[]){const hashes=[];for(const p of s.photos){const hash=await crypto.subtle.digest('SHA-256',await p.blob.arrayBuffer());hashes.push([...new Uint8Array(hash)]);}samples.push([s.code,s.description,s.state,hashes]);}return JSON.stringify([fields,photos,r.campaignUid||null,samples]);
+  const samples=[];for(const s of r.samples||[]){const hashes=[];for(const p of s.photos){const hash=await crypto.subtle.digest('SHA-256',await p.blob.arrayBuffer());hashes.push([...new Uint8Array(hash)]);}samples.push([s.code,s.description,s.state,hashes]);}return JSON.stringify([fields,photos,r.campaignUid||null,samples,r.templateKey||'']);
 }
 async function importContext(parsed,local) {
   const campaignMerge=mergeCampaigns(local.campaigns||[],parsed.campaigns||[]);const remap=r=>{if(r.campaignUid)r.campaignUid=campaignMerge.mapping.get(r.campaignUid)||r.campaignUid;};parsed.records.forEach(remap);parsed.trash.forEach(e=>remap(e.record));parsed.history.forEach(e=>remap(e.record));parsed.drafts.forEach(remap);parsed.campaigns=campaignMerge.merged;
@@ -361,10 +365,10 @@ async function importBackup(file) {
 }
 async function submitStation(asNew=false) {
   if(busy||photoBusy||!db)return;const record=collectForm(),sampleProblem=samplesError(draftSamples);if(sampleProblem){notify(sampleProblem,true);$('samples').scrollIntoView();return;}const errors=validation(record);if(Object.keys(errors).length){showErrors(errors);return;}clearErrors();setBusy(true);
-  try{clearTimeout(draftTimer);await draftWrites.catch(()=>{});const id=await saveRecord(record,draftPhotos,asNew?null:editingId,{uid:editingUid,revision:editingRevision,draftKey});await clearForm();await refresh();notify(id+' guardada en este dispositivo.');switchTab('list');}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}
+  try{clearTimeout(draftTimer);await draftWrites.catch(()=>{});const id=await saveRecord(record,draftPhotos,asNew?null:editingId,{uid:editingUid,revision:editingRevision,draftKey});await clearForm();await refresh();const saved=stations.find(s=>s.id===id),count=qualityIssues(saved).length;notify(id+' guardada en este dispositivo.'+(count?' Tiene '+count+' avisos de revisión; puedes consultarlos en Ver estación.':''));switchTab('list');}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}
 }
 
-function setBusy(value) { busy = value; $('station-form').inert = value; ['save','save-as-new','reset','import-json','export-csv','export-zip','export-json','export-geojson','export-samples','map-import','apply-update'].forEach(id => $(id).disabled = value); }
+function setBusy(value) { busy = value; $('station-form').inert = value; ['save','save-as-new','reset','import-json','export-csv','export-zip','export-json','export-geojson','export-samples','map-import','apply-update'].forEach(id => $(id).disabled = value);renderTemplate();renderQuickEntry(); }
 function revoke(urls) { urls.splice(0).forEach(url => URL.revokeObjectURL(url)); }
 async function nextId() { const tx = db.transaction('meta','readonly'), done = txDone(tx); const r = await request(tx.objectStore('meta').get('sequence')); await done; return formatId((r?.value||0)+1); }
 async function clearForm() {
@@ -373,7 +377,7 @@ async function clearForm() {
   $('form-title').textContent = 'Nueva estación'; $('save').textContent = 'Guardar estación'; $('reset').textContent = 'Limpiar formulario';
   $('gps-status').textContent = 'Coordenadas en grados decimales (WGS84). También puedes escribirlas.';
   $('compass-status').textContent = 'Lectura sugerida. Sostén el teléfono plano y comprueba con tu brújula de campo.';
-  clearErrors(); renderPhotos(); $('station-id').value = await nextId();
+  clearErrors(); renderPhotos();renderTemplate();renderQuickEntry();scheduleQuality(); $('station-id').value = await nextId();
 }
 function clearErrors() { ['lat','lon','alt','litologia','rumbo','buzamiento','dir_buzamiento'].forEach(id => { $('err-'+id).hidden = true; $(id).removeAttribute('aria-invalid'); $(id).removeAttribute('aria-describedby'); }); }
 function validation(r) {
@@ -388,7 +392,7 @@ function validation(r) {
   return errors;
 }
 function collectForm() {
-  const r = {fecha:draftDate,campaignUid:$('campaign').value||null,samples:structuredClone(draftSamples)};
+  const r = {fecha:draftDate,campaignUid:$('campaign').value||null,templateKey:$('field-template').value,samples:structuredClone(draftSamples)};
   FIELDS.forEach(key => { const input = $(key); r[key] = ['litologia','tipo','observaciones'].includes(key) ? input.value.trim() : input.validity.badInput ? NaN : input.value === '' ? null : Number(input.value); });
   return r;
 }
@@ -405,20 +409,24 @@ async function refresh() {
   const all = element('option','Todas las litologías'); all.value='';
   $('filter').replaceChildren(all,...lithologies.map(s=>{const o=element('option',s);o.value=s;return o;}));
   $('filter').value = lithologies.includes(selected) ? selected : '';
-  [trashed,previousVersions,recoveryDrafts]=await Promise.all([readStore('trash'),readStore('history'),readStore('drafts')]); renderList(); renderTrash(); renderRecovery(); await readMapLayers(); renderMap(); await updateStorage();
+  [trashed,previousVersions,recoveryDrafts]=await Promise.all([readStore('trash'),readStore('history'),readStore('drafts')]); renderList(); renderTrash(); renderRecovery(); await readMapLayers(); renderMap(); await updateStorage();renderQuickEntry();scheduleQuality();
 }
 function normalized(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 function renderList() {
   const query = normalized($('search').value.trim()), filter = $('filter').value;
-  const found = stations.filter(s => (!filter || s.litologia === filter) && campaignMatch(s,$('list-campaign').value) && normalized([s.id,s.litologia,s.observaciones,...(s.samples||[]).map(m=>m.code)].join(' ')).includes(query));
+  const context=qualityContext(),issuesById=new Map(stations.map(s=>[s.id,qualityIssues(s,context)]));
+  const selection = stations.filter(s => (!filter || s.litologia === filter) && campaignMatch(s,$('list-campaign').value) && normalized([s.id,s.litologia,s.observaciones,...(s.samples||[]).map(m=>m.code)].join(' ')).includes(query));
+  const reviewing=selection.filter(s=>issuesById.get(s.id).length).length,duplicated=selection.filter(s=>issuesById.get(s.id).some(i=>i.key==='duplicate-code')).length;$('quality-summary').textContent='En esta selección: '+reviewing+' estaciones con avisos · '+duplicated+' con códigos repetidos. GPS: revisar si supera ±'+GPS_REVIEW_METERS+' m.';
+  const found=selection.filter(s=>!$('quality-filter').value||($('quality-filter').value==='duplicates'?issuesById.get(s.id).some(i=>i.key==='duplicate-code'):issuesById.get(s.id).length));
   $('list-count').textContent = found.length + ' de ' + stations.length + ' estaciones'; $('stations').replaceChildren();
   if (!found.length) { const e=element('div',stations.length ? 'No hay estaciones que coincidan con tu búsqueda.' : 'Tu primera estación empieza aquí. Registra un punto en la pestaña Nueva.','empty'); $('stations').append(e); return; }
   for (const s of found) {
     const card=element('article',undefined,'card'); card.append(element('div',s.id,'station-id'),element('h3',s.litologia),element('span',s.tipo,'badge'),element('p',readableDate(s.fecha),'station-meta'),element('p',s.lat.toFixed(6)+', '+s.lon.toFixed(6)+' · '+s.photoCount+' fotos','station-meta'));
     card.append(element('p',campaignName(s.campaignUid)+' · '+(s.samples||[]).length+' muestras','badge'));
     if (s.rumbo!==null || s.buzamiento!==null) card.append(element('p','Rumbo '+(s.rumbo??'—')+'° · Buzamiento '+(s.buzamiento??'—')+'°','station-meta'));
+    const issues=issuesById.get(s.id);if(issues.length)card.append(element('p','Revisar · '+issues.length+' avisos'+(issues.some(i=>i.key==='duplicate-code')?' · bolsa repetida':''),'badge quality-tag'));
     const actions=element('div',undefined,'buttons');
-    for (const [text,action,cls] of [['Ver estación',()=>showDetail(s.id),'primary'],['Editar',()=>editStation(s.id),''],['Borrar',()=>deleteStation(s.id),'danger']]) { const b=element('button',text,cls);b.type='button';b.setAttribute('aria-label',text+' '+s.id);b.onclick=()=>{if(!busy&&!photoBusy) action().catch(e=>notify(friendlyError(e),true));};actions.append(b); }
+    for (const [text,action,cls] of [['Ver estación',()=>showDetail(s.id),'primary'],['Editar',()=>editStation(s.id),''],['Usar geología',()=>reuseGeology(s.id),''],['Borrar',()=>deleteStation(s.id),'danger']]) { const b=element('button',text,cls);b.type='button';b.setAttribute('aria-label',text+' '+s.id);b.onclick=()=>{if(!busy&&!photoBusy) action().catch(e=>notify(friendlyError(e),true));};actions.append(b); }
     card.append(actions);$('stations').append(card);
   }
 }
@@ -431,6 +439,7 @@ function switchTab(tab) {
 }
 async function showDetail(id) {
   const s=stations.find(r=>r.id===id);if(!s)return;detailId=id;revoke(detailUrls);$('detail-title').textContent=id;$('detail-content').replaceChildren();
+  $('detail-content').append(qualityBox(qualityIssues(s)));
   const dl=element('dl'), labels={fecha:'Fecha y hora',lat:'Latitud',lon:'Longitud',alt:'Altitud (m)',precision_m:'Precisión (± m)',litologia:'Litología',rumbo:'Rumbo (°)',buzamiento:'Buzamiento (°)',dir_buzamiento:'Dirección de buzamiento (°)',tipo:'Tipo de medida',observaciones:'Observaciones'};
   for(const [key,label] of Object.entries(labels)) dl.append(element('dt',label),element('dd',key==='fecha'?readableDate(s[key]):String(s[key]??'Sin dato')));
   $('detail-content').append(dl);appendSampleDetail(s);
@@ -442,6 +451,7 @@ async function editStation(id) {
   const s=stations.find(r=>r.id===id);if(!s)return;
   const items=await readPhotos(id);await forgetCurrentDraft();draftEpoch++;stopCompass();revoke(photoUrls);draftPhotos=items;editingId=id;editingUid=s.uid;editingRevision=s.revision;draftDate=s.fecha;dirty=false;$('save-as-new').hidden=false;clearErrors();
   draftSamples=structuredClone(s.samples||[]);fillCampaignSelect('campaign');if(s.campaignUid&&!$('campaign').querySelector('option[value="'+s.campaignUid+'"]')){const o=element('option',campaignName(s.campaignUid)+' · archivada');o.value=s.campaignUid;$('campaign').append(o);}$('campaign').value=s.campaignUid||'';renderSamples();
+  $('field-template').value=s.templateKey||'';renderTemplate();renderQuickEntry();scheduleQuality();
   FIELDS.forEach(key=>$(key).value=s[key]??'');$('station-id').value=id;$('date-display').value=readableDate(s.fecha);$('form-title').textContent='Editar estación';$('save').textContent='Guardar cambios';$('reset').textContent='Cancelar edición';renderPhotos();switchTab('new');
 }
 
@@ -668,7 +678,7 @@ async function saveCampaign(event){
   event.preventDefault();if(busy||photoBusy)return;const data={};for(const key of ['name','area','start','end','description'])data[key]=$('campaign-'+key).value.trim();
   if(!data.name||data.name.length>120||data.area.length>200||data.description.length>2000||(data.start&&data.end&&data.start>data.end)){$('campaign-error').textContent='Escribe un nombre (hasta 120 caracteres) y un intervalo de fechas válido.';return;}
   $('campaign-error').textContent='';$('campaign-save').disabled=true;
-  try{const expected=campaignEditing,uid=expected?.uid||newUID();await writeTransaction('meta',async tx=>{const meta=tx.objectStore('meta'),row=await request(meta.get('campaigns')),items=row?.value||[],old=items.find(c=>c.uid===uid);if(expected&&old?.revision!==expected.revision)throw new Error('La campaña cambió en otra pestaña. Cierra y vuelve a abrir Campañas.');if(items.some(c=>c.uid!==uid&&normalized(c.name)===normalized(data.name)))throw new Error('Ya existe una campaña con ese nombre.');const c={...old,...data,uid,archived:old?.archived||false,revision:(old?.revision||0)+1,updatedAt:new Date().toISOString()};meta.put({key:'campaigns',value:[...items.filter(c=>c.uid!==uid),c]});await bumpGeneration(meta);});await refresh();renderCampaignManager();editCampaign();if(!expected){$('campaign').value=uid;markDirty();}notify('Campaña guardada en este dispositivo.');}catch(e){$('campaign-error').textContent=e.message;}finally{$('campaign-save').disabled=false;}
+  try{const expected=campaignEditing,uid=expected?.uid||newUID();await writeTransaction('meta',async tx=>{const meta=tx.objectStore('meta'),row=await request(meta.get('campaigns')),items=row?.value||[],old=items.find(c=>c.uid===uid);if(expected&&old?.revision!==expected.revision)throw new Error('La campaña cambió en otra pestaña. Cierra y vuelve a abrir Campañas.');if(items.some(c=>c.uid!==uid&&normalized(c.name)===normalized(data.name)))throw new Error('Ya existe una campaña con ese nombre.');const c={...old,...data,uid,archived:old?.archived||false,revision:(old?.revision||0)+1,updatedAt:new Date().toISOString()};meta.put({key:'campaigns',value:[...items.filter(c=>c.uid!==uid),c]});await bumpGeneration(meta);});await refresh();renderCampaignManager();editCampaign();if(!expected){$('campaign').value=uid;renderQuickEntry();markDirty();}notify('Campaña guardada en este dispositivo.');}catch(e){$('campaign-error').textContent=e.message;}finally{$('campaign-save').disabled=false;}
 }
 async function archiveCampaign(c){
   if(!confirm((c.archived?'¿Reactivar ':'¿Archivar ')+c.name+'? Sus estaciones y muestras se conservan.'))return;
@@ -676,7 +686,7 @@ async function archiveCampaign(c){
 }
 function samplePhotoName(r,s,i,p){return photoName(r.id+'_M'+String((r.samples||[]).indexOf(s)+1).padStart(2,'0'),i,p);}
 function renderSamples(){
-  revoke(sampleUrls);$('samples').replaceChildren();$('sample-count').textContent=draftSamples.length+' muestras · hasta 30 por estación';$('add-sample').disabled=photoBusy||draftSamples.length>=30;
+  revoke(sampleUrls);$('samples').replaceChildren();$('sample-count').textContent=draftSamples.length+' muestras · hasta 30 por estación';$('add-sample').disabled=photoBusy||draftSamples.length>=30;scheduleQuality();
   draftSamples.forEach((s,i)=>{const card=element('fieldset',undefined,'sample-card'),legend=element('legend','Muestra '+(i+1));card.append(legend);
     for(const [key,label,tag] of [['code','Código de bolsa','input'],['description','Descripción de la muestra','textarea'],['state','Estado de laboratorio','select']]){const id='sample-'+s.uid+'-'+key,input=element(tag);input.id=id;input.value=s[key];input.disabled=photoBusy;const l=element('label',label);l.htmlFor=id;if(tag==='select'){for(const state of SAMPLE_STATES){const o=element('option',state);o.value=state;input.append(o);}input.value=s.state;}else{input.maxLength=key==='code'?80:4000;if(key==='code')input.placeholder='Automático al guardar · EST-001-M01';}input.oninput=()=>{s[key]=input.value;markDirty();};card.append(l,input);}
     card.append(element('p',s.photos.length+' de 5 fotos propias · 1280 px','hint'));s.photos.forEach((p,j)=>{const photo=element('div',undefined,'photo'),img=element('img'),url=URL.createObjectURL(p.blob);sampleUrls.push(url);img.src=url;img.alt='Muestra '+(s.code||i+1)+' · foto '+(j+1);const b=element('button','Quitar foto de muestra '+(j+1));b.type='button';b.disabled=photoBusy;b.onclick=()=>{s.photos.splice(j,1);markDirty();renderSamples();};photo.append(img,b);card.append(photo);});
@@ -713,6 +723,67 @@ function appendSampleDetail(s){
 }
 
 $('manage-campaigns').onclick=$('list-manage-campaigns').onclick=openCampaignManager;$('close-campaigns').onclick=()=>$('campaign-dialog').close();$('campaign-editor').onsubmit=saveCampaign;$('campaign-new').onclick=()=>editCampaign();$('list-campaign').onchange=renderList;$('map-campaign').onchange=()=>{renderMapChoices();fitStations();};$('add-sample').onclick=()=>{if(!busy&&!photoBusy&&draftSamples.length<30){draftSamples.push({uid:newUID(),code:'',description:'',state:SAMPLE_STATES[0],photos:[]});markDirty();renderSamples();}};
+// Guides prompt observations; they never infer rock type or measurements.
+const FIELD_TEMPLATES={
+  sedimentaria:{name:'Sedimentaria',prompts:['Tamaño de grano y selección','Composición y matriz / cemento','Textura y estructuras sedimentarias','Espesor y contactos de capas','Fósiles y alteración']},
+  ignea:{name:'Ígnea',prompts:['Minerales y proporciones observadas','Tamaño de cristales y textura','Fenocristales, matriz y vesículas','Contactos y estructuras de enfriamiento','Alteración y fracturas']},
+  metamorfica:{name:'Metamórfica',prompts:['Minerales y asociaciones observadas','Textura y tamaño de grano','Foliación, bandeado y lineación','Pliegues y relaciones de corte','Protolito interpretado y evidencias']}
+};
+const GPS_REVIEW_METERS=20;
+let qualityFrame=0;
+function validTemplate(key){return typeof key==='string'&&(key===''||Object.hasOwn(FIELD_TEMPLATES,key));}
+function renderTemplate(){
+  const template=FIELD_TEMPLATES[$('field-template').value];$('template-guide').replaceChildren();$('insert-guide').disabled=!template||busy||photoBusy;
+  if(template){const list=element('ul');for(const prompt of template.prompts)list.append(element('li',prompt));$('template-guide').append(list);}
+}
+function insertTemplateGuide(){
+  if(busy||photoBusy)return;const template=FIELD_TEMPLATES[$('field-template').value];if(!template)return;
+  const notes=$('observaciones'),guide='Guía '+template.name.toLowerCase()+'\n'+template.prompts.map(p=>p+': ').join('\n');
+  if(notes.value.includes(guide.trim())){notify('Esta guía ya está en las notas. Completa las observaciones.');return;}
+  const text=(notes.value.trim()?notes.value.trim()+'\n\n':'')+guide;if(text.length>20000){notify('No hay espacio para añadir la guía: máximo 20.000 caracteres en notas.',true);return;}
+  notes.value=text;markDirty();notes.focus();notify('Guía añadida. Completa lo observado y elimina los apartados que no apliquen.');
+}
+function hasFieldNotes(text){
+  const headings=new Set(Object.values(FIELD_TEMPLATES).flatMap(t=>[normalized('Guía '+t.name),...t.prompts.map(p=>normalized(p+':'))]));
+  return String(text||'').split('\n').some(line=>line.trim()&&!headings.has(normalized(line.trim())));
+}
+function qualityContext(records=stations){
+  const codes=new Map();for(const r of records)for(const s of r.samples||[]){const code=normalized(s.code.trim());if(!code)continue;const key=(r.campaignUid||'none')+'\0'+code;if(!codes.has(key))codes.set(key,[]);codes.get(key).push({stationId:r.id,stationUid:r.uid,sampleUid:s.uid});}return {codes};
+}
+function qualityIssues(r,context=qualityContext()){
+  const issues=[];
+  if(!Number.isFinite(r.lat)||!Number.isFinite(r.lon)||Math.abs(r.lat)>90||Math.abs(r.lon)>180)issues.push({key:'coordinates',text:'Faltan coordenadas válidas. Son obligatorias para guardar.'});
+  if(!r.litologia?.trim())issues.push({key:'lithology',text:'Falta la litología. Es obligatoria para guardar.'});
+  if(Number.isFinite(r.precision_m)&&r.precision_m>GPS_REVIEW_METERS)issues.push({key:'gps',text:'Precisión GPS ±'+Math.round(r.precision_m)+' m: supera el umbral de revisión de '+GPS_REVIEW_METERS+' m. Puedes intentar otra lectura.'});
+  if(r.tipo!=='otra'&&(r.rumbo==null||r.buzamiento==null))issues.push({key:'orientation',text:r.rumbo==null&&r.buzamiento==null?'Sin rumbo ni buzamiento registrados. Completa la medida si la tomaste.':'Orientación parcial: falta '+(r.rumbo==null?'rumbo':'buzamiento')+'.'});
+  if(!hasFieldNotes(r.observaciones))issues.push({key:'notes',text:'Sin observaciones propias. Una guía vacía todavía requiere completar notas.'});
+  for(const [i,s] of (r.samples||[]).entries()){
+    if(!s.description.trim())issues.push({key:'sample-notes',text:'Muestra '+(s.code.trim()||i+1)+': sin descripción.'});
+    const code=normalized(s.code.trim());if(!code)continue;const matches=(context.codes.get((r.campaignUid||'none')+'\0'+code)||[]).filter(x=>x.stationUid!==r.uid);
+    if(matches.length)issues.push({key:'duplicate-code',text:'Bolsa '+s.code.trim()+': código usado también en '+[...new Set(matches.map(x=>x.stationId))].sort().join(', ')+' dentro de '+(r.campaignUid?'esta campaña':'Sin campaña')+'. Verifica la etiqueta.'});
+  }
+  return issues;
+}
+function qualityBox(issues,title='Revisión de campo'){
+  const box=element('section',undefined,'quality-box');box.append(element('h3',title));
+  if(issues.length){const list=element('ul');for(const issue of issues)list.append(element('li',issue.text));box.append(list);}else box.append(element('p','Sin avisos en las comprobaciones de esta app.'));
+  box.append(element('p','Estos avisos ayudan a revisar el registro; no certifican la exactitud geológica. Los campos obligatorios y los rangos se validan al guardar.','hint'));return box;
+}
+function renderFormQuality(){
+  const r=collectForm();r.uid=editingUid;const issues=qualityIssues(r);$('form-quality').replaceChildren(qualityBox(issues,issues.length?'Revisar · '+issues.length+' avisos':'Revisión de campo'));
+}
+function scheduleQuality(){cancelAnimationFrame(qualityFrame);qualityFrame=requestAnimationFrame(renderFormQuality);}
+function previousFieldStation(){const uid=$('campaign').value||null;return stations.filter(s=>(s.campaignUid||null)===uid).sort((a,b)=>idNumber(b.id)-idNumber(a.id))[0];}
+function renderQuickEntry(){
+  const source=previousFieldStation();$('reuse-last').disabled=busy||photoBusy||!!editingId||!source;$('reuse-last').textContent=source?'Reutilizar geología de '+source.id:'Sin estación anterior en esta campaña';$('reuse-hint').textContent=editingId?'Finaliza o cancela la edición para iniciar otra estación.':source?source.litologia+' · Se copiarán litología, tipo y notas. Registra de nuevo ubicación y orientación.':'Guarda la primera estación de esta campaña para reutilizar su contexto.';
+}
+async function reuseGeology(id){
+  if(busy||photoBusy||!db)return;const source=stations.find(s=>s.id===id);if(!source)return;
+  if(dirty&&!confirm('¿Iniciar una estación con la geología de '+id+'? Se descartará el formulario pendiente, incluyendo sus fotos y muestras.'))return;
+  setBusy(true);try{await clearForm();selectFormCampaign(source.campaignUid);for(const key of ['litologia','tipo','observaciones'])$(key).value=source[key]||'';$('field-template').value=source.templateKey||'';renderTemplate();renderQuickEntry();markDirty();await persistDraft();switchTab('new');$('lat').focus();notify('Contexto copiado de '+source.id+'. Toma GPS, mide orientación y revisa las notas antes de guardar.');}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);renderQuickEntry();renderTemplate();}
+}
+
+$('reuse-last').onclick=()=>{const source=previousFieldStation();if(source)reuseGeology(source.id);};$('field-template').onchange=()=>{renderTemplate();markDirty();};$('insert-guide').onclick=insertTemplateGuide;$('quality-filter').onchange=renderList;$('campaign').addEventListener('change',()=>{renderQuickEntry();scheduleQuality();});
 $('station-form').addEventListener('input',markDirty);
 ['lat','lon'].forEach(id=>$(id).addEventListener('input',()=>{$('precision_m').value='';$('gps-status').textContent='Coordenadas manuales · Precisión GPS no aplicable.';}));
 $('station-form').addEventListener('submit',e=>{e.preventDefault();submitStation();});

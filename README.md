@@ -220,3 +220,26 @@ El respaldo JSON **v3 siempre incluye toda la colección**, aunque se haya elegi
 El caché es **v1.4.0**. Guarda el formulario y usa Exportar → Buscar actualización → Aplicar actualización con conexión. Los datos de campo quedan en IndexedDB; la actualización del shell no los borra. Mantén respaldos JSON externos.
 
 Validación: Chrome local mediante servidor estático y perfiles de prueba aislados. Instalabilidad aprobada por el protocolo de DevTools, uso offline con muestras/fotos, compresión, códigos duplicados, borradores tras recarga, edición/historial/papelera, filtros de campaña, CSV con BOM, integridad CRC del ZIP, GeoJSON y restauración v3 en navegador vacío. Probadas importaciones repetidas/conflictivas y respaldo v2. La actualización real del service worker desde v1.3 preservó identidad, fecha, fotos y contador. Se repitieron pruebas del mapa/capas y de importación/concurrencia; diseño claro/oscuro en 320, 390 y 768 px sin desbordamientos. Cámara y sensores reales de Android/iPhone requieren prueba física; los datos de estas pruebas no se publican.
+
+
+## Registro rápido y revisión de campo · v1.5
+
+En Nueva abre «Registro rápido y guías». Selecciona Sedimentaria, Ígnea o Metamórfica para ver cinco temas de observación. «Añadir guía a las notas» anexa apartados vacíos a las notas existentes, sin asignar litología ni medidas. Completa lo observado y elimina los apartados que no apliquen. Una guía sin completar mantiene el aviso de notas pendientes. La guía elegida se conserva en borradores, estaciones, versiones y respaldos mediante el campo opcional templateKey; el formato JSON sigue siendo v3. Respaldos v1/v2/v3 sin este campo siguen siendo válidos.
+
+«Reutilizar geología de EST-…» toma la última estación guardada (mayor ID) de la campaña elegida; Sin campaña tiene su propio grupo. También puedes elegir un registro concreto desde Lista → Usar geología. Se copian campaña, litología, tipo de medida, notas y guía a una estación nueva. ID y fecha son nuevos; coordenadas, altitud, precisión GPS, rumbo, buzamiento, dirección, fotos y muestras quedan vacíos. Revisa siempre las notas copiadas para la nueva ubicación. Si hay un formulario pendiente, se confirma su descarte antes de iniciar otro; cancelar conserva todo. La copia se guarda como borrador automáticamente y solo se convierte en estación al pulsar Guardar.
+
+La «Revisión de campo» aparece en el formulario y en Ver estación. Lista permite filtrar estaciones con avisos o con códigos repetidos. Los avisos se calculan con los datos actuales; no modifican las observaciones ni los registros. Comprueban:
+
+- GPS con precisión mayor que ±20 m. Es un umbral orientativo de esta app, no una certificación de exactitud. Las coordenadas manuales sin precisión no se penalizan por ese motivo.
+- Rumbo o buzamiento ausentes para un tipo de medida distinto de Otra. La dirección de buzamiento sigue siendo opcional.
+- Notas vacías o que solo contienen apartados de una guía sin completar.
+- Muestras sin descripción.
+- Códigos de bolsa usados en más de una estación activa de la misma campaña (incluido el grupo Sin campaña). La comparación ignora espacios externos, mayúsculas y acentos. Los códigos de campañas diferentes no se comparan entre sí. Papelera, borradores y versiones anteriores no cuentan como estaciones activas.
+
+Los avisos de calidad no bloquean guardar registros válidos. Los límites y campos obligatorios originales siguen activos: coordenadas y litología son obligatorias, los rangos numéricos se validan y los códigos repetidos dentro de una misma estación deben corregirse. Al editar, cambiar de campaña, importar, borrar o restaurar se recalcula la revisión; se excluye la propia estación durante una edición para no generar falsos duplicados.
+
+La base sigue en IndexedDB versión 2 y los respaldos completos siguen en JSON v3. El caché es **v1.5.0**: guarda o descarta el formulario y usa Exportar → Buscar actualización → Aplicar actualización. No borres los datos del sitio para actualizar.
+
+Pruebas locales en Chrome con perfiles aislados: tres guías sin inventar mediciones, anexado de notas sin sobrescribir, recuperación del borrador con guía, GPS simulado de 50 m con aviso y guardado permitido, copia de contexto con nuevo ID/fecha y datos de ubicación/medidas/fotos/muestras vacíos. Bolsas repetidas dentro de una campaña, exclusión de otras campañas y de la propia edición, actualización tras corregir/borrar/restaurar, cancelar descarte conservando el formulario, selección de última estación por campaña y umbral GPS >20 m. Restauración v3 en navegador vacío conserva guías y recalcula avisos. Todo probado offline; instalabilidad aprobada, cero errores JavaScript y diseño claro/oscuro a 320/390/768 px sin desbordamiento. La actualización real v1.4 → v1.5 conservó campaña, identidad, fecha, bolsas y fotos de estación/muestra; la base y contador permanecieron intactos. Se repitieron pruebas del mapa/capas y de campañas/muestras. No se publican datos de prueba. Los sensores físicos de Android/iPhone siguen requiriendo prueba en el dispositivo.
+
+También pasó la regresión de importaciones y edición simultánea: cambios concurrentes no se sobrescriben, importaciones inválidas/canceladas no escriben datos y respaldos antiguos no duplican registros idénticos.
