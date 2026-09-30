@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#263d31">
+<meta name="description" content="Tu cuaderno de campo geológico. Estaciones, medidas y fotografías sin conexión.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<title>Estrato · Cuaderno de campo</title>
+<style>
+:root{color-scheme:light dark;--bg:#f3f2e9;--paper:#fffef8;--ink:#20372c;--muted:#566357;--line:#b9c1b3;--accent:#d9ed91;--strong:#263d31;--on-strong:#fffef8;--soft:#e6eadb;--error:#a32322;--danger-bg:#fff0ec;--shadow:0 8px 26px #20372c0a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button,.file-button{min-height:54px;border-radius:10px;border:1.5px solid var(--line);padding:12px 18px;background:var(--paper);color:var(--ink);font-weight:700;cursor:pointer;touch-action:manipulation}button:hover,.file-button:hover{border-color:var(--ink)}button:disabled{opacity:.55;cursor:wait}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}.primary{background:var(--strong);color:var(--on-strong);border-color:var(--strong)}.accent{background:var(--accent);color:#20372c;border-color:var(--accent)}.danger{color:var(--error);border-color:var(--error)}.full{width:100%}[hidden]{display:none!important}header{background:var(--strong);color:var(--on-strong);padding:22px max(20px,env(safe-area-inset-right)) 18px}header .inner,main,.status-inner{max-width:620px;margin:auto}.brand{display:flex;align-items:center;gap:12px}.brand svg{width:44px;height:44px;color:var(--accent);flex:none}.brand-name{font-size:28px;letter-spacing:-1.3px;font-weight:850;line-height:1.15}.brand-sub{font-size:12px;font-weight:650;letter-spacing:2px;text-transform:uppercase;opacity:.9}.version{margin-left:auto;font:12px monospace;border:1px solid #8ea18c;padding:4px 8px;border-radius:6px}.status{border-bottom:1px solid var(--line);background:var(--soft);padding:10px 20px;font-size:12px;font-weight:650}.status-inner{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:space-between}#network::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ink);margin-right:6px}main{padding:28px 20px 130px}h1{font-size:30px;line-height:1.15;letter-spacing:-1px;margin:8px 0 10px}h2{font-size:19px;margin:0 0 18px;letter-spacing:-.3px}h3{font-size:19px;margin:0 0 6px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}.intro{color:var(--muted);margin:0 0 24px;font-size:15px}.card{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:22px;margin:18px 0;box-shadow:var(--shadow)}.section-number{font:13px monospace;display:inline-block;margin-right:10px;color:var(--muted)}label{display:block;font-weight:650;font-size:15px;margin:18px 0 7px}input:not([type=file]),textarea,select{width:100%;min-height:54px;background:var(--paper);color:var(--ink);border:1.5px solid var(--line);border-radius:9px;padding:12px;appearance:auto}textarea{min-height:125px;resize:vertical}input[readonly]{background:var(--soft);font-family:monospace;font-size:18px}input[aria-invalid=true]{border:2px solid var(--error)}.hint{color:var(--muted);font-size:13px;margin:8px 0}.buttons{display:flex;flex-direction:column;gap:10px;margin-top:16px}.info-strip{border-left:3px solid var(--ink);padding:3px 12px;margin:16px 0;font-size:13px;color:var(--muted)}#message{position:sticky;top:8px;z-index:5;background:var(--soft);border:2px solid var(--ink);padding:14px;border-radius:10px;margin-bottom:18px;font-size:15px;box-shadow:var(--shadow)}#message.error{background:var(--danger-bg);border-color:var(--error);color:var(--error)}.error-text{color:var(--error);font-size:13px;margin:5px 0}.photo{margin:14px 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}.photo img{width:100%;height:190px;object-fit:cover;display:block}.photo-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;gap:12px;font-size:13px}.photo-footer button{min-height:48px;padding:8px 14px}.station-id{font-family:monospace;font-weight:800;font-size:20px}.station-meta{color:var(--muted);font-size:13px;margin:8px 0}.badge{display:inline-block;background:var(--soft);border-radius:5px;padding:3px 8px;font-size:12px;font-weight:750}.empty{text-align:center;padding:32px 16px;border:1px dashed var(--line);border-radius:12px;margin-top:20px;color:var(--muted)}.empty svg{height:48px;width:48px;margin-bottom:12px}.count{font:13px monospace;color:var(--muted);margin-top:20px}.export-card p{font-size:15px;color:var(--muted)}nav{position:fixed;bottom:0;left:0;right:0;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:var(--paper);border-top:1px solid var(--line);z-index:10}nav .nav-inner{max-width:620px;margin:auto;display:flex;gap:6px}nav button{flex:1;min-height:65px;border:0;background:transparent;font-size:13px;padding:6px;border-radius:9px}nav button svg{display:block;width:22px;height:22px;margin:0 auto 4px}nav button[aria-selected=true]{background:var(--strong);color:var(--on-strong)}dialog{border:1px solid var(--line);border-radius:16px;background:var(--paper);color:var(--ink);padding:22px;max-width:580px;width:calc(100% - 32px);max-height:85dvh;overflow:auto}dialog::backdrop{background:#101b14bb}dialog img,video{max-width:100%;border-radius:8px;display:block}video{width:100%;background:#14221a}dl{margin:0}dt{font-size:13px;color:var(--muted);margin-top:14px}dd{margin:3px 0;overflow-wrap:anywhere;white-space:pre-wrap}.dialog-title{display:flex;align-items:center;justify-content:space-between;gap:8px}.dialog-title h2{margin:0}.file-button{display:block;text-align:center}footer{color:var(--muted);font-size:12px;text-align:center;margin-top:25px}summary{cursor:pointer;min-height:48px;padding:12px 0;font-size:14px;font-weight:650}a{color:var(--ink)}
+@media(prefers-color-scheme:dark){:root{--bg:#121c17;--paper:#1c2a22;--ink:#f2f4e6;--muted:#bbc8b8;--line:#697b6a;--accent:#d9ed91;--strong:#263d31;--on-strong:#fffef8;--soft:#293b2d;--error:#ffb2a9;--danger-bg:#3e2522;--shadow:none}input[readonly]{background:var(--soft)}nav button[aria-selected=true],.primary{background:var(--accent);color:#20372c;border-color:var(--accent)}}
+@media(min-width:650px){main{padding-top:35px}.card{padding:28px}h1{font-size:36px}}
+</style>
+</head>
+<body>
+<header><div class="inner brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M5 33 20 10l7 11 5-6 11 18M5 38h38M5 43h38M14 33l9-8 10 8" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><div><div class="brand-name">estrato</div><div class="brand-sub">Cuaderno de campo</div></div><span class="version">v1.0</span></div></header>
+<div class="status"><div class="status-inner"><span id="network">Comprobando conexión</span><span id="storage">Abriendo almacenamiento…</span><span id="offline-ready">Preparando uso offline…</span></div></div>
+<main>
+<noscript>Activa JavaScript para registrar y guardar estaciones.</noscript>
+<div id="message" role="status" aria-live="polite" hidden></div>
+<section id="panel-new" role="tabpanel" aria-labelledby="tab-new">
+<div class="eyebrow">Registro en terreno</div><h1 id="form-title">Nueva estación</h1><p class="intro">Observa, mide y guarda. Tus datos se quedan en este dispositivo.</p>
+<form id="station-form" novalidate>
+<div class="card"><h2><span class="section-number">01 /</span>Estación y ubicación</h2>
+<label for="station-id">ID de estación</label><input id="station-id" readonly aria-describedby="id-hint"><p id="id-hint" class="hint">El ID definitivo se asigna al guardar.</p>
+<label for="date-display">Fecha y hora</label><input id="date-display" readonly><p class="hint">Automática al crear; se conserva al editar.</p>
+<button type="button" id="gps" class="accent full" style="margin-top:18px">◎ Tomar GPS</button><p class="hint" id="gps-status" role="status">Coordenadas en grados decimales (WGS84). También puedes escribirlas.</p>
+<label for="lat">Latitud *</label><input id="lat" name="lat" type="number" inputmode="decimal" step="any" min="-90" max="90" placeholder="Ej. -0.180653" required><p id="err-lat" class="error-text" hidden></p>
+<label for="lon">Longitud *</label><input id="lon" name="lon" type="number" inputmode="decimal" step="any" min="-180" max="180" placeholder="Ej. -78.467834" required><p id="err-lon" class="error-text" hidden></p>
+<label for="alt">Altitud (m)</label><input id="alt" name="alt" type="number" inputmode="decimal" step="any" placeholder="Opcional"><p id="err-alt" class="error-text" hidden></p>
+<label for="precision_m">Precisión GPS (± m)</label><input id="precision_m" type="number" inputmode="decimal" step="any" min="0" readonly placeholder="Sin lectura GPS"><p class="hint">Se vacía si modificas las coordenadas a mano.</p>
+</div>
+<div class="card"><h2><span class="section-number">02 /</span>Geología y orientación</h2>
+<label for="litologia">Litología *</label><input id="litologia" name="litologia" list="lithologies" maxlength="200" placeholder="Ej. Arenisca" required autocomplete="off"><datalist id="lithologies"></datalist><p id="err-litologia" class="error-text" hidden></p><p class="hint">Las litologías guardadas aparecerán como sugerencias.</p>
+<label for="tipo">Tipo de medida</label><select id="tipo" name="tipo"><option value="estratificación">Estratificación</option><option value="falla">Falla</option><option value="diaclasa">Diaclasa</option><option value="foliación">Foliación</option><option value="otra">Otra</option></select>
+<label for="rumbo">Rumbo (0–360°)</label><input id="rumbo" name="rumbo" type="number" inputmode="decimal" min="0" max="360" step="any" placeholder="Opcional"><p id="err-rumbo" class="error-text" hidden></p>
+<button type="button" id="compass" class="full" style="margin-top:12px">⊕ Leer brújula</button><p id="compass-status" class="hint" role="status">Lectura sugerida. Sostén el teléfono plano y comprueba con tu brújula de campo.</p>
+<label for="buzamiento">Buzamiento (0–90°)</label><input id="buzamiento" name="buzamiento" type="number" inputmode="decimal" min="0" max="90" step="any" placeholder="Opcional"><p id="err-buzamiento" class="error-text" hidden></p>
+<label for="dir_buzamiento">Dirección de buzamiento (0–360°)</label><input id="dir_buzamiento" name="dir_buzamiento" type="number" inputmode="decimal" min="0" max="360" step="any" placeholder="Azimut opcional"><p id="err-dir_buzamiento" class="error-text" hidden></p>
+</div>
+<div class="card"><h2><span class="section-number">03 /</span>Notas y fotografías</h2>
+<label for="observaciones">Observaciones</label><textarea id="observaciones" name="observaciones" maxlength="20000" placeholder="Textura, estructuras, alteración, contexto del afloramiento…"></textarea>
+<div class="buttons"><button type="button" id="camera">▣ Tomar foto</button><button type="button" id="gallery">＋ Añadir desde galería</button></div><input id="photo-input" type="file" accept="image/*" multiple hidden>
+<p class="hint" id="photo-count">0 de 5 fotos · Se reducen a 1280 px y se guardan localmente.</p><p class="hint">Si no se abre la cámara o galería, habilita sus permisos en los ajustes del navegador. Puedes seguir registrando sin fotos.</p><div id="photos"></div>
+</div>
+<div class="buttons"><button id="save" type="submit" class="primary">Guardar estación</button><button id="reset" type="button">Limpiar formulario</button></div><p class="hint">* Campos obligatorios. Se guarda únicamente al pulsar «Guardar estación».</p>
+</form></section>
+<section id="panel-list" role="tabpanel" aria-labelledby="tab-list" hidden><div class="eyebrow">Tu archivo de campo</div><h1>Estaciones</h1><p class="intro">Cada punto, con su contexto. Disponible sin conexión.</p><label for="search">Buscar estaciones</label><input type="search" id="search" placeholder="ID, litología u observaciones"><label for="filter">Filtrar por litología</label><select id="filter"><option value="">Todas las litologías</option></select><p id="list-count" class="count"></p><div id="stations"></div></section>
+<section id="panel-export" role="tabpanel" aria-labelledby="tab-export" hidden><div class="eyebrow">Del terreno a tu escritorio</div><h1>Exportar y respaldar</h1><p class="intro">Lleva tus registros contigo. Todas las exportaciones incluyen la colección completa.</p>
+<div class="card export-card"><span class="badge">TABLA DE DATOS</span><h2 style="margin-top:12px">CSV para Excel</h2><p>Una fila por estación, con coordenadas, medidas y nombres de fotos. UTF-8 con BOM.</p><button id="export-csv" class="full primary">Descargar CSV</button></div>
+<div class="card export-card"><span class="badge">DATOS + FOTOGRAFÍAS</span><h2 style="margin-top:12px">Paquete de campo</h2><p>Un ZIP con el CSV y las fotos nombradas por estación: EST-001_01.jpg.</p><button id="export-zip" class="full primary">Descargar ZIP</button></div>
+<div class="card export-card"><span class="badge">RESPALDO COMPLETO</span><h2 style="margin-top:12px">Protege tu trabajo</h2><p>El JSON contiene todos los registros y fotos. Guarda una copia fuera del navegador después de cada jornada.</p><div class="buttons"><button id="export-json" class="accent">Descargar respaldo JSON</button><button id="import-json">Importar respaldo JSON</button></div><input id="backup-input" type="file" accept=".json,application/json" hidden><p class="hint">La importación combina colecciones. Si un ID ya existe, se pide confirmación antes de reemplazarlo. Un archivo inválido no modifica tus datos.</p></div>
+<div class="card export-card"><h2>Este dispositivo</h2><p id="storage-detail">Calculando uso…</p><p id="persistence">Comprobando protección del almacenamiento…</p><div class="buttons"><button id="persist">Pedir almacenamiento persistente</button><button id="install">Cómo instalar la app</button><button id="update">Buscar actualización</button><button id="apply-update" hidden class="accent">Aplicar actualización</button></div><p id="update-status" class="hint" role="status"></p><details><summary>Antes de salir al campo</summary><p>Abre la app con conexión y espera «Lista para usar offline». Instálala y prueba abrirla en modo avión. No borres los datos del sitio ni uses modo privado. El navegador puede negar el almacenamiento persistente; mantén respaldos JSON externos.</p><p>Para instalar en iPhone: abre en Safari, usa Compartir → Añadir a pantalla de inicio. En Android: menú de Chrome → Instalar app.</p></details></div>
+<footer>Estrato v1.0 · Sin cuenta, sin servidor, sin seguimiento.</footer></section>
+</main>
+<nav role="tablist" aria-label="Secciones del cuaderno"><div class="nav-inner"><button id="tab-new" role="tab" aria-controls="panel-new" aria-selected="true" data-tab="new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nueva</button><button id="tab-list" role="tab" aria-controls="panel-list" aria-selected="false" data-tab="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/></svg>Lista</button><button id="tab-export" role="tab" aria-controls="panel-export" aria-selected="false" data-tab="export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Exportar</button></div></nav>
+<dialog id="detail-dialog" aria-labelledby="detail-title"><div class="dialog-title"><h2 id="detail-title">Estación</h2><button type="button" id="close-detail" aria-label="Cerrar detalle">Cerrar</button></div><div id="detail-content"></div><div class="buttons"><button id="detail-edit" class="primary">Editar estación</button></div></dialog>
+<dialog id="camera-dialog" aria-labelledby="camera-title"><h2 id="camera-title">Fotografía de campo</h2><video id="camera-video" autoplay muted playsinline></video><div class="buttons"><button id="capture" class="accent">Capturar foto</button><button id="close-camera">Cancelar</button></div></dialog>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const TYPES = ['estratificación','falla','diaclasa','foliación','otra'];
+const FIELDS = ['lat','lon','alt','precision_m','litologia','rumbo','buzamiento','dir_buzamiento','tipo','observaciones'];
+const COLUMNS = ['id','fecha',...FIELDS,'nombres_fotos'];
+const DB_NAME = 'estrato-field-notebook';
+let db, stations = [], draftPhotos = [], editingId = null, draftDate, dirty = false, draftEpoch = 0, busy = false, photoBusy = false, cameraStream, registration, installPrompt, detailId;
+let photoUrls = [], detailUrls = [], stopCompass = () => {};
+function notify(text, error = false) { $('message').textContent = text; $('message').classList.toggle('error', error); $('message').hidden = false; }
+function friendlyError(error) { return error?.name === 'QuotaExceededError' ? 'No queda espacio. Descarga un respaldo y libera espacio antes de volver a guardar.' : error?.name === 'VersionError' ? 'Esta versión de la app es antigua. Actualízala para abrir los datos.' : 'No se pudo completar la operación. Tus registros existentes se conservan. ' + (error?.message || 'Revisa los permisos de almacenamiento del navegador.'); }
+function element(tag, text, cls) { const e = document.createElement(tag); if (text !== undefined) e.textContent = text; if (cls) e.className = cls; return e; }
+function readableDate(iso) { return new Date(iso).toLocaleString('es', {dateStyle:'medium',timeStyle:'short'}); }
+function formatId(n) { return 'EST-' + String(n).padStart(3,'0'); }
+function idNumber(id) { return Number(id.slice(4)); }
+function bytes(n) { return (n / 1048576).toLocaleString('es', {maximumFractionDigits:2}) + ' MB'; }
+function txDone(tx) { return new Promise((resolve,reject) => { tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error || new Error('Transacción cancelada.')); }); }
+function request(req) { return new Promise((resolve,reject) => { req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); }); }
+async function openDatabase() {
+  if (!('indexedDB' in window)) throw new Error('Este navegador no permite IndexedDB. Usa Chrome o Safari actualizado.');
+  return new Promise((resolve,reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => {
+      const d = req.result;
+      d.createObjectStore('stations', {keyPath:'id'});
+      d.createObjectStore('photos', {keyPath:'stationId'});
+      d.createObjectStore('meta', {keyPath:'key'});
+    };
+    req.onerror = () => reject(req.error);
+    req.onblocked = () => notify('Cierra las otras pestañas de Estrato para abrir el almacenamiento.', true);
+    req.onsuccess = () => { req.result.onversionchange = () => { req.result.close(); notify('Se actualizó la base de datos en otra pestaña. Recarga la app.', true); }; resolve(req.result); };
+  });
+}
+async function readAll() { const tx = db.transaction('stations','readonly'); const done = txDone(tx); const records = await request(tx.objectStore('stations').getAll()); await done; return records; }
+async function readPhotos(id) { const tx = db.transaction('photos','readonly'); const done = txDone(tx); const result = await request(tx.objectStore('photos').get(id)); await done; return result?.items || []; }
+async function snapshot() {
+  const tx = db.transaction(['stations','photos','meta'],'readonly'), done = txDone(tx);
+  const [records, photos, meta] = await Promise.all([request(tx.objectStore('stations').getAll()), request(tx.objectStore('photos').getAll()), request(tx.objectStore('meta').get('sequence'))]);
+  await done;
+  const map = new Map(photos.map(p => [p.stationId,p.items]));
+  return {records:records.sort((a,b) => idNumber(a.id)-idNumber(b.id)).map(r => ({...r,photos:map.get(r.id)||[]})), sequence:meta?.value || 0};
+}
+// The counter and all blobs commit in the same transaction. Never reuse a deleted ID.
+function saveRecord(record, items, existingId) {
+  const tx = db.transaction(['stations','photos','meta'],'readwrite'), done = txDone(tx);
+  const store = tx.objectStore('stations'), meta = tx.objectStore('meta');
+  let assignedId;
+  if (existingId) {
+    const check = store.get(existingId);
+    check.onsuccess = () => {
+      if (!check.result) { tx.abort(); return; }
+      assignedId = existingId;
+      store.put({...record,id:assignedId,photoCount:items.length});
+      tx.objectStore('photos').put({stationId:assignedId,items});
+    };
+  } else {
+    const seq = meta.get('sequence');
+    seq.onsuccess = () => {
+      const next = (seq.result?.value || 0) + 1;
+      assignedId = formatId(next);
+      meta.put({key:'sequence',value:next});
+      store.add({...record,id:assignedId,photoCount:items.length});
+      tx.objectStore('photos').put({stationId:assignedId,items});
+    };
+  }
+  return done.then(() => assignedId);
+}
+function setBusy(value) { busy = value; $('station-form').inert = value; ['save','reset','import-json','export-csv','export-zip','export-json','apply-update'].forEach(id => $(id).disabled = value); }
+function revoke(urls) { urls.splice(0).forEach(url => URL.revokeObjectURL(url)); }
+async function nextId() { const tx = db.transaction('meta','readonly'), done = txDone(tx); const r = await request(tx.objectStore('meta').get('sequence')); await done; return formatId((r?.value||0)+1); }
+async function clearForm() {
+  draftEpoch++; stopCompass(); revoke(photoUrls); draftPhotos = []; editingId = null; dirty = false;
+  HTMLFormElement.prototype.reset.call($('station-form')); draftDate = new Date().toISOString(); $('date-display').value = readableDate(draftDate);
+  $('form-title').textContent = 'Nueva estación'; $('save').textContent = 'Guardar estación'; $('reset').textContent = 'Limpiar formulario';
+  $('gps-status').textContent = 'Coordenadas en grados decimales (WGS84). También puedes escribirlas.';
+  $('compass-status').textContent = 'Lectura sugerida. Sostén el teléfono plano y comprueba con tu brújula de campo.';
+  clearErrors(); renderPhotos(); $('station-id').value = await nextId();
+}
+function clearErrors() { ['lat','lon','alt','litologia','rumbo','buzamiento','dir_buzamiento'].forEach(id => { $('err-'+id).hidden = true; $(id).removeAttribute('aria-invalid'); $(id).removeAttribute('aria-describedby'); }); }
+function validation(r) {
+  const errors = {};
+  for (const [key,min,max,required] of [['lat',-90,90,true],['lon',-180,180,true],['alt',-Infinity,Infinity,false],['precision_m',0,Infinity,false],['rumbo',0,360,false],['buzamiento',0,90,false],['dir_buzamiento',0,360,false]]) {
+    if (r[key] === null && !required) continue;
+    if (typeof r[key] !== 'number' || !Number.isFinite(r[key]) || r[key] < min || r[key] > max) errors[key] = required && r[key] === null ? 'Este campo es obligatorio.' : key === 'alt' ? 'Escribe una altitud numérica válida.' : 'Escribe un valor entre ' + min + ' y ' + max + '.';
+  }
+  if (typeof r.litologia !== 'string' || !r.litologia.trim() || r.litologia.length > 200) errors.litologia = 'Escribe una litología (máximo 200 caracteres).';
+  if (!TYPES.includes(r.tipo)) errors.tipo = 'Tipo de medida no válido.';
+  if (typeof r.observaciones !== 'string' || r.observaciones.length > 20000) errors.observaciones = 'Las observaciones admiten hasta 20 000 caracteres.';
+  return errors;
+}
+function collectForm() {
+  const r = {fecha:draftDate};
+  FIELDS.forEach(key => { const input = $(key); r[key] = ['litologia','tipo','observaciones'].includes(key) ? input.value.trim() : input.validity.badInput ? NaN : input.value === '' ? null : Number(input.value); });
+  return r;
+}
+function showErrors(errors) {
+  clearErrors(); let first;
+  Object.entries(errors).forEach(([key,text]) => { const e = $('err-'+key); if(e) {e.textContent=text; e.hidden=false; $(key).setAttribute('aria-invalid','true'); $(key).setAttribute('aria-describedby','err-'+key); first ||= $(key);} });
+  notify('Revisa los campos marcados antes de guardar.',true); first?.focus();
+}
+async function refresh() {
+  stations = (await readAll()).sort((a,b) => idNumber(b.id)-idNumber(a.id));
+  const lithologies = [...new Set(stations.map(s => s.litologia))].sort((a,b)=>a.localeCompare(b,'es'));
+  $('lithologies').replaceChildren(...lithologies.map(s => {const o=element('option');o.value=s;return o;}));
+  const selected = $('filter').value;
+  const all = element('option','Todas las litologías'); all.value='';
+  $('filter').replaceChildren(all,...lithologies.map(s=>{const o=element('option',s);o.value=s;return o;}));
+  $('filter').value = lithologies.includes(selected) ? selected : '';
+  renderList(); await updateStorage();
+}
+function normalized(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
+function renderList() {
+  const query = normalized($('search').value.trim()), filter = $('filter').value;
+  const found = stations.filter(s => (!filter || s.litologia === filter) && normalized([s.id,s.litologia,s.observaciones].join(' ')).includes(query));
+  $('list-count').textContent = found.length + ' de ' + stations.length + ' estaciones'; $('stations').replaceChildren();
+  if (!found.length) { const e=element('div',stations.length ? 'No hay estaciones que coincidan con tu búsqueda.' : 'Tu primera estación empieza aquí. Registra un punto en la pestaña Nueva.','empty'); $('stations').append(e); return; }
+  for (const s of found) {
+    const card=element('article',undefined,'card'); card.append(element('div',s.id,'station-id'),element('h3',s.litologia),element('span',s.tipo,'badge'),element('p',readableDate(s.fecha),'station-meta'),element('p',s.lat.toFixed(6)+', '+s.lon.toFixed(6)+' · '+s.photoCount+' fotos','station-meta'));
+    if (s.rumbo!==null || s.buzamiento!==null) card.append(element('p','Rumbo '+(s.rumbo??'—')+'° · Buzamiento '+(s.buzamiento??'—')+'°','station-meta'));
+    const actions=element('div',undefined,'buttons');
+    for (const [text,action,cls] of [['Ver estación',()=>showDetail(s.id),'primary'],['Editar',()=>editStation(s.id),''],['Borrar',()=>deleteStation(s.id),'danger']]) { const b=element('button',text,cls);b.type='button';b.setAttribute('aria-label',text+' '+s.id);b.onclick=()=>{if(!busy&&!photoBusy) action().catch(e=>notify(friendlyError(e),true));};actions.append(b); }
+    card.append(actions);$('stations').append(card);
+  }
+}
+function switchTab(tab) {
+  ['new','list','export'].forEach(t=>{$('panel-'+t).hidden=t!==tab;$('tab-'+t).setAttribute('aria-selected',String(t===tab));$('tab-'+t).tabIndex=t===tab?0:-1;});
+  window.scrollTo({top:0});
+  if(tab==='list' && db) refresh().catch(e=>notify(friendlyError(e),true));
+  if(tab==='export' && db) updateStorage();
+}
+async function showDetail(id) {
+  const s=stations.find(r=>r.id===id);if(!s)return;detailId=id;revoke(detailUrls);$('detail-title').textContent=id;$('detail-content').replaceChildren();
+  const dl=element('dl'), labels={fecha:'Fecha y hora',lat:'Latitud',lon:'Longitud',alt:'Altitud (m)',precision_m:'Precisión (± m)',litologia:'Litología',rumbo:'Rumbo (°)',buzamiento:'Buzamiento (°)',dir_buzamiento:'Dirección de buzamiento (°)',tipo:'Tipo de medida',observaciones:'Observaciones'};
+  for(const [key,label] of Object.entries(labels)) dl.append(element('dt',label),element('dd',key==='fecha'?readableDate(s[key]):String(s[key]??'Sin dato')));
+  $('detail-content').append(dl);
+  for(const [i,p] of (await readPhotos(id)).entries()) { const url=URL.createObjectURL(p.blob);detailUrls.push(url);const img=element('img');img.src=url;img.alt=id+' · Foto '+(i+1);img.style.marginTop='18px';$('detail-content').append(img); }
+  $('detail-dialog').showModal();
+}
+async function editStation(id) {
+  if(dirty && !confirm('Hay cambios sin guardar. ¿Descartarlos para editar '+id+'?'))return;
+  const s=stations.find(r=>r.id===id);if(!s)return;
+  const items=await readPhotos(id);draftEpoch++;stopCompass();revoke(photoUrls);draftPhotos=items;editingId=id;draftDate=s.fecha;dirty=false;clearErrors();
+  FIELDS.forEach(key=>$(key).value=s[key]??'');$('station-id').value=id;$('date-display').value=readableDate(s.fecha);$('form-title').textContent='Editar estación';$('save').textContent='Guardar cambios';$('reset').textContent='Cancelar edición';renderPhotos();switchTab('new');
+}
+async function deleteStation(id) {
+  if(!confirm('¿Borrar '+id+' y todas sus fotos? Esta acción no se puede deshacer.'))return;
+  setBusy(true);
+  try{const tx=db.transaction(['stations','photos'],'readwrite'),done=txDone(tx);tx.objectStore('stations').delete(id);tx.objectStore('photos').delete(id);await done;if(editingId===id)await clearForm();await refresh();notify(id+' eliminada.');}finally{setBusy(false);}
+}
+function renderPhotos() {
+  revoke(photoUrls);$('photos').replaceChildren();$('photo-count').textContent=draftPhotos.length+' de 5 fotos · Se reducen a 1280 px y se guardan localmente.';
+  draftPhotos.forEach((p,i)=>{const card=element('div',undefined,'photo'),img=element('img'),url=URL.createObjectURL(p.blob);photoUrls.push(url);img.src=url;img.alt='Foto '+(i+1)+' de la estación';const row=element('div',undefined,'photo-footer');row.append(element('span','Foto '+(i+1)+' · '+bytes(p.blob.size)));const b=element('button','Quitar');b.type='button';b.disabled=photoBusy;b.setAttribute('aria-label','Quitar foto '+(i+1));b.onclick=()=>{draftPhotos.splice(i,1);dirty=true;renderPhotos();};row.append(b);card.append(img,row);$('photos').append(card);});
+  $('camera').disabled = $('gallery').disabled = photoBusy || draftPhotos.length >= 5;
+}
+function canvasBlob(canvas) { return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('No se pudo comprimir la imagen.')),'image/jpeg',.82)); }
+async function compressImage(blob) {
+  if(!blob.type.startsWith('image/'))throw new Error('Selecciona una imagen.');
+  if(blob.size>50*1048576)throw new Error('La foto supera 50 MB. Elige una imagen más pequeña.');
+  let image, url;
+  try {
+    if('createImageBitmap' in window) image=await createImageBitmap(blob,{imageOrientation:'from-image'});
+    else {url=URL.createObjectURL(blob);image=new Image();image.src=url;await image.decode();}
+    const width=image.width||image.naturalWidth,height=image.height||image.naturalHeight;
+    if(!width||!height)throw new Error('Imagen sin dimensiones válidas.');
+    const scale=Math.min(1,1280/Math.max(width,height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(width*scale));canvas.height=Math.max(1,Math.round(height*scale));const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);
+    return {blob:await canvasBlob(canvas),width:canvas.width,height:canvas.height};
+  } catch(e){throw new Error('No se pudo leer la foto. Prueba JPEG, PNG o WebP; algunos teléfonos no permiten HEIC. '+(e.message||''));}
+  finally{image?.close?.();if(url)URL.revokeObjectURL(url);}
+}
+async function addPhotos(files) {
+  if(photoBusy||busy)return;const epoch=draftEpoch;photoBusy=true;$('save').disabled=true;$('reset').disabled=true;renderPhotos();
+  let added=0,errors=[];
+  try{for(const file of files){if(draftPhotos.length>=5){errors.push('Se permiten hasta 5 fotos por estación.');break;}try{const p=await compressImage(file);if(epoch!==draftEpoch)break;draftPhotos.push(p);dirty=true;added++;}catch(e){errors.push(e.message);}}}
+  finally{photoBusy=false;$('save').disabled=busy;$('reset').disabled=busy;renderPhotos();}
+  if(errors.length)notify((added?added+' foto(s) añadidas. ':'')+errors.join(' '),true);else if(added)notify(added+' foto(s) listas. Guarda la estación para conservarlas.');
+}
+function closeCamera(){cameraStream?.getTracks().forEach(t=>t.stop());cameraStream=null;$('camera-video').srcObject=null;if($('camera-dialog').open)$('camera-dialog').close();}
+async function openCamera(){
+  if(draftPhotos.length>=5||photoBusy||busy)return;
+  if(!navigator.mediaDevices?.getUserMedia){notify('La cámara no está disponible. Abre por HTTPS o elige una foto desde galería.',true);return;}
+  const epoch=draftEpoch;$('camera').disabled=true;
+  try{cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false});if(epoch!==draftEpoch){closeCamera();return;}$('camera-video').srcObject=cameraStream;$('camera-dialog').showModal();await $('camera-video').play();}
+  catch(e){closeCamera();notify(e.name==='NotAllowedError'?'Permiso de cámara denegado. Permite la cámara en los ajustes del sitio o usa una foto de galería.':e.name==='NotFoundError'?'No se encontró una cámara. Usa la galería.':'No se pudo abrir la cámara. Cierra otras apps que la usen y prueba otra vez, o usa la galería.',true);}
+  finally{renderPhotos();}
+}
+async function capturePhoto(){const v=$('camera-video');if(!v.videoWidth){notify('Espera a que la cámara esté lista.',true);return;}$('capture').disabled=true;try{const scale=Math.min(1,1280/Math.max(v.videoWidth,v.videoHeight)),c=document.createElement('canvas');c.width=Math.round(v.videoWidth*scale);c.height=Math.round(v.videoHeight*scale);c.getContext('2d').drawImage(v,0,0,c.width,c.height);const blob=await canvasBlob(c);closeCamera();await addPhotos([blob]);}catch(e){notify(e.message,true);}finally{$('capture').disabled=false;}}
+function takeGPS(){
+  if(!navigator.geolocation){$('gps-status').textContent='GPS no disponible. Escribe las coordenadas manualmente.';return;}
+  const epoch=draftEpoch;$('gps').disabled=true;$('gps-status').textContent='Buscando posición de alta precisión…';
+  navigator.geolocation.getCurrentPosition(position=>{
+    $('gps').disabled=false;if(epoch!==draftEpoch)return;
+    const c=position.coords;$('lat').value=c.latitude;$('lon').value=c.longitude;$('alt').value=c.altitude??'';$('precision_m').value=c.accuracy;dirty=true;
+    $('gps-status').textContent='Posición capturada · Precisión ± '+c.accuracy.toFixed(1)+' m'+(c.altitude===null?' · Altitud no disponible.':'');
+  },error=>{$('gps').disabled=false;if(epoch!==draftEpoch)return;$('gps-status').textContent=error.code===1?'Permiso de ubicación denegado. Habilítalo en los ajustes del sitio o escribe las coordenadas.':error.code===3?'El GPS tardó demasiado. Busca cielo abierto y vuelve a intentar o escribe las coordenadas.':'No se pudo obtener una posición. Enciende la ubicación del teléfono o escribe las coordenadas.';},{enableHighAccuracy:true,timeout:25000,maximumAge:0});
+}
+async function readCompass(){
+  stopCompass();if(!window.DeviceOrientationEvent){$('compass-status').textContent='Este dispositivo no ofrece brújula. Escribe el rumbo manualmente.';return;}
+  const epoch=draftEpoch;
+  try{if(typeof DeviceOrientationEvent.requestPermission==='function'){const permission=await DeviceOrientationEvent.requestPermission();if(permission!=='granted'){$('compass-status').textContent='Permiso de orientación denegado. Escribe el rumbo manualmente.';return;}}}
+  catch{$('compass-status').textContent='La brújula no está disponible. Usa HTTPS y escribe el rumbo manualmente.';return;}
+  if(epoch!==draftEpoch)return;
+  $('compass').disabled=true;$('compass-status').textContent='Esperando una lectura absoluta; sostén el teléfono plano…';
+  const cleanup=()=>{clearTimeout(timer);window.removeEventListener('deviceorientation',handler);window.removeEventListener('deviceorientationabsolute',handler);$('compass').disabled=false;};
+  const handler=e=>{let heading=null;if(Number.isFinite(e.webkitCompassHeading)&&!(Number.isFinite(e.webkitCompassAccuracy)&&e.webkitCompassAccuracy<0))heading=e.webkitCompassHeading;else if(e.absolute===true&&Number.isFinite(e.alpha))heading=360-e.alpha+(screen.orientation?.angle||0);if(heading===null)return;cleanup();if(epoch!==draftEpoch)return;heading=((heading%360)+360)%360;$('rumbo').value=heading.toFixed(1);dirty=true;$('compass-status').textContent='Sugerencia: '+heading.toFixed(1)+'°. Verifica la lectura y corrígela si es necesario.';};
+  const timer=setTimeout(()=>{cleanup();if(epoch===draftEpoch)$('compass-status').textContent='No hay una lectura absoluta disponible. Escribe el rumbo manualmente.';},9000);
+  stopCompass=cleanup;window.addEventListener('deviceorientation',handler);window.addEventListener('deviceorientationabsolute',handler);
+}
+function photoName(id,i,p){const ext=p.blob.type==='image/png'?'png':p.blob.type==='image/webp'?'webp':'jpg';return id+'_'+String(i+1).padStart(2,'0')+'.'+ext;}
+// Quote every value; neutralize spreadsheet formulas only in free-text fields.
+function csvCell(value,text=false){let s=String(value??'');if(text&&/^[\s]*[=+\-@\t\r\n]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
+function makeCSV(records){return '\uFEFF'+COLUMNS.join(',')+'\r\n'+records.map(r=>COLUMNS.map(key=>csvCell(key==='nombres_fotos'?r.photos.map((p,i)=>photoName(r.id,i,p)).join(';'):r[key],['litologia','observaciones','tipo'].includes(key))).join(',')).join('\r\n')+(records.length?'\r\n':'');}
+function download(blob,name){const url=URL.createObjectURL(blob),a=element('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
+function fileStamp(){return new Date().toISOString().replace(/[:.]/g,'-');}
+// ZIP32, STORE (no compression), UTF-8 names, CRC32; JPEGs are already compressed.
+const CRC_TABLE=Uint32Array.from({length:256},(_,n)=>{for(let k=0;k<8;k++)n=n&1?0xedb88320^(n>>>1):n>>>1;return n>>>0;});
+function crc32(data){let c=0xffffffff;for(const b of data)c=CRC_TABLE[(c^b)&255]^(c>>>8);return (c^0xffffffff)>>>0;}
+function header(size){const b=new Uint8Array(size);return {bytes:b,view:new DataView(b.buffer)};}
+async function makeZIP(files){
+  if(files.length>65535)throw new Error('Demasiados archivos para ZIP32. Exporta JSON.');
+  const encoder=new TextEncoder(),parts=[],central=[];let offset=0;
+  const now=new Date(),year=Math.max(1980,Math.min(2107,now.getFullYear())),time=(now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1),date=((year-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate();
+  for(const file of files){const name=encoder.encode(file.name),data=new Uint8Array(await file.blob.arrayBuffer()),crc=crc32(data);if(data.length>0xffffffff||offset+30+name.length+data.length>0xffffffff)throw new Error('El paquete supera el límite de ZIP32 (4 GB). Exporta JSON.');
+    const l=header(30),v=l.view;v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint16(6,0x0800,true);v.setUint16(10,time,true);v.setUint16(12,date,true);v.setUint32(14,crc,true);v.setUint32(18,data.length,true);v.setUint32(22,data.length,true);v.setUint16(26,name.length,true);parts.push(l.bytes,name,data);
+    const c=header(46),w=c.view;w.setUint32(0,0x02014b50,true);w.setUint16(4,20,true);w.setUint16(6,20,true);w.setUint16(8,0x0800,true);w.setUint16(12,time,true);w.setUint16(14,date,true);w.setUint32(16,crc,true);w.setUint32(20,data.length,true);w.setUint32(24,data.length,true);w.setUint16(28,name.length,true);w.setUint32(42,offset,true);central.push(c.bytes,name);offset+=30+name.length+data.length;
+  }
+  const centralSize=central.reduce((n,b)=>n+b.length,0);if(offset+centralSize+22>0xffffffff)throw new Error('El paquete supera el límite ZIP32.');
+  const end=header(22),v=end.view;v.setUint32(0,0x06054b50,true);v.setUint16(8,files.length,true);v.setUint16(10,files.length,true);v.setUint32(12,centralSize,true);v.setUint32(16,offset,true);return new Blob([...parts,...central,end.bytes],{type:'application/zip'});
+}
+function toDataURL(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob);});}
+async function exportData(kind){
+  if(busy||photoBusy)return;setBusy(true);notify('Preparando exportación…');
+  try{const {records,sequence}=await snapshot(),stamp=fileStamp();
+    if(kind==='csv')download(new Blob([makeCSV(records)],{type:'text/csv;charset=utf-8'}),'estaciones-'+stamp+'.csv');
+    if(kind==='zip'){const files=[{name:'estaciones.csv',blob:new Blob([makeCSV(records)],{type:'text/csv;charset=utf-8'})}];for(const r of records)r.photos.forEach((p,i)=>files.push({name:photoName(r.id,i,p),blob:p.blob}));download(await makeZIP(files),'campo-'+stamp+'.zip');}
+    if(kind==='json'){const data=[];for(const r of records){const {photos,...fields}=r;const converted=[];for(const p of photos)converted.push({data:await toDataURL(p.blob),width:p.width,height:p.height});data.push({...fields,photos:converted});}download(new Blob([JSON.stringify({app:'estrato',version:1,exportedAt:new Date().toISOString(),sequence,stations:data})],{type:'application/json;charset=utf-8'}),'respaldo-estrato-'+stamp+'.json');}
+    notify('Exportación preparada: '+records.length+' estaciones. Comprueba que el archivo quedó guardado en Descargas o Archivos.');
+  }catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}
+}
+async function validateBackup(raw){
+  if(!raw||raw.app!=='estrato'||raw.version!==1||!Array.isArray(raw.stations)||!Number.isSafeInteger(raw.sequence)||raw.sequence<0)throw new Error('Formato de respaldo no válido. Se requiere JSON de Estrato, versión 1.');
+  const ids=new Set(), records=[];let max=raw.sequence;
+  for(const r of raw.stations){
+    if(!r||typeof r.id!=='string'||!/^EST-\d{3,}$/.test(r.id)||!Number.isSafeInteger(idNumber(r.id))||idNumber(r.id)<1||r.id!==formatId(idNumber(r.id))||ids.has(r.id))throw new Error('ID inválido o repetido en el respaldo.');
+    ids.add(r.id);max=Math.max(max,idNumber(r.id));
+    if(typeof r.fecha!=='string'||!/^\d{4}-\d{2}-\d{2}T/.test(r.fecha)||!Number.isFinite(Date.parse(r.fecha)))throw new Error(r.id+': fecha inválida.');
+    const fields={id:r.id,fecha:r.fecha};FIELDS.forEach(key=>fields[key]=r[key]);if(Object.keys(validation(fields)).length)throw new Error(r.id+': datos geológicos o coordenadas inválidos.');
+    if(!Array.isArray(r.photos)||r.photos.length>5)throw new Error(r.id+': se permiten hasta 5 fotos.');
+    const photos=[];
+    for(const p of r.photos){
+      if(!p||typeof p.data!=='string'||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]*={0,2}$/.test(p.data)||p.data.length>12*1048576)throw new Error(r.id+': foto inválida o demasiado grande.');
+      const [prefix,data]=p.data.split(',');if(!data||data.length%4)throw new Error(r.id+': foto base64 inválida.');
+      const decoded=atob(data),array=Uint8Array.from(decoded,c=>c.charCodeAt(0)),blob=new Blob([array],{type:prefix.slice(5,prefix.indexOf(';'))});
+      let image,url;try{if('createImageBitmap' in window)image=await createImageBitmap(blob);else{url=URL.createObjectURL(blob);image=new Image();image.src=url;await image.decode();}const width=image.width||image.naturalWidth,height=image.height||image.naturalHeight;if(width<1||height<1||Math.max(width,height)>1280)throw new Error('Dimensiones inválidas; máximo 1280 px.');photos.push({blob,width,height});}finally{image?.close?.();if(url)URL.revokeObjectURL(url);}
+    }
+    records.push({...fields,photoCount:photos.length,photos});
+  }
+  if(max>=Number.MAX_SAFE_INTEGER)throw new Error('El contador de estaciones está fuera de rango.');
+  return {records,sequence:max};
+}
+async function importBackup(file){
+  if(!file||busy||photoBusy)return;setBusy(true);notify('Validando respaldo y fotos…');
+  try{
+    if(file.size>250*1048576)throw new Error('El respaldo supera 250 MB. Divide la colección antes de importarla en este dispositivo.');
+    const parsed=await validateBackup(JSON.parse(await file.text()));
+    const txRead=db.transaction('stations','readonly'),readDone=txDone(txRead),keys=await request(txRead.objectStore('stations').getAllKeys());await readDone;
+    const conflicts=parsed.records.filter(r=>keys.includes(r.id));
+    if(!confirm('Importar '+parsed.records.length+' estaciones con sus fotos. '+(conflicts.length?'Se reemplazarán '+conflicts.length+' ID existentes: '+conflicts.slice(0,8).map(r=>r.id).join(', ')+(conflicts.length>8?'…':'')+'. ':'No se reemplazará ninguna estación existente. ')+(dirty?'El formulario sin guardar se descartará. ':'')+'Las demás estaciones se conservarán. ¿Continuar?')){notify('Importación cancelada.');return;}
+    const tx=db.transaction(['stations','photos','meta'],'readwrite'),done=txDone(tx),meta=tx.objectStore('meta'),seq=meta.get('sequence');
+    seq.onsuccess=()=>{meta.put({key:'sequence',value:Math.max(seq.result?.value||0,parsed.sequence)});for(const r of parsed.records){const {photos,...fields}=r;tx.objectStore('stations').put(fields);tx.objectStore('photos').put({stationId:r.id,items:photos});}};
+    await done;await clearForm();await refresh();notify('Respaldo importado: '+parsed.records.length+' estaciones.');
+  }catch(e){notify('Importación rechazada. '+friendlyError(e),true);}finally{setBusy(false);$('backup-input').value='';}
+}
+async function updateStorage(){
+  try{const stationBytes=stations.reduce((n,s)=>n+new Blob([JSON.stringify(s)]).size,0);let detail='';
+    if(navigator.storage?.estimate){const {usage=0,quota=0}=await navigator.storage.estimate();$('storage').textContent=bytes(usage)+' usados';detail='Uso estimado del sitio: '+bytes(usage)+(quota?' de '+bytes(quota)+' disponibles para este origen.':'.');}
+    else{const data=await snapshot(),size=stationBytes+data.records.reduce((n,r)=>n+r.photos.reduce((sum,p)=>sum+p.blob.size,0),0);$('storage').textContent=bytes(size)+' en registros';detail='Registros y fotos: '+bytes(size)+'. Este navegador no informa su cuota.';}
+    $('storage-detail').textContent=detail+' '+stations.length+' estaciones guardadas.';
+    const persistent=navigator.storage?.persisted?await navigator.storage.persisted():false;$('persistence').textContent=persistent?'Almacenamiento persistente concedido. Guarda también un respaldo externo.':'El almacenamiento persistente aún no está concedido o no está disponible. Conserva respaldos externos.';
+  }catch{$('storage').textContent='Uso no disponible';$('storage-detail').textContent='El navegador no permite estimar el espacio. Guarda respaldos frecuentes.';}
+}
+async function askPersistence(){try{const granted=await navigator.storage?.persist?.();await updateStorage();notify(granted?'Almacenamiento persistente concedido.':'El navegador no concedió almacenamiento persistente. Puedes seguir usando la app; descarga respaldos JSON.');}catch{notify('Este navegador no permite solicitar almacenamiento persistente. Descarga respaldos JSON.');}}
+function updateNetwork(){$('network').textContent=navigator.onLine?'Con conexión':'Sin conexión';}
+function waitingUpdate(){if(registration?.waiting){$('apply-update').hidden=false;$('update-status').textContent='Hay una versión nueva lista. Guarda la estación antes de aplicarla.';}}
+async function prepareOffline(){
+  if(!isSecureContext||!('serviceWorker' in navigator)){$('offline-ready').textContent='Offline no disponible';notify('Usa HTTPS o localhost para instalar y activar el modo offline.',true);return;}
+  try{registration=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});waitingUpdate();registration.addEventListener('updatefound',()=>{const worker=registration.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed')waitingUpdate();});});await navigator.serviceWorker.ready;$('offline-ready').textContent='Lista para usar offline';}
+  catch{$('offline-ready').textContent='Caché offline no preparada';notify('No se pudo preparar la app offline. Abre con conexión y vuelve a cargar antes de salir al campo.',true);}
+}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+document.querySelector('nav').addEventListener('keydown',e=>{const tabs=[...document.querySelectorAll('[data-tab]')],i=tabs.indexOf(document.activeElement);if(i<0)return;let target;if(e.key==='ArrowRight')target=(i+1)%3;if(e.key==='ArrowLeft')target=(i+2)%3;if(e.key==='Home')target=0;if(e.key==='End')target=2;if(target!==undefined){e.preventDefault();switchTab(tabs[target].dataset.tab);tabs[target].focus();}});
+$('station-form').addEventListener('input',()=>dirty=true);
+['lat','lon'].forEach(id=>$(id).addEventListener('input',()=>{$('precision_m').value='';$('gps-status').textContent='Coordenadas manuales · Precisión GPS no aplicable.';}));
+$('station-form').addEventListener('submit',async e=>{e.preventDefault();if(busy||photoBusy||!db)return;const record=collectForm(),errors=validation(record);if(Object.keys(errors).length){showErrors(errors);return;}clearErrors();setBusy(true);try{const id=await saveRecord(record,draftPhotos,editingId);await clearForm();await refresh();notify(id+' guardada en este dispositivo.');switchTab('list');}catch(error){notify(friendlyError(error),true);}finally{setBusy(false);}});
+$('reset').onclick=async()=>{if(busy||photoBusy)return;if(dirty&&!confirm('¿Descartar el formulario y las fotos sin guardar?'))return;try{await clearForm();}catch(e){notify(friendlyError(e),true);}};
+$('gps').onclick=takeGPS;$('compass').onclick=readCompass;$('camera').onclick=openCamera;$('capture').onclick=capturePhoto;$('close-camera').onclick=closeCamera;$('camera-dialog').addEventListener('cancel',closeCamera);$('camera-dialog').addEventListener('close',closeCamera);
+$('gallery').onclick=()=>{if(!busy&&!photoBusy){$('photo-input').value='';$('photo-input').click();}};$('photo-input').onchange=()=>addPhotos([...$('photo-input').files]);
+$('search').oninput=renderList;$('filter').onchange=renderList;
+$('close-detail').onclick=()=>$('detail-dialog').close();$('detail-dialog').addEventListener('close',()=>revoke(detailUrls));$('detail-edit').onclick=()=>{$('detail-dialog').close();editStation(detailId).catch(e=>notify(friendlyError(e),true));};
+['csv','zip','json'].forEach(kind=>$('export-'+kind).onclick=()=>exportData(kind));$('import-json').onclick=()=>{$('backup-input').value='';$('backup-input').click();};$('backup-input').onchange=()=>importBackup($('backup-input').files[0]);$('persist').onclick=askPersistence;
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;$('install').textContent='Instalar Estrato';});window.addEventListener('appinstalled',()=>{installPrompt=null;$('install').textContent='App instalada';});
+$('install').onclick=async()=>{if(installPrompt){await installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('install').textContent='Cómo instalar la app';}else notify('Android/Chrome: menú → Instalar app. iPhone/Safari: Compartir → Añadir a pantalla de inicio. Primero espera «Lista para usar offline».');};
+$('update').onclick=async()=>{if(!registration){notify('El modo offline aún no está preparado.',true);return;}try{$('update').disabled=true;await registration.update();waitingUpdate();if(!registration.waiting)$('update-status').textContent=registration.installing?'Descargando una nueva versión…':'Búsqueda completada. Si aparece una versión nueva, se mostrará el botón para aplicarla.';}catch{$('update-status').textContent='No se pudo comprobar. Conéctate a internet e inténtalo de nuevo.';}finally{$('update').disabled=false;}};
+let applyingUpdate=false;$('apply-update').onclick=()=>{if(busy||photoBusy)return;if(dirty){notify('Guarda o descarta los cambios del formulario antes de actualizar.',true);return;}if(registration?.waiting){applyingUpdate=true;registration.waiting.postMessage({type:'SKIP_WAITING'});}};navigator.serviceWorker?.addEventListener('controllerchange',()=>{if(applyingUpdate)location.reload();});
+window.addEventListener('online',updateNetwork);window.addEventListener('offline',updateNetwork);window.addEventListener('beforeunload',event=>{if(dirty||busy||photoBusy){event.preventDefault();event.returnValue='';}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){closeCamera();stopCompass();}else if(db&&!busy){refresh().catch(e=>notify(friendlyError(e),true));}});
+(async()=>{updateNetwork();switchTab('new');$('save').disabled=true;try{db=await openDatabase();await refresh();await clearForm();$('save').disabled=false;if(navigator.storage?.persist)navigator.storage.persist().then(()=>updateStorage()).catch(()=>{});await prepareOffline();}catch(e){notify(friendlyError(e),true);$('storage').textContent='Almacenamiento no disponible';$('save').disabled=true;['export-csv','export-zip','export-json','import-json'].forEach(id=>$(id).disabled=true);}})();
+</script>
+</body>
+</html>
