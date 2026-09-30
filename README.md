@@ -29,7 +29,7 @@ Espera **Lista para usar offline** antes de desconectarte. La primera apertura n
 
 1. Abre DevTools y selecciona **Application → Manifest**. Comprueba nombre, `start_url`, `scope`, modo `standalone`, y ambos iconos; no debe haber errores de instalabilidad. No se incluyen capturas promocionales: puede faltar la presentación enriquecida del diálogo de instalación, pero la instalación básica sigue disponible.
 2. En **Service Workers**, comprueba que `sw.js` está activado y controla la página. La primera instalación toma el control mediante `clients.claim()`.
-3. En **Cache Storage**, comprueba una caché `estrato-…-v1.2.0` con la portada, `index.html`, manifiesto e iconos.
+3. En **Cache Storage**, comprueba una caché `estrato-…-v1.3.0` con la portada, `index.html`, manifiesto e iconos.
 4. En **IndexedDB**, abre la base `estrato-field-notebook` (versión 2) y sus almacenes `stations`, `photos`, `meta`, `drafts`, `trash` y `history`. Las fotos se guardan como objetos **Blob**, nunca rutas de archivos ni localStorage.
 5. Crea una estación con una foto, recarga y comprueba su detalle. Marca **Offline** en Service Workers o en Network y recarga: la app y la foto deben seguir funcionando. Crea otra estación y exporta CSV, ZIP y JSON mientras estás offline.
 6. Prueba rumbo 361°, buzamiento 91°, latitud 91° y longitud 181°: deben aparecer errores claros y no guardarse.
@@ -103,7 +103,7 @@ Consulta [GitHub: configurar la fuente de publicación](https://docs.github.com/
 
 ## Actualizaciones y caché
 
-1. Cada vez que cambies HTML, iconos o manifiesto, incrementa `VERSION` en `sw.js` (la actual es `v1.2.0`; siguiente ejemplo `v1.2.1`) y publica todos los archivos juntos.
+1. Cada vez que cambies HTML, iconos o manifiesto, incrementa `VERSION` en `sw.js` (la actual es `v1.3.0`; siguiente ejemplo `v1.3.1`) y publica todos los archivos juntos.
 2. La instalación de la nueva caché usa `cache: 'reload'` para evitar archivos antiguos de la caché HTTP. La nueva versión espera; no se fuerza una recarga mientras estás registrando.
 3. Con conexión, abre **Exportar → Buscar actualización**. Cuando esté disponible, guarda o descarta el formulario y pulsa **Aplicar actualización**. La app activa el worker nuevo y recarga. IndexedDB se conserva.
 4. Al activarse, se eliminan solamente cachés antiguas de Estrato para ese alcance; no otras PWAs del mismo dominio.
@@ -194,3 +194,12 @@ Pruebas aprobadas en Chrome con un perfil independiente y servidor estático loc
 - Regresión de borradores, papelera, versiones anteriores, concurrencia, importaciones v1/v2 y exportaciones CSV/ZIP/JSON aprobada.
 
 GPS real, sensores y funcionamiento en Android/iPhone siguen requiriendo la prueba física indicada arriba. Antes de una jornada, verifica en modo avión tanto los puntos como las capas que necesitas.
+
+
+## Identidad visual · v1.3
+
+Estrato incorpora una identidad de libreta geológica: emblema propio de estratos cruzados por una falla, cabecera con pliegues, tonos de basalto, papel, óxido y ocre, títulos de atlas y fichas con numeración y detalles de encuadernación. Los iconos instalables de 192/512 px usan el mismo emblema y se generan con Python estándar, sin recursos remotos. La interfaz mantiene una columna, las cuatro pestañas, botones grandes y modo oscuro automático. Las tipografías son del sistema y el dibujo es SVG/CSS inline; todo queda en el shell offline.
+
+Esta actualización cambia presentación e iconos. Conserva la base de datos, el formato de respaldos y las estaciones existentes. El caché nuevo es v1.3.0; actualiza desde Exportar → Buscar actualización → Aplicar actualización después de guardar el formulario.
+
+Se revisaron las cuatro pestañas en 320, 360, 390, 768 y 1280 px, sin desbordamiento horizontal; formularios, fichas y diálogos en modos claro y oscuro. Los pares principales de texto, ayudas y botones superan 4,5:1 de contraste calculado. Se verificó guardar y abrir estaciones desde la interfaz y se ejecutó nuevamente la prueba de mapa, capas, fotos, gestos táctiles, exportación y respaldo offline. El manifiesto conserva su identidad y las rutas de instalación.
