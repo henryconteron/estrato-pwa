@@ -7,7 +7,7 @@ Código fuente: **https://github.com/henryconteron/estrato-pwa**.
 
 ## Archivos
 
-- `index.html`: interfaz, estilos, IndexedDB, cámara/GPS/brújula, mapa offline, CSV, ZIP, GeoJSON y JSON.
+- `index.html`: interfaz, estilos, IndexedDB, cámara/GPS/brújula, mapa base offline, medición de distancias, informe imprimible, demostración, CSV, ZIP, GeoJSON y JSON.
 - `manifest.webmanifest`: nombre, identidad, alcance e instalación.
 - `sw.js`: caché versionada del app shell, con estrategia cache-first.
 - `icon-192.png` e `icon-512.png`: iconos PNG generados con Python estándar; el dibujo está dentro de la zona segura para iconos maskable.
@@ -29,7 +29,7 @@ Espera **Lista para usar offline** antes de desconectarte. La primera apertura n
 
 1. Abre DevTools y selecciona **Application → Manifest**. Comprueba nombre, `start_url`, `scope`, modo `standalone`, y ambos iconos; no debe haber errores de instalabilidad. No se incluyen capturas promocionales: puede faltar la presentación enriquecida del diálogo de instalación, pero la instalación básica sigue disponible.
 2. En **Service Workers**, comprueba que `sw.js` está activado y controla la página. La primera instalación toma el control mediante `clients.claim()`.
-3. En **Cache Storage**, comprueba una caché `estrato-…-v1.3.0` con la portada, `index.html`, manifiesto e iconos.
+3. En **Cache Storage**, comprueba una caché `estrato-…-v1.6.0` con la portada, `index.html`, manifiesto e iconos.
 4. En **IndexedDB**, abre la base `estrato-field-notebook` (versión 2) y sus almacenes `stations`, `photos`, `meta`, `drafts`, `trash` y `history`. Las fotos se guardan como objetos **Blob**, nunca rutas de archivos ni localStorage.
 5. Crea una estación con una foto, recarga y comprueba su detalle. Marca **Offline** en Service Workers o en Network y recarga: la app y la foto deben seguir funcionando. Crea otra estación y exporta CSV, ZIP y JSON mientras estás offline.
 6. Prueba rumbo 361°, buzamiento 91°, latitud 91° y longitud 181°: deben aparecer errores claros y no guardarse.
@@ -243,3 +243,35 @@ La base sigue en IndexedDB versión 2 y los respaldos completos siguen en JSON v
 Pruebas locales en Chrome con perfiles aislados: tres guías sin inventar mediciones, anexado de notas sin sobrescribir, recuperación del borrador con guía, GPS simulado de 50 m con aviso y guardado permitido, copia de contexto con nuevo ID/fecha y datos de ubicación/medidas/fotos/muestras vacíos. Bolsas repetidas dentro de una campaña, exclusión de otras campañas y de la propia edición, actualización tras corregir/borrar/restaurar, cancelar descarte conservando el formulario, selección de última estación por campaña y umbral GPS >20 m. Restauración v3 en navegador vacío conserva guías y recalcula avisos. Todo probado offline; instalabilidad aprobada, cero errores JavaScript y diseño claro/oscuro a 320/390/768 px sin desbordamiento. La actualización real v1.4 → v1.5 conservó campaña, identidad, fecha, bolsas y fotos de estación/muestra; la base y contador permanecieron intactos. Se repitieron pruebas del mapa/capas y de campañas/muestras. No se publican datos de prueba. Los sensores físicos de Android/iPhone siguen requiriendo prueba en el dispositivo.
 
 También pasó la regresión de importaciones y edición simultánea: cambios concurrentes no se sobrescriben, importaciones inválidas/canceladas no escriben datos y respaldos antiguos no duplican registros idénticos.
+
+## Mapas base, informes y demostración · v1.6
+
+### Mapa base offline
+
+En Mapa abre «Mapa base offline». Importa una imagen **PNG o JPEG** de tu zona (máximo 20 MB y 40 megapíxeles de entrada). Debe representar un rectángulo con **norte arriba y coordenadas WGS84/EPSG:4326**, con distribución lineal de longitud/latitud. Escribe nombre, fuente/autor y coordenadas decimales de los bordes Oeste, Este, Sur y Norte. Usa imágenes que tengas permiso de utilizar. Oeste debe ser menor que Este, Sur menor que Norte, y el ancho longitudinal no puede superar 180°. No se admiten imágenes rotadas ni zonas que cruzan el antimeridiano. Una captura Mercator, una imagen con bordes/marcos o una fotografía de un mapa no se alinean correctamente: prepara, reproyecta y recorta el área útil en tu SIG antes de importarla. No se interpreta GeoTIFF, MBTiles ni archivos de georreferenciación.
+
+La imagen se reduce a **2560 px de lado mayor** y se guarda como Blob en IndexedDB, dentro de `meta.baseMaps`. Hasta 4 fondos. El selector muestra uno a la vez; puedes cambiar opacidad o ver su zona completa. Fondo y opacidad seleccionados se recuerdan localmente en `meta.baseMapView`. Retirar un fondo pide confirmación y no borra estaciones. La cuadrícula, puntos, capas GeoJSON y GPS siguen funcionando. No se descargan teselas ni mapas de terceros: prepara las imágenes antes de salir. Comprueba la alineación con puntos conocidos; la app no puede verificar que los bordes indicados correspondan a la imagen.
+
+«Medir distancia» permite tocar dos puntos. La distancia aproximada es geodésica en línea recta (Haversine); no representa longitud de sendero ni desnivel. Puedes arrastrar o ampliar durante la medición. Un tercer toque inicia otra. Para teclado: flechas para desplazar, +/- para ampliar y Enter para marcar el centro. «Terminar medición» limpia los puntos; no se guardan como registros.
+
+### Informe de campaña
+
+En Exportar elige una campaña, Todas o Sin campaña y pulsa **Descargar informe de campaña**. Obtendrás un HTML autónomo con imágenes incrustadas: abre el archivo descargado y pulsa **Imprimir / Guardar PDF**; el diálogo del navegador permite imprimir o elegir Guardar como PDF. En algunos celulares conviene abrir el archivo desde Archivos con el navegador o llevarlo al computador. El informe también se puede leer sin imprimir y sin conexión.
+
+Incluye mapa con todas las estaciones seleccionadas, índice, coordenadas/altitud/precisión, orientaciones, notas, muestras, estados manuales, fotos de estaciones y bolsas y avisos de revisión. Usa el fondo seleccionado en Mapa si es compartido o corresponde a la campaña elegida; si no, intenta usar el fondo asociado a esa campaña. Muestra fuente y bordes del fondo. El mapa se ajusta al contenido del informe, independientemente de la vista actual; la escala es aproximada. No incluye capas GeoJSON de referencia, posición GPS actual ni mediciones temporales del mapa. Tampoco borradores, papelera o versiones anteriores. **El informe no reemplaza el respaldo JSON.** Puede ser grande si hay muchas fotografías. Al contener tus datos y fotos, decide tú con quién compartir el archivo.
+
+### Campaña de prueba
+
+En Exportar pulsa **Cargar demostración**. Se añade una campaña «DEMO · Quebrada de los Estratos» con 3 estaciones, 2 muestras, 5 imágenes sintéticas y un mapa geológico inventado. Las coordenadas son de entrenamiento: no representan observaciones reales. Incluye un GPS de ±35 m y una orientación incompleta para practicar la revisión. No usar la demo para navegar ni interpretar geología.
+
+La carga es aditiva y atómica: conserva tus estaciones, fotos, versiones, papelera y formulario/borrador pendiente. Asigna los siguientes IDs disponibles. Repetir el botón abre la campaña de demostración existente y no la vuelve a crear. Si has editado sus ejemplos, se conservan esas ediciones. Necesita espacio para un fondo. El código de la demo se publica, pero los datos solo se generan en tu dispositivo al pulsar el botón. Puedes filtrar otra campaña para seguir trabajando, archivar la demo o mover sus estaciones a la papelera desde Lista. Las exportaciones de Todas incluyen la demo: elige tu campaña real cuando quieras excluirla.
+
+### Respaldo y actualización
+
+El respaldo completo ahora es **JSON v4**, incluyendo fondos como base64, sus bordes, fuente y asociación de campaña. Restaura también estaciones, muestras, fotos, borradores, papelera, historia, campañas y GeoJSON. Admite importaciones v1/v2/v3. Para recuperar un respaldo v4 usa **Estrato v1.6 o posterior**. Los fondos idénticos no se duplican al reimportar; los diferentes se conservan por separado, hasta el límite de 4. Fondos corruptos, límites/dimensiones inválidos o referencias a campañas inexistentes rechazan toda la importación antes de escribir. La preferencia de fondo visible es propia del dispositivo y no forma parte del respaldo.
+
+El caché es **v1.6.0**; la base sigue en IndexedDB **versión 2**. Actualiza con conexión: guarda o descarta el formulario, Exportar → Buscar actualización → Aplicar actualización. No borres los datos del sitio. Conserva una copia JSON fuera del navegador.
+
+### Verificación
+
+Chrome con servidor estático local y perfiles aislados: demo aditiva/idempotente con estación y borrador previos intactos, medición por toque/teclado, recarga con red bloqueada y fondo/opacidad recuperados, informe autónomo con 3 fichas/2 bolsas/5 fotos y campaña filtrada, imágenes cargadas offline, diseño de impresión y textos escapados. Respaldo v4 restaurado en perfil vacío y reimportado sin duplicados; rechazo de mapas corruptos, bordes inválidos, dimensiones incorrectas y referencias inexistentes. Importación de una imagen de 3000 px reducida a 2560 y retiro sin borrar estaciones. Diseño claro/oscuro a 320/390/768 px sin desbordamiento, instalabilidad sin errores y cero errores JavaScript. Actualización real v1.5 → v1.6 conserva campaña, identidad, fechas, muestra y ambas fotos. Se repitieron las pruebas de guías, calidad, borradores, papelera, historial e importación concurrente. Sensores físicos de Android/iPhone e impresión desde cada sistema siguen requiriendo prueba en esos dispositivos.
