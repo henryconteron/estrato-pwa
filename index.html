@@ -19,13 +19,14 @@
 </style>
 </head>
 <body>
-<header><div class="inner brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M5 33 20 10l7 11 5-6 11 18M5 38h38M5 43h38M14 33l9-8 10 8" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><div><div class="brand-name">estrato</div><div class="brand-sub">Cuaderno de campo</div></div><span class="version">v1.0</span></div></header>
+<header><div class="inner brand"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M5 33 20 10l7 11 5-6 11 18M5 38h38M5 43h38M14 33l9-8 10 8" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg><div><div class="brand-name">estrato</div><div class="brand-sub">Cuaderno de campo</div></div><span class="version">v1.1</span></div></header>
 <div class="status"><div class="status-inner"><span id="network">Comprobando conexión</span><span id="storage">Abriendo almacenamiento…</span><span id="offline-ready">Preparando uso offline…</span></div></div>
 <main>
 <noscript>Activa JavaScript para registrar y guardar estaciones.</noscript>
 <div id="message" role="status" aria-live="polite" hidden></div>
 <section id="panel-new" role="tabpanel" aria-labelledby="tab-new">
 <div class="eyebrow">Registro en terreno</div><h1 id="form-title">Nueva estación</h1><p class="intro">Observa, mide y guarda. Tus datos se quedan en este dispositivo.</p>
+<section id="draft-recovery" hidden aria-labelledby="recovery-title"><h2 id="recovery-title">Borradores recuperables</h2><p class="hint">Recupera un formulario pendiente, incluyendo sus fotos. Cada pestaña mantiene su propio borrador.</p><div id="recovery-list"></div></section><p id="draft-status" class="info-strip" role="status">El borrador se guarda automáticamente al escribir.</p>
 <form id="station-form" novalidate>
 <div class="card"><h2><span class="section-number">01 /</span>Estación y ubicación</h2>
 <label for="station-id">ID de estación</label><input id="station-id" readonly aria-describedby="id-hint"><p id="id-hint" class="hint">El ID definitivo se asigna al guardar.</p>
@@ -49,19 +50,20 @@
 <div class="buttons"><button type="button" id="camera">▣ Tomar foto</button><button type="button" id="gallery">＋ Añadir desde galería</button></div><input id="photo-input" type="file" accept="image/*" multiple hidden>
 <p class="hint" id="photo-count">0 de 5 fotos · Se reducen a 1280 px y se guardan localmente.</p><p class="hint">Si no se abre la cámara o galería, habilita sus permisos en los ajustes del navegador. Puedes seguir registrando sin fotos.</p><div id="photos"></div>
 </div>
-<div class="buttons"><button id="save" type="submit" class="primary">Guardar estación</button><button id="reset" type="button">Limpiar formulario</button></div><p class="hint">* Campos obligatorios. Se guarda únicamente al pulsar «Guardar estación».</p>
+<div class="buttons"><button id="save" type="submit" class="primary">Guardar estación</button><button id="save-as-new" type="button" hidden>Guardar como nueva</button><button id="reset" type="button">Limpiar formulario</button></div><p class="hint">* Campos obligatorios. El borrador se guarda automáticamente; «Guardar estación» finaliza el registro.</p>
 </form></section>
-<section id="panel-list" role="tabpanel" aria-labelledby="tab-list" hidden><div class="eyebrow">Tu archivo de campo</div><h1>Estaciones</h1><p class="intro">Cada punto, con su contexto. Disponible sin conexión.</p><label for="search">Buscar estaciones</label><input type="search" id="search" placeholder="ID, litología u observaciones"><label for="filter">Filtrar por litología</label><select id="filter"><option value="">Todas las litologías</option></select><p id="list-count" class="count"></p><div id="stations"></div></section>
+<section id="panel-list" role="tabpanel" aria-labelledby="tab-list" hidden><div class="eyebrow">Tu archivo de campo</div><h1>Estaciones</h1><p class="intro">Cada punto, con su contexto. Disponible sin conexión.</p><label for="search">Buscar estaciones</label><input type="search" id="search" placeholder="ID, litología u observaciones"><label for="filter">Filtrar por litología</label><select id="filter"><option value="">Todas las litologías</option></select><p id="list-count" class="count"></p><div id="stations"></div><details id="trash-section" class="card"><summary>Papelera · <span id="trash-count">0 estaciones</span></summary><p class="hint">Las estaciones y fotos se conservan hasta que decidas eliminarlas definitivamente. Se incluyen en el respaldo JSON.</p><div id="trash-list"></div></details></section>
 <section id="panel-export" role="tabpanel" aria-labelledby="tab-export" hidden><div class="eyebrow">Del terreno a tu escritorio</div><h1>Exportar y respaldar</h1><p class="intro">Lleva tus registros contigo. Todas las exportaciones incluyen la colección completa.</p>
 <div class="card export-card"><span class="badge">TABLA DE DATOS</span><h2 style="margin-top:12px">CSV para Excel</h2><p>Una fila por estación, con coordenadas, medidas y nombres de fotos. UTF-8 con BOM.</p><button id="export-csv" class="full primary">Descargar CSV</button></div>
 <div class="card export-card"><span class="badge">DATOS + FOTOGRAFÍAS</span><h2 style="margin-top:12px">Paquete de campo</h2><p>Un ZIP con el CSV y las fotos nombradas por estación: EST-001_01.jpg.</p><button id="export-zip" class="full primary">Descargar ZIP</button></div>
-<div class="card export-card"><span class="badge">RESPALDO COMPLETO</span><h2 style="margin-top:12px">Protege tu trabajo</h2><p>El JSON contiene todos los registros y fotos. Guarda una copia fuera del navegador después de cada jornada.</p><div class="buttons"><button id="export-json" class="accent">Descargar respaldo JSON</button><button id="import-json">Importar respaldo JSON</button></div><input id="backup-input" type="file" accept=".json,application/json" hidden><p class="hint">La importación combina colecciones. Si un ID ya existe, se pide confirmación antes de reemplazarlo. Un archivo inválido no modifica tus datos.</p></div>
+<div class="card export-card"><span class="badge">RESPALDO COMPLETO</span><h2 style="margin-top:12px">Protege tu trabajo</h2><p>El JSON contiene estaciones, fotos, borradores, papelera y versiones anteriores. Guarda una copia fuera del navegador después de cada jornada.</p><div class="buttons"><button id="export-json" class="accent">Descargar respaldo JSON</button><button id="import-json">Importar respaldo JSON</button></div><input id="backup-input" type="file" accept=".json,application/json" hidden><p class="hint">La importación muestra una vista previa. IDs iguales de distintos celulares se conservan con una numeración nueva. Admite respaldos antiguos v1 y completos v2.</p></div>
 <div class="card export-card"><h2>Este dispositivo</h2><p id="storage-detail">Calculando uso…</p><p id="persistence">Comprobando protección del almacenamiento…</p><div class="buttons"><button id="persist">Pedir almacenamiento persistente</button><button id="install">Cómo instalar la app</button><button id="update">Buscar actualización</button><button id="apply-update" hidden class="accent">Aplicar actualización</button></div><p id="update-status" class="hint" role="status"></p><details><summary>Antes de salir al campo</summary><p>Abre la app con conexión y espera «Lista para usar offline». Instálala y prueba abrirla en modo avión. No borres los datos del sitio ni uses modo privado. El navegador puede negar el almacenamiento persistente; mantén respaldos JSON externos.</p><p>Para instalar en iPhone: abre en Safari, usa Compartir → Añadir a pantalla de inicio. En Android: menú de Chrome → Instalar app.</p></details></div>
-<footer>Estrato v1.0 · Sin cuenta, sin servidor, sin seguimiento.</footer></section>
+<footer>Estrato v1.1 · Sin cuenta, sin servidor, sin seguimiento.</footer></section>
 </main>
 <nav role="tablist" aria-label="Secciones del cuaderno"><div class="nav-inner"><button id="tab-new" role="tab" aria-controls="panel-new" aria-selected="true" data-tab="new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nueva</button><button id="tab-list" role="tab" aria-controls="panel-list" aria-selected="false" data-tab="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/></svg>Lista</button><button id="tab-export" role="tab" aria-controls="panel-export" aria-selected="false" data-tab="export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Exportar</button></div></nav>
-<dialog id="detail-dialog" aria-labelledby="detail-title"><div class="dialog-title"><h2 id="detail-title">Estación</h2><button type="button" id="close-detail" aria-label="Cerrar detalle">Cerrar</button></div><div id="detail-content"></div><div class="buttons"><button id="detail-edit" class="primary">Editar estación</button></div></dialog>
+<dialog id="detail-dialog" aria-labelledby="detail-title"><div class="dialog-title"><h2 id="detail-title">Estación</h2><button type="button" id="close-detail" aria-label="Cerrar detalle">Cerrar</button></div><div id="detail-content"></div><div class="buttons"><button id="detail-edit" class="primary">Editar estación</button><button id="restore-history" hidden>Recuperar versión anterior</button></div></dialog>
 <dialog id="camera-dialog" aria-labelledby="camera-title"><h2 id="camera-title">Fotografía de campo</h2><video id="camera-video" autoplay muted playsinline></video><div class="buttons"><button id="capture" class="accent">Capturar foto</button><button id="close-camera">Cancelar</button></div></dialog>
+<dialog id="import-dialog" aria-labelledby="import-title"><h2 id="import-title">Revisar importación</h2><p id="import-summary" class="hint"></p><label for="import-policy">Si la misma estación tiene cambios</label><select id="import-policy"><option value="both">Conservar ambas versiones (recomendado)</option><option value="replace">Actualizar la misma identidad</option></select><p class="hint">Dos estaciones de distinta identidad nunca se reemplazan por compartir EST-001. En respaldos v1, sin identidad, los registros diferentes se añaden por separado.</p><div id="import-preview"></div><div class="buttons"><button id="confirm-import" class="accent">Confirmar importación</button><button id="cancel-import">Cancelar</button></div></dialog>
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
@@ -78,62 +80,262 @@ function readableDate(iso) { return new Date(iso).toLocaleString('es', {dateStyl
 function formatId(n) { return 'EST-' + String(n).padStart(3,'0'); }
 function idNumber(id) { return Number(id.slice(4)); }
 function bytes(n) { return (n / 1048576).toLocaleString('es', {maximumFractionDigits:2}) + ' MB'; }
-function txDone(tx) { return new Promise((resolve,reject) => { tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error || new Error('Transacción cancelada.')); }); }
+function txDone(tx) { return new Promise((resolve,reject) => { tx.oncomplete = resolve; tx.onerror = event => reject(tx.error || event.target?.error || new Error('No se pudo escribir la transacción.')); tx.onabort = () => reject(tx.error || new Error('Transacción cancelada.')); }); }
 function request(req) { return new Promise((resolve,reject) => { req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); }); }
-async function openDatabase() {
-  if (!('indexedDB' in window)) throw new Error('Este navegador no permite IndexedDB. Usa Chrome o Safari actualizado.');
-  return new Promise((resolve,reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => {
-      const d = req.result;
-      d.createObjectStore('stations', {keyPath:'id'});
-      d.createObjectStore('photos', {keyPath:'stationId'});
-      d.createObjectStore('meta', {keyPath:'key'});
-    };
-    req.onerror = () => reject(req.error);
-    req.onblocked = () => notify('Cierra las otras pestañas de Estrato para abrir el almacenamiento.', true);
-    req.onsuccess = () => { req.result.onversionchange = () => { req.result.close(); notify('Se actualizó la base de datos en otra pestaña. Recarga la app.', true); }; resolve(req.result); };
-  });
-}
+
 async function readAll() { const tx = db.transaction('stations','readonly'); const done = txDone(tx); const records = await request(tx.objectStore('stations').getAll()); await done; return records; }
 async function readPhotos(id) { const tx = db.transaction('photos','readonly'); const done = txDone(tx); const result = await request(tx.objectStore('photos').get(id)); await done; return result?.items || []; }
+
+const STORES = ['stations','photos','meta','drafts','trash','history'];
+let draftKey = newUID(), editingUid = null, editingRevision = null, draftTimer;
+let draftWrites = Promise.resolve(), recoveryDrafts = [], trashed = [], previousVersions = [];
+function newUID() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  const b = crypto.getRandomValues(new Uint8Array(16)); b[6]=(b[6]&15)|64; b[8]=(b[8]&63)|128;
+  const h=[...b].map(n=>n.toString(16).padStart(2,'0')).join('');
+  return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);
+}
+const validUID = value => typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(value);
+const validID = value => typeof value === 'string' && /^EST-\d{3,}$/.test(value) && Number.isSafeInteger(idNumber(value)) && idNumber(value)>0 && value===formatId(idNumber(value));
+const validDate = value => typeof value==='string' && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value));
+async function writeTransaction(names, action) {
+  const tx=db.transaction(names,'readwrite'), done=txDone(tx); done.catch(()=>{});
+  try { const result=await action(tx); await done; return result; }
+  catch(error) { try{tx.abort();}catch{} await done.catch(()=>{}); throw error; }
+}
+async function readStore(name) {
+  const tx=db.transaction(name,'readonly'),done=txDone(tx),result=await request(tx.objectStore(name).getAll());await done;return result;
+}
+async function openDatabase() {
+  if (!('indexedDB' in window)) throw new Error('Este navegador no permite IndexedDB. Usa Chrome o Safari actualizado.');
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(DB_NAME,2);
+    req.onupgradeneeded=()=>{
+      const d=req.result;
+      if(!d.objectStoreNames.contains('stations'))d.createObjectStore('stations',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('photos'))d.createObjectStore('photos',{keyPath:'stationId'});
+      if(!d.objectStoreNames.contains('meta'))d.createObjectStore('meta',{keyPath:'key'});
+      for(const name of ['drafts','trash','history'])if(!d.objectStoreNames.contains(name))d.createObjectStore(name,{keyPath:name==='drafts'?'key':'uid'});
+      const store=req.transaction.objectStore('stations');
+      if(!store.indexNames.contains('uid'))store.createIndex('uid','uid',{unique:true});
+      const cursor=store.openCursor();cursor.onsuccess=()=>{const c=cursor.result;if(!c)return;const r=c.value;if(!r.uid)c.update({...r,uid:newUID(),revision:1,updatedAt:r.fecha});c.continue();};
+    };
+    req.onerror=()=>reject(req.error);
+    req.onblocked=()=>notify('Cierra otras pestañas de Estrato para completar la actualización del almacenamiento.',true);
+    req.onsuccess=()=>{req.result.onversionchange=()=>{req.result.close();notify('Hay una versión nueva del almacenamiento. Recarga la app.',true);};resolve(req.result);};
+  });
+}
 async function snapshot() {
-  const tx = db.transaction(['stations','photos','meta'],'readonly'), done = txDone(tx);
-  const [records, photos, meta] = await Promise.all([request(tx.objectStore('stations').getAll()), request(tx.objectStore('photos').getAll()), request(tx.objectStore('meta').get('sequence'))]);
-  await done;
-  const map = new Map(photos.map(p => [p.stationId,p.items]));
-  return {records:records.sort((a,b) => idNumber(a.id)-idNumber(b.id)).map(r => ({...r,photos:map.get(r.id)||[]})), sequence:meta?.value || 0};
+  const tx=db.transaction(STORES,'readonly'),done=txDone(tx);
+  const [records,photos,sequence,generation,trash,history,drafts]=await Promise.all([
+    request(tx.objectStore('stations').getAll()),request(tx.objectStore('photos').getAll()),
+    request(tx.objectStore('meta').get('sequence')),request(tx.objectStore('meta').get('generation')),
+    request(tx.objectStore('trash').getAll()),request(tx.objectStore('history').getAll()),request(tx.objectStore('drafts').getAll())
+  ]);await done;
+  const map=new Map(photos.map(p=>[p.stationId,p.items]));
+  return {records:records.sort((a,b)=>idNumber(a.id)-idNumber(b.id)).map(r=>({...r,photos:map.get(r.id)||[]})),sequence:sequence?.value||0,generation:generation?.value||0,trash,history,drafts};
 }
-// The counter and all blobs commit in the same transaction. Never reuse a deleted ID.
-function saveRecord(record, items, existingId) {
-  const tx = db.transaction(['stations','photos','meta'],'readwrite'), done = txDone(tx);
-  const store = tx.objectStore('stations'), meta = tx.objectStore('meta');
-  let assignedId;
-  if (existingId) {
-    const check = store.get(existingId);
-    check.onsuccess = () => {
-      if (!check.result) { tx.abort(); return; }
-      assignedId = existingId;
-      store.put({...record,id:assignedId,photoCount:items.length});
-      tx.objectStore('photos').put({stationId:assignedId,items});
-    };
-  } else {
-    const seq = meta.get('sequence');
-    seq.onsuccess = () => {
-      const next = (seq.result?.value || 0) + 1;
-      assignedId = formatId(next);
-      meta.put({key:'sequence',value:next});
-      store.add({...record,id:assignedId,photoCount:items.length});
-      tx.objectStore('photos').put({stationId:assignedId,items});
-    };
+async function bumpGeneration(meta) { const g=await request(meta.get('generation'));meta.put({key:'generation',value:(g?.value||0)+1}); }
+async function saveRecord(record,items,existingId,expected={}) {
+  return writeTransaction(STORES,async tx=>{
+    const store=tx.objectStore('stations'),photos=tx.objectStore('photos'),meta=tx.objectStore('meta');
+    let id,uid,revision;
+    if(existingId){
+      const old=await request(store.get(existingId));
+      if(!old || (expected.uid && old.uid!==expected.uid) || (expected.revision && old.revision!==expected.revision))throw new Error('La estación cambió o se movió a la papelera en otra pestaña. Tu borrador se conserva. Revisa la estación o usa «Guardar como nueva».');
+      const oldPhotos=await request(photos.get(existingId));
+      tx.objectStore('history').put({uid:old.uid,record:old,photos:oldPhotos?.items||[],savedAt:new Date().toISOString()});
+      id=old.id;uid=old.uid;revision=old.revision+1;
+    }else{
+      const seq=await request(meta.get('sequence')),next=(seq?.value||0)+1;
+      if(!Number.isSafeInteger(next))throw new Error('El contador de estaciones está fuera de rango.');
+      meta.put({key:'sequence',value:next});id=formatId(next);uid=newUID();revision=1;
+    }
+    store.put({...record,id,uid,revision,updatedAt:new Date().toISOString(),photoCount:items.length});
+    photos.put({stationId:id,items});if(expected.draftKey)tx.objectStore('drafts').delete(expected.draftKey);
+    await bumpGeneration(meta);return id;
+  });
+}
+function draftSnapshot() {
+  const values={};FIELDS.forEach(key=>values[key]=$(key).value);
+  return {key:draftKey,editingId,editingUid,editingRevision,draftDate,values,photos:[...draftPhotos],savedAt:new Date().toISOString()};
+}
+function persistDraft() {
+  clearTimeout(draftTimer);if(!db||!dirty)return draftWrites;
+  const data=draftSnapshot(),epoch=draftEpoch;
+  $('draft-status').textContent='Guardando borrador…';
+  const job=draftWrites.catch(()=>{}).then(()=>writeTransaction('drafts',tx=>{tx.objectStore('drafts').put(data);}));
+  draftWrites=job;
+  job.then(()=>{if(epoch===draftEpoch&&data.key===draftKey&&dirty)$('draft-status').textContent='Borrador guardado en este dispositivo · '+readableDate(data.savedAt);},e=>{if(epoch===draftEpoch){$('draft-status').textContent='No se pudo guardar el borrador. Guarda la estación o descarga un respaldo.';notify(friendlyError(e),true);}});
+  return job;
+}
+function markDirty() { dirty=true;$('draft-status').textContent='Cambios pendientes de guardar en el borrador…';clearTimeout(draftTimer);draftTimer=setTimeout(()=>persistDraft().catch(()=>{}),350); }
+async function forgetCurrentDraft() {
+  clearTimeout(draftTimer);await draftWrites.catch(()=>{});
+  const key=draftKey;await writeTransaction('drafts',tx=>{tx.objectStore('drafts').delete(key);});draftKey=newUID();
+}
+function renderRecovery() {
+  const drafts=recoveryDrafts.filter(d=>d.key!==draftKey).sort((a,b)=>b.savedAt.localeCompare(a.savedAt));
+  $('draft-recovery').hidden=!drafts.length;$('recovery-list').replaceChildren();
+  for(const d of drafts){
+    const card=element('article',undefined,'card');card.append(element('h3',d.editingId?'Edición de '+d.editingId:'Nueva estación sin finalizar'),element('p',(d.values.litologia||'Sin litología')+' · '+d.photos.length+' fotos','station-meta'),element('p',readableDate(d.savedAt),'station-meta'));
+    const actions=element('div',undefined,'buttons');for(const [label,action,cls] of [['Recuperar borrador',()=>restoreDraft(d.key),'primary'],['Descartar borrador',()=>discardDraft(d.key),'danger']]){const b=element('button',label,cls);b.type='button';b.onclick=()=>{if(!busy&&!photoBusy)action().catch(e=>notify(friendlyError(e),true));};actions.append(b);}card.append(actions);$('recovery-list').append(card);
   }
-  return done.then(() => assignedId);
 }
-function setBusy(value) { busy = value; $('station-form').inert = value; ['save','reset','import-json','export-csv','export-zip','export-json','apply-update'].forEach(id => $(id).disabled = value); }
+async function restoreDraft(key) {
+  if(dirty&&!confirm('¿Descartar el formulario actual para recuperar este borrador?'))return;
+  setBusy(true);
+  try{
+    clearTimeout(draftTimer);await draftWrites.catch(()=>{});const target=newUID(),oldKey=draftKey;
+    const d=await writeTransaction('drafts',async tx=>{const store=tx.objectStore('drafts'),source=await request(store.get(key));if(!source)throw new Error('Este borrador ya se recuperó en otra pestaña.');const moved={...source,key:target};store.put(moved);store.delete(key);store.delete(oldKey);return moved;});
+    draftEpoch++;stopCompass();closeCamera();draftKey=target;editingId=d.editingId;editingUid=d.editingUid;editingRevision=d.editingRevision;draftDate=d.draftDate;draftPhotos=d.photos;dirty=true;
+    FIELDS.forEach(field=>$(field).value=d.values[field]??'');$('station-id').value=editingId||await nextId();$('date-display').value=readableDate(draftDate);
+    $('form-title').textContent=editingId?'Editar estación':'Nueva estación';$('save').textContent=editingId?'Guardar cambios':'Guardar estación';$('save-as-new').hidden=!editingId;$('reset').textContent=editingId?'Cancelar edición':'Limpiar formulario';
+    clearErrors();renderPhotos();$('draft-status').textContent='Borrador recuperado, incluyendo fotos. Pulsa Guardar para finalizar.';await refresh();switchTab('new');notify('Borrador recuperado.');
+  }finally{setBusy(false);}
+}
+async function discardDraft(key) {
+  if(!confirm('¿Descartar este borrador y sus fotos? No es una estación finalizada.'))return;
+  await writeTransaction('drafts',tx=>{tx.objectStore('drafts').delete(key);});await refresh();notify('Borrador descartado.');
+}
+function renderTrash() {
+  $('trash-count').textContent=trashed.length+' estaciones en la papelera';$('trash-list').replaceChildren();
+  if(!trashed.length){$('trash-list').append(element('p','La papelera está vacía.','hint'));return;}
+  for(const entry of [...trashed].sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt))){
+    const card=element('article',undefined,'card');card.append(element('div',entry.record.id,'station-id'),element('h3',entry.record.litologia),element('p',entry.photos.length+' fotos · Eliminada '+readableDate(entry.deletedAt),'station-meta'));
+    const actions=element('div',undefined,'buttons');for(const [label,action,cls] of [['Restaurar estación',()=>restoreTrash(entry.uid),'primary'],['Eliminar definitivamente',()=>purgeTrash(entry.uid),'danger']]){const b=element('button',label,cls);b.type='button';b.onclick=()=>{if(!busy&&!photoBusy)action().catch(e=>notify(friendlyError(e),true));};actions.append(b);}card.append(actions);$('trash-list').append(card);
+  }
+}
+async function deleteStation(id) {
+  if(!confirm('¿Mover '+id+' y sus fotos a la papelera? Podrás restaurarlas desde Lista.'))return;
+  setBusy(true);try{
+    await writeTransaction(STORES,async tx=>{const store=tx.objectStore('stations'),old=await request(store.get(id));if(!old)throw new Error('La estación ya no está disponible.');const p=await request(tx.objectStore('photos').get(id));tx.objectStore('trash').put({uid:old.uid,record:old,photos:p?.items||[],deletedAt:new Date().toISOString()});store.delete(id);tx.objectStore('photos').delete(id);await bumpGeneration(tx.objectStore('meta'));});
+    // An open edit remains recoverable as a draft; deletion never discards it.
+    if(editingId===id&&dirty)await persistDraft();await refresh();notify(id+' movida a la papelera. Sus fotos se conservan.');
+  }finally{setBusy(false);}
+}
+async function restoreTrash(uid) {
+  setBusy(true);try{
+    const restored=await writeTransaction(STORES,async tx=>{const trash=tx.objectStore('trash'),entry=await request(trash.get(uid));if(!entry)throw new Error('La estación ya se restauró.');const store=tx.objectStore('stations'),meta=tx.objectStore('meta');let id=entry.record.id;
+      if(await request(store.get(id))){const seq=await request(meta.get('sequence'));id=formatId((seq?.value||0)+1);meta.put({key:'sequence',value:idNumber(id)});}
+      store.add({...entry.record,id,uid,revision:entry.record.revision+1,updatedAt:new Date().toISOString(),...(id!==entry.record.id?{originalId:entry.record.id}:{})});tx.objectStore('photos').put({stationId:id,items:entry.photos});trash.delete(uid);await bumpGeneration(meta);return id;});
+    await refresh();notify(restored+' restaurada con sus fotos.');
+  }finally{setBusy(false);}
+}
+async function purgeTrash(uid) {
+  const entry=trashed.find(r=>r.uid===uid);if(!entry)return;
+  if(!confirm('¿Eliminar definitivamente '+entry.record.id+', sus fotos y su versión anterior? Esta acción no se puede deshacer. Descarga un respaldo antes.'))return;
+  setBusy(true);try{await writeTransaction(STORES,async tx=>{tx.objectStore('trash').delete(uid);tx.objectStore('history').delete(uid);await bumpGeneration(tx.objectStore('meta'));});await refresh();notify('Estación eliminada definitivamente de la papelera.');}finally{setBusy(false);}
+}
+async function restoreHistory(uid) {
+  if(!confirm('¿Recuperar la versión anterior, incluyendo sus fotos? La versión actual quedará guardada como anterior.'))return;
+  setBusy(true);try{
+    const id=await writeTransaction(STORES,async tx=>{const store=tx.objectStore('stations'),history=tx.objectStore('history'),old=await request(history.get(uid)),current=await request(store.index('uid').get(uid));if(!old||!current)throw new Error('La versión o estación ya no está disponible.');const pictures=await request(tx.objectStore('photos').get(current.id));history.put({uid,record:current,photos:pictures?.items||[],savedAt:new Date().toISOString()});store.put({...old.record,id:current.id,uid,revision:current.revision+1,updatedAt:new Date().toISOString()});tx.objectStore('photos').put({stationId:current.id,items:old.photos});await bumpGeneration(tx.objectStore('meta'));return current.id;});
+    $('detail-dialog').close();await refresh();notify('Versión anterior de '+id+' recuperada.');
+  }finally{setBusy(false);}
+}
+async function encodePhotos(items) {const encoded=[];for(const p of items)encoded.push({data:await toDataURL(p.blob),width:p.width,height:p.height});return encoded;}
+async function backupData(snap) {
+  const stations=[],trash=[],history=[],drafts=[];
+  for(const r of snap.records)stations.push({...r,photos:await encodePhotos(r.photos)});
+  for(const e of snap.trash)trash.push({...e,photos:await encodePhotos(e.photos)});
+  for(const e of snap.history)history.push({...e,photos:await encodePhotos(e.photos)});
+  for(const e of snap.drafts)drafts.push({...e,photos:await encodePhotos(e.photos)});
+  return {app:'estrato',version:2,exportedAt:new Date().toISOString(),sequence:snap.sequence,stations,trash,history,drafts};
+}
+async function decodePhotos(items,label) {
+  if(!Array.isArray(items)||items.length>5)throw new Error(label+': se permiten hasta 5 fotos.');
+  const photos=[];
+  for(const p of items){
+    if(!p||typeof p.data!=='string'||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]*={0,2}$/.test(p.data)||p.data.length>12*1048576)throw new Error(label+': foto inválida o demasiado grande.');
+    const [prefix,data]=p.data.split(',');if(!data||data.length%4)throw new Error(label+': foto base64 inválida.');
+    const decoded=atob(data),array=Uint8Array.from(decoded,c=>c.charCodeAt(0)),blob=new Blob([array],{type:prefix.slice(5,prefix.indexOf(';'))});
+    let img,url;try{if('createImageBitmap' in window)img=await createImageBitmap(blob);else{url=URL.createObjectURL(blob);img=new Image();img.src=url;await img.decode();}const width=img.width||img.naturalWidth,height=img.height||img.naturalHeight;if(width<1||height<1||Math.max(width,height)>1280)throw new Error(label+': dimensiones inválidas; máximo 1280 px.');photos.push({blob,width,height});}finally{img?.close?.();if(url)URL.revokeObjectURL(url);}
+  }return photos;
+}
+function validateRecord(r,legacy=false) {
+  if(!r||!validID(r.id)||!validDate(r.fecha))throw new Error('Estación con ID o fecha inválidos.');
+  const fields={id:r.id,fecha:r.fecha};FIELDS.forEach(key=>fields[key]=r[key]);
+  if(Object.keys(validation(fields)).length)throw new Error(r.id+': datos geológicos o coordenadas inválidos.');
+  if(!legacy&&(!validUID(r.uid)||!Number.isSafeInteger(r.revision)||r.revision<1||!validDate(r.updatedAt)))throw new Error(r.id+': identidad o versión inválida.');
+  return {...fields,uid:legacy?null:r.uid,revision:legacy?1:r.revision,updatedAt:legacy?r.fecha:r.updatedAt,...(validID(r.originalId)?{originalId:r.originalId}:{}),...(validUID(r.copyOfUid)?{copyOfUid:r.copyOfUid}:{})};
+}
+async function validateBackup(raw) {
+  if(!raw||raw.app!=='estrato'||![1,2].includes(raw.version)||!Array.isArray(raw.stations)||!Number.isSafeInteger(raw.sequence)||raw.sequence<0||raw.sequence>=Number.MAX_SAFE_INTEGER)throw new Error('Se requiere un respaldo JSON de Estrato, versión 1 o 2.');
+  const legacy=raw.version===1,ids=new Set(),uids=new Set(),records=[],trash=[],history=[],drafts=[];let max=raw.sequence;
+  for(const r of raw.stations){const fields=validateRecord(r,legacy);if(ids.has(fields.id)||(!legacy&&uids.has(fields.uid)))throw new Error('Identidad o ID repetidos en estaciones.');ids.add(fields.id);if(!legacy)uids.add(fields.uid);max=Math.max(max,idNumber(fields.id));const photos=await decodePhotos(r.photos,r.id);records.push({...fields,photoCount:photos.length,photos});}
+  if(!legacy){
+    if(!Array.isArray(raw.trash)||!Array.isArray(raw.history)||!Array.isArray(raw.drafts))throw new Error('El respaldo v2 debe incluir papelera, versiones y borradores.');
+    for(const e of raw.trash){const record=validateRecord(e.record);if(e.uid!==record.uid||uids.has(e.uid)||!validDate(e.deletedAt))throw new Error('Entrada de papelera inválida o repetida.');uids.add(e.uid);max=Math.max(max,idNumber(record.id));const photos=await decodePhotos(e.photos,'Papelera '+record.id);trash.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,deletedAt:e.deletedAt});}
+    const historyUids=new Set();for(const e of raw.history){const record=validateRecord(e.record);if(e.uid!==record.uid||historyUids.has(e.uid)||!validDate(e.savedAt)||!uids.has(e.uid))throw new Error('Versión anterior inválida o sin estación asociada.');historyUids.add(e.uid);const photos=await decodePhotos(e.photos,'Versión '+record.id);history.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,savedAt:e.savedAt});}
+    const draftKeys=new Set();for(const d of raw.drafts){if(!d||!validUID(d.key)||draftKeys.has(d.key)||!validDate(d.savedAt)||!validDate(d.draftDate)||!d.values||FIELDS.some(key=>typeof d.values[key]!=='string'||d.values[key].length>(key==='observaciones'?20000:key==='litologia'?200:100))||!TYPES.includes(d.values.tipo)||!(d.editingId===null||validID(d.editingId))||!(d.editingUid===null||validUID(d.editingUid))||!(d.editingRevision===null||(Number.isSafeInteger(d.editingRevision)&&d.editingRevision>0)))throw new Error('Borrador inválido.');draftKeys.add(d.key);const values={};FIELDS.forEach(key=>values[key]=d.values[key]);drafts.push({key:d.key,editingId:d.editingId,editingUid:d.editingUid,editingRevision:d.editingRevision,draftDate:d.draftDate,values,photos:await decodePhotos(d.photos,'Borrador'),savedAt:d.savedAt});}
+  }
+  if(max>=Number.MAX_SAFE_INTEGER)throw new Error('El contador está fuera de rango.');return {records,sequence:max,trash,history,drafts,legacy};
+}
+async function fingerprint(r) {
+  const fields=[r.fecha,...FIELDS.map(k=>r[k])],photos=[];
+  for(const p of r.photos){const hash=await crypto.subtle.digest('SHA-256',await p.blob.arrayBuffer());photos.push([...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join(''));}
+  return JSON.stringify([fields,photos]);
+}
+async function importContext(parsed,local) {
+  const fingerprints=new Map();for(const r of local.records)fingerprints.set(r.uid,await fingerprint(r));
+  const incoming=[];for(const r of parsed.records){const hash=await fingerprint(r);let uid=r.uid;if(!uid){const exact=local.records.find(s=>(s.id===r.id||s.originalId===r.id)&&fingerprints.get(s.uid)===hash);uid=exact?.uid||newUID();}incoming.push({record:{...r,uid},hash});}
+  return {parsed,local,incoming,fingerprints};
+}
+function planImport(context,policy) {
+  const {parsed,local,incoming,fingerprints}=context,known=new Map(local.records.map(r=>[r.uid,r])),usedIds=new Set([...local.records.map(r=>r.id),...local.trash.map(e=>e.record.id)]),usedUids=new Set([...known.keys(),...local.trash.map(e=>e.uid)]),mapping=new Map();
+  const adds=[],updates=[],rows=[],history=[],trash=[],drafts=[];let sequence=Math.max(local.sequence,parsed.sequence),unchanged=0;
+  const allocate=()=>{do{sequence++;if(!Number.isSafeInteger(sequence))throw new Error('Contador fuera de rango.');}while(usedIds.has(formatId(sequence)));return formatId(sequence);};
+  for(const {record:r,hash} of incoming){
+    const same=known.get(r.uid),copy=local.records.find(s=>s.copyOfUid===r.uid&&fingerprints.get(s.uid)===hash);
+    if((same&&fingerprints.get(same.uid)===hash)||(copy&&(policy==='both'||!same))){const identical=same&&fingerprints.get(same.uid)===hash?same:copy;unchanged++;mapping.set(r.uid,identical.uid);rows.push({source:r.id,target:identical.id,action:'Ya existe · no se cambia',record:r});continue;}
+    if(same&&policy==='replace'){
+      const updated={...r,id:same.id,uid:same.uid,revision:same.revision+1,updatedAt:new Date().toISOString()};updates.push(updated);history.push({uid:same.uid,record:(({photos,...fields})=>fields)(same),photos:same.photos,savedAt:new Date().toISOString()});mapping.set(r.uid,same.uid);rows.push({source:r.id,target:same.id,action:'Actualizar misma identidad · se guarda la versión actual',record:r,local:same});
+    }else{
+      const copyIdentity=usedUids.has(r.uid),uid=copyIdentity?newUID():r.uid,id=usedIds.has(r.id)?allocate():r.id;
+      const added={...r,id,uid,revision:1,updatedAt:new Date().toISOString(),...(id!==r.id?{originalId:r.id}:{}),...(copyIdentity?{copyOfUid:r.uid}:{})};adds.push(added);usedIds.add(id);usedUids.add(uid);mapping.set(r.uid,uid);rows.push({source:r.id,target:id,action:same?'Conservar ambas versiones':id!==r.id?'Añadir con nuevo ID · otra identidad':'Añadir estación',record:r,local:same});
+    }
+  }
+  const historyKnown=new Set([...local.history.map(e=>e.uid),...history.map(e=>e.uid)]);
+  for(const e of parsed.trash){if(!usedUids.has(e.uid)){trash.push(e);usedUids.add(e.uid);mapping.set(e.uid,e.uid);}}
+  for(const e of parsed.history){const uid=mapping.get(e.uid);if(!uid||historyKnown.has(uid))continue;const active=[...adds,...updates].find(r=>r.uid===uid);history.push({...e,uid,record:{...e.record,uid,id:active?.id||e.record.id}});historyKnown.add(uid);}
+  const draftKnown=new Set(local.drafts.map(d=>d.key));for(const d of parsed.drafts)if(!draftKnown.has(d.key)){const mapped=d.editingUid&&mapping.get(d.editingUid),active=[...adds,...updates,...local.records].find(r=>r.uid===mapped);drafts.push({...d,editingId:active?.id||d.editingId,editingUid:mapped||d.editingUid});}
+  return {adds,updates,rows,history,trash,drafts,sequence,unchanged};
+}
+function showImportPreview(context) {
+  return new Promise(resolve=>{
+    const dialog=$('import-dialog');$('import-policy').value='both';
+    const render=()=>{const p=planImport(context,$('import-policy').value);$('import-summary').textContent=p.adds.length+' nuevas · '+p.updates.length+' actualizaciones · '+p.unchanged+' idénticas. También se añadirán '+p.trash.length+' entradas de papelera, '+p.history.length+' versiones y '+p.drafts.length+' borradores. El formulario actual se conserva.';$('import-preview').replaceChildren();
+      for(const row of p.rows.slice(0,100)){const card=element('article',undefined,'card');card.append(element('h3',row.source+' → '+row.target),element('p',row.action,'badge'),element('p','Respaldo: '+row.record.litologia+' · '+row.record.lat+', '+row.record.lon+' · '+row.record.photos.length+' fotos','hint'));if(row.local){card.append(element('p','Actual: '+row.local.litologia+' · '+row.local.lat+', '+row.local.lon+' · '+row.local.photos.length+' fotos','hint'),element('p','Notas actuales: '+row.local.observaciones.slice(0,240),'hint'),element('p','Notas del respaldo: '+row.record.observaciones.slice(0,240),'hint'));}$('import-preview').append(card);}if(p.rows.length>100)$('import-preview').append(element('p','Se muestran las primeras 100 estaciones. El resumen incluye toda la colección.','hint'));};
+    $('import-policy').onchange=render;render();dialog.returnValue='cancel';
+    dialog.addEventListener('close',()=>resolve(dialog.returnValue==='confirm'?$('import-policy').value:null),{once:true});dialog.showModal();
+  });
+}
+async function importBackup(file) {
+  if(!file||busy||photoBusy)return;setBusy(true);notify('Validando respaldo y fotos…');
+  try{
+    await persistDraft();if(file.size>250*1048576)throw new Error('El respaldo supera 250 MB.');const parsed=await validateBackup(JSON.parse(await file.text())),local=await snapshot(),context=await importContext(parsed,local),policy=await showImportPreview(context);if(!policy){notify('Importación cancelada.');return;}
+    const plan=planImport(context,policy);
+    await writeTransaction(STORES,async tx=>{
+      const meta=tx.objectStore('meta'),g=await request(meta.get('generation'));
+      if((g?.value||0)!==local.generation)throw new Error('La colección cambió en otra pestaña durante la vista previa. Vuelve a importar para revisar los cambios.');
+      const currentSeq=await request(meta.get('sequence'));if((currentSeq?.value||0)!==local.sequence)throw new Error('El contador cambió. Vuelve a importar.');
+      for(const r of [...plan.adds,...plan.updates]){const {photos,...fields}=r;tx.objectStore('stations').put(fields);tx.objectStore('photos').put({stationId:r.id,items:photos});}
+      for(const e of plan.history)tx.objectStore('history').put(e);for(const e of plan.trash)tx.objectStore('trash').add(e);for(const d of plan.drafts)tx.objectStore('drafts').add(d);
+      meta.put({key:'sequence',value:plan.sequence});await bumpGeneration(meta);
+    });await refresh();if(!editingId)$('station-id').value=await nextId();notify('Importación completa: '+plan.adds.length+' nuevas, '+plan.updates.length+' actualizadas, '+plan.unchanged+' idénticas. Las estaciones de otra identidad se conservan por separado.');
+  }catch(e){notify('Importación rechazada. '+friendlyError(e),true);}finally{setBusy(false);$('backup-input').value='';}
+}
+async function submitStation(asNew=false) {
+  if(busy||photoBusy||!db)return;const record=collectForm(),errors=validation(record);if(Object.keys(errors).length){showErrors(errors);return;}clearErrors();setBusy(true);
+  try{clearTimeout(draftTimer);await draftWrites.catch(()=>{});const id=await saveRecord(record,draftPhotos,asNew?null:editingId,{uid:editingUid,revision:editingRevision,draftKey});await clearForm();await refresh();notify(id+' guardada en este dispositivo.');switchTab('list');}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}
+}
+
+function setBusy(value) { busy = value; $('station-form').inert = value; ['save','save-as-new','reset','import-json','export-csv','export-zip','export-json','apply-update'].forEach(id => $(id).disabled = value); }
 function revoke(urls) { urls.splice(0).forEach(url => URL.revokeObjectURL(url)); }
 async function nextId() { const tx = db.transaction('meta','readonly'), done = txDone(tx); const r = await request(tx.objectStore('meta').get('sequence')); await done; return formatId((r?.value||0)+1); }
 async function clearForm() {
-  draftEpoch++; stopCompass(); revoke(photoUrls); draftPhotos = []; editingId = null; dirty = false;
+  await forgetCurrentDraft(); draftEpoch++; stopCompass(); revoke(photoUrls); draftPhotos = []; editingId = null; editingUid = null; editingRevision = null; dirty = false; $('save-as-new').hidden = true; $('draft-status').textContent='El borrador se guarda automáticamente al escribir.';
   HTMLFormElement.prototype.reset.call($('station-form')); draftDate = new Date().toISOString(); $('date-display').value = readableDate(draftDate);
   $('form-title').textContent = 'Nueva estación'; $('save').textContent = 'Guardar estación'; $('reset').textContent = 'Limpiar formulario';
   $('gps-status').textContent = 'Coordenadas en grados decimales (WGS84). También puedes escribirlas.';
@@ -170,7 +372,7 @@ async function refresh() {
   const all = element('option','Todas las litologías'); all.value='';
   $('filter').replaceChildren(all,...lithologies.map(s=>{const o=element('option',s);o.value=s;return o;}));
   $('filter').value = lithologies.includes(selected) ? selected : '';
-  renderList(); await updateStorage();
+  [trashed,previousVersions,recoveryDrafts]=await Promise.all([readStore('trash'),readStore('history'),readStore('drafts')]); renderList(); renderTrash(); renderRecovery(); await updateStorage();
 }
 function normalized(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 function renderList() {
@@ -198,22 +400,18 @@ async function showDetail(id) {
   for(const [key,label] of Object.entries(labels)) dl.append(element('dt',label),element('dd',key==='fecha'?readableDate(s[key]):String(s[key]??'Sin dato')));
   $('detail-content').append(dl);
   for(const [i,p] of (await readPhotos(id)).entries()) { const url=URL.createObjectURL(p.blob);detailUrls.push(url);const img=element('img');img.src=url;img.alt=id+' · Foto '+(i+1);img.style.marginTop='18px';$('detail-content').append(img); }
-  $('detail-dialog').showModal();
+  $('restore-history').hidden=!previousVersions.some(e=>e.uid===s.uid); $('restore-history').onclick=()=>restoreHistory(s.uid).catch(e=>notify(friendlyError(e),true)); $('detail-dialog').showModal();
 }
 async function editStation(id) {
   if(dirty && !confirm('Hay cambios sin guardar. ¿Descartarlos para editar '+id+'?'))return;
   const s=stations.find(r=>r.id===id);if(!s)return;
-  const items=await readPhotos(id);draftEpoch++;stopCompass();revoke(photoUrls);draftPhotos=items;editingId=id;draftDate=s.fecha;dirty=false;clearErrors();
+  const items=await readPhotos(id);await forgetCurrentDraft();draftEpoch++;stopCompass();revoke(photoUrls);draftPhotos=items;editingId=id;editingUid=s.uid;editingRevision=s.revision;draftDate=s.fecha;dirty=false;$('save-as-new').hidden=false;clearErrors();
   FIELDS.forEach(key=>$(key).value=s[key]??'');$('station-id').value=id;$('date-display').value=readableDate(s.fecha);$('form-title').textContent='Editar estación';$('save').textContent='Guardar cambios';$('reset').textContent='Cancelar edición';renderPhotos();switchTab('new');
 }
-async function deleteStation(id) {
-  if(!confirm('¿Borrar '+id+' y todas sus fotos? Esta acción no se puede deshacer.'))return;
-  setBusy(true);
-  try{const tx=db.transaction(['stations','photos'],'readwrite'),done=txDone(tx);tx.objectStore('stations').delete(id);tx.objectStore('photos').delete(id);await done;if(editingId===id)await clearForm();await refresh();notify(id+' eliminada.');}finally{setBusy(false);}
-}
+
 function renderPhotos() {
   revoke(photoUrls);$('photos').replaceChildren();$('photo-count').textContent=draftPhotos.length+' de 5 fotos · Se reducen a 1280 px y se guardan localmente.';
-  draftPhotos.forEach((p,i)=>{const card=element('div',undefined,'photo'),img=element('img'),url=URL.createObjectURL(p.blob);photoUrls.push(url);img.src=url;img.alt='Foto '+(i+1)+' de la estación';const row=element('div',undefined,'photo-footer');row.append(element('span','Foto '+(i+1)+' · '+bytes(p.blob.size)));const b=element('button','Quitar');b.type='button';b.disabled=photoBusy;b.setAttribute('aria-label','Quitar foto '+(i+1));b.onclick=()=>{draftPhotos.splice(i,1);dirty=true;renderPhotos();};row.append(b);card.append(img,row);$('photos').append(card);});
+  draftPhotos.forEach((p,i)=>{const card=element('div',undefined,'photo'),img=element('img'),url=URL.createObjectURL(p.blob);photoUrls.push(url);img.src=url;img.alt='Foto '+(i+1)+' de la estación';const row=element('div',undefined,'photo-footer');row.append(element('span','Foto '+(i+1)+' · '+bytes(p.blob.size)));const b=element('button','Quitar');b.type='button';b.disabled=photoBusy;b.setAttribute('aria-label','Quitar foto '+(i+1));b.onclick=()=>{draftPhotos.splice(i,1);markDirty();renderPhotos();};row.append(b);card.append(img,row);$('photos').append(card);});
   $('camera').disabled = $('gallery').disabled = photoBusy || draftPhotos.length >= 5;
 }
 function canvasBlob(canvas) { return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('No se pudo comprimir la imagen.')),'image/jpeg',.82)); }
@@ -234,7 +432,7 @@ async function compressImage(blob) {
 async function addPhotos(files) {
   if(photoBusy||busy)return;const epoch=draftEpoch;photoBusy=true;$('save').disabled=true;$('reset').disabled=true;renderPhotos();
   let added=0,errors=[];
-  try{for(const file of files){if(draftPhotos.length>=5){errors.push('Se permiten hasta 5 fotos por estación.');break;}try{const p=await compressImage(file);if(epoch!==draftEpoch)break;draftPhotos.push(p);dirty=true;added++;}catch(e){errors.push(e.message);}}}
+  try{for(const file of files){if(draftPhotos.length>=5){errors.push('Se permiten hasta 5 fotos por estación.');break;}try{const p=await compressImage(file);if(epoch!==draftEpoch)break;draftPhotos.push(p);markDirty();await persistDraft();added++;}catch(e){errors.push(e.message);}}}
   finally{photoBusy=false;$('save').disabled=busy;$('reset').disabled=busy;renderPhotos();}
   if(errors.length)notify((added?added+' foto(s) añadidas. ':'')+errors.join(' '),true);else if(added)notify(added+' foto(s) listas. Guarda la estación para conservarlas.');
 }
@@ -253,7 +451,7 @@ function takeGPS(){
   const epoch=draftEpoch;$('gps').disabled=true;$('gps-status').textContent='Buscando posición de alta precisión…';
   navigator.geolocation.getCurrentPosition(position=>{
     $('gps').disabled=false;if(epoch!==draftEpoch)return;
-    const c=position.coords;$('lat').value=c.latitude;$('lon').value=c.longitude;$('alt').value=c.altitude??'';$('precision_m').value=c.accuracy;dirty=true;
+    const c=position.coords;$('lat').value=c.latitude;$('lon').value=c.longitude;$('alt').value=c.altitude??'';$('precision_m').value=c.accuracy;markDirty();
     $('gps-status').textContent='Posición capturada · Precisión ± '+c.accuracy.toFixed(1)+' m'+(c.altitude===null?' · Altitud no disponible.':'');
   },error=>{$('gps').disabled=false;if(epoch!==draftEpoch)return;$('gps-status').textContent=error.code===1?'Permiso de ubicación denegado. Habilítalo en los ajustes del sitio o escribe las coordenadas.':error.code===3?'El GPS tardó demasiado. Busca cielo abierto y vuelve a intentar o escribe las coordenadas.':'No se pudo obtener una posición. Enciende la ubicación del teléfono o escribe las coordenadas.';},{enableHighAccuracy:true,timeout:25000,maximumAge:0});
 }
@@ -265,7 +463,7 @@ async function readCompass(){
   if(epoch!==draftEpoch)return;
   $('compass').disabled=true;$('compass-status').textContent='Esperando una lectura absoluta; sostén el teléfono plano…';
   const cleanup=()=>{clearTimeout(timer);window.removeEventListener('deviceorientation',handler);window.removeEventListener('deviceorientationabsolute',handler);$('compass').disabled=false;};
-  const handler=e=>{let heading=null;if(Number.isFinite(e.webkitCompassHeading)&&!(Number.isFinite(e.webkitCompassAccuracy)&&e.webkitCompassAccuracy<0))heading=e.webkitCompassHeading;else if(e.absolute===true&&Number.isFinite(e.alpha))heading=360-e.alpha+(screen.orientation?.angle||0);if(heading===null)return;cleanup();if(epoch!==draftEpoch)return;heading=((heading%360)+360)%360;$('rumbo').value=heading.toFixed(1);dirty=true;$('compass-status').textContent='Sugerencia: '+heading.toFixed(1)+'°. Verifica la lectura y corrígela si es necesario.';};
+  const handler=e=>{let heading=null;if(Number.isFinite(e.webkitCompassHeading)&&!(Number.isFinite(e.webkitCompassAccuracy)&&e.webkitCompassAccuracy<0))heading=e.webkitCompassHeading;else if(e.absolute===true&&Number.isFinite(e.alpha))heading=360-e.alpha+(screen.orientation?.angle||0);if(heading===null)return;cleanup();if(epoch!==draftEpoch)return;heading=((heading%360)+360)%360;$('rumbo').value=heading.toFixed(1);markDirty();$('compass-status').textContent='Sugerencia: '+heading.toFixed(1)+'°. Verifica la lectura y corrígela si es necesario.';};
   const timer=setTimeout(()=>{cleanup();if(epoch===draftEpoch)$('compass-status').textContent='No hay una lectura absoluta disponible. Escribe el rumbo manualmente.';},9000);
   stopCompass=cleanup;window.addEventListener('deviceorientation',handler);window.addEventListener('deviceorientationabsolute',handler);
 }
@@ -293,57 +491,25 @@ async function makeZIP(files){
 function toDataURL(blob){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob);});}
 async function exportData(kind){
   if(busy||photoBusy)return;setBusy(true);notify('Preparando exportación…');
-  try{const {records,sequence}=await snapshot(),stamp=fileStamp();
+  try{await persistDraft();const snap=await snapshot(),{records,sequence}=snap,stamp=fileStamp();
     if(kind==='csv')download(new Blob([makeCSV(records)],{type:'text/csv;charset=utf-8'}),'estaciones-'+stamp+'.csv');
     if(kind==='zip'){const files=[{name:'estaciones.csv',blob:new Blob([makeCSV(records)],{type:'text/csv;charset=utf-8'})}];for(const r of records)r.photos.forEach((p,i)=>files.push({name:photoName(r.id,i,p),blob:p.blob}));download(await makeZIP(files),'campo-'+stamp+'.zip');}
-    if(kind==='json'){const data=[];for(const r of records){const {photos,...fields}=r;const converted=[];for(const p of photos)converted.push({data:await toDataURL(p.blob),width:p.width,height:p.height});data.push({...fields,photos:converted});}download(new Blob([JSON.stringify({app:'estrato',version:1,exportedAt:new Date().toISOString(),sequence,stations:data})],{type:'application/json;charset=utf-8'}),'respaldo-estrato-'+stamp+'.json');}
+    if(kind==='json')download(new Blob([JSON.stringify(await backupData(snap))],{type:'application/json;charset=utf-8'}),'respaldo-estrato-'+stamp+'.json');
     notify('Exportación preparada: '+records.length+' estaciones. Comprueba que el archivo quedó guardado en Descargas o Archivos.');
   }catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}
 }
-async function validateBackup(raw){
-  if(!raw||raw.app!=='estrato'||raw.version!==1||!Array.isArray(raw.stations)||!Number.isSafeInteger(raw.sequence)||raw.sequence<0)throw new Error('Formato de respaldo no válido. Se requiere JSON de Estrato, versión 1.');
-  const ids=new Set(), records=[];let max=raw.sequence;
-  for(const r of raw.stations){
-    if(!r||typeof r.id!=='string'||!/^EST-\d{3,}$/.test(r.id)||!Number.isSafeInteger(idNumber(r.id))||idNumber(r.id)<1||r.id!==formatId(idNumber(r.id))||ids.has(r.id))throw new Error('ID inválido o repetido en el respaldo.');
-    ids.add(r.id);max=Math.max(max,idNumber(r.id));
-    if(typeof r.fecha!=='string'||!/^\d{4}-\d{2}-\d{2}T/.test(r.fecha)||!Number.isFinite(Date.parse(r.fecha)))throw new Error(r.id+': fecha inválida.');
-    const fields={id:r.id,fecha:r.fecha};FIELDS.forEach(key=>fields[key]=r[key]);if(Object.keys(validation(fields)).length)throw new Error(r.id+': datos geológicos o coordenadas inválidos.');
-    if(!Array.isArray(r.photos)||r.photos.length>5)throw new Error(r.id+': se permiten hasta 5 fotos.');
-    const photos=[];
-    for(const p of r.photos){
-      if(!p||typeof p.data!=='string'||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]*={0,2}$/.test(p.data)||p.data.length>12*1048576)throw new Error(r.id+': foto inválida o demasiado grande.');
-      const [prefix,data]=p.data.split(',');if(!data||data.length%4)throw new Error(r.id+': foto base64 inválida.');
-      const decoded=atob(data),array=Uint8Array.from(decoded,c=>c.charCodeAt(0)),blob=new Blob([array],{type:prefix.slice(5,prefix.indexOf(';'))});
-      let image,url;try{if('createImageBitmap' in window)image=await createImageBitmap(blob);else{url=URL.createObjectURL(blob);image=new Image();image.src=url;await image.decode();}const width=image.width||image.naturalWidth,height=image.height||image.naturalHeight;if(width<1||height<1||Math.max(width,height)>1280)throw new Error('Dimensiones inválidas; máximo 1280 px.');photos.push({blob,width,height});}finally{image?.close?.();if(url)URL.revokeObjectURL(url);}
-    }
-    records.push({...fields,photoCount:photos.length,photos});
-  }
-  if(max>=Number.MAX_SAFE_INTEGER)throw new Error('El contador de estaciones está fuera de rango.');
-  return {records,sequence:max};
-}
-async function importBackup(file){
-  if(!file||busy||photoBusy)return;setBusy(true);notify('Validando respaldo y fotos…');
-  try{
-    if(file.size>250*1048576)throw new Error('El respaldo supera 250 MB. Divide la colección antes de importarla en este dispositivo.');
-    const parsed=await validateBackup(JSON.parse(await file.text()));
-    const txRead=db.transaction('stations','readonly'),readDone=txDone(txRead),keys=await request(txRead.objectStore('stations').getAllKeys());await readDone;
-    const conflicts=parsed.records.filter(r=>keys.includes(r.id));
-    if(!confirm('Importar '+parsed.records.length+' estaciones con sus fotos. '+(conflicts.length?'Se reemplazarán '+conflicts.length+' ID existentes: '+conflicts.slice(0,8).map(r=>r.id).join(', ')+(conflicts.length>8?'…':'')+'. ':'No se reemplazará ninguna estación existente. ')+(dirty?'El formulario sin guardar se descartará. ':'')+'Las demás estaciones se conservarán. ¿Continuar?')){notify('Importación cancelada.');return;}
-    const tx=db.transaction(['stations','photos','meta'],'readwrite'),done=txDone(tx),meta=tx.objectStore('meta'),seq=meta.get('sequence');
-    seq.onsuccess=()=>{meta.put({key:'sequence',value:Math.max(seq.result?.value||0,parsed.sequence)});for(const r of parsed.records){const {photos,...fields}=r;tx.objectStore('stations').put(fields);tx.objectStore('photos').put({stationId:r.id,items:photos});}};
-    await done;await clearForm();await refresh();notify('Respaldo importado: '+parsed.records.length+' estaciones.');
-  }catch(e){notify('Importación rechazada. '+friendlyError(e),true);}finally{setBusy(false);$('backup-input').value='';}
-}
+
 async function updateStorage(){
   try{const stationBytes=stations.reduce((n,s)=>n+new Blob([JSON.stringify(s)]).size,0);let detail='';
     if(navigator.storage?.estimate){const {usage=0,quota=0}=await navigator.storage.estimate();$('storage').textContent=bytes(usage)+' usados';detail='Uso estimado del sitio: '+bytes(usage)+(quota?' de '+bytes(quota)+' disponibles para este origen.':'.');}
-    else{const data=await snapshot(),size=stationBytes+data.records.reduce((n,r)=>n+r.photos.reduce((sum,p)=>sum+p.blob.size,0),0);$('storage').textContent=bytes(size)+' en registros';detail='Registros y fotos: '+bytes(size)+'. Este navegador no informa su cuota.';}
+    else{const data=await snapshot(),all=[...data.records,...data.trash,...data.history,...data.drafts],size=stationBytes+all.reduce((n,r)=>n+r.photos.reduce((sum,p)=>sum+p.blob.size,0),0);$('storage').textContent=bytes(size)+' en registros';detail='Registros, borradores y fotos: '+bytes(size)+'. Este navegador no informa su cuota.';}
     $('storage-detail').textContent=detail+' '+stations.length+' estaciones guardadas.';
     const persistent=navigator.storage?.persisted?await navigator.storage.persisted():false;$('persistence').textContent=persistent?'Almacenamiento persistente concedido. Guarda también un respaldo externo.':'El almacenamiento persistente aún no está concedido o no está disponible. Conserva respaldos externos.';
   }catch{$('storage').textContent='Uso no disponible';$('storage-detail').textContent='El navegador no permite estimar el espacio. Guarda respaldos frecuentes.';}
 }
 async function askPersistence(){try{const granted=await navigator.storage?.persist?.();await updateStorage();notify(granted?'Almacenamiento persistente concedido.':'El navegador no concedió almacenamiento persistente. Puedes seguir usando la app; descarga respaldos JSON.');}catch{notify('Este navegador no permite solicitar almacenamiento persistente. Descarga respaldos JSON.');}}
 function updateNetwork(){$('network').textContent=navigator.onLine?'Con conexión':'Sin conexión';}
+window.addEventListener('pagehide',()=>persistDraft().catch(()=>{}));
 function waitingUpdate(){if(registration?.waiting){$('apply-update').hidden=false;$('update-status').textContent='Hay una versión nueva lista. Guarda la estación antes de aplicarla.';}}
 async function prepareOffline(){
   if(!isSecureContext||!('serviceWorker' in navigator)){$('offline-ready').textContent='Offline no disponible';notify('Usa HTTPS o localhost para instalar y activar el modo offline.',true);return;}
@@ -352,9 +518,11 @@ async function prepareOffline(){
 }
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 document.querySelector('nav').addEventListener('keydown',e=>{const tabs=[...document.querySelectorAll('[data-tab]')],i=tabs.indexOf(document.activeElement);if(i<0)return;let target;if(e.key==='ArrowRight')target=(i+1)%3;if(e.key==='ArrowLeft')target=(i+2)%3;if(e.key==='Home')target=0;if(e.key==='End')target=2;if(target!==undefined){e.preventDefault();switchTab(tabs[target].dataset.tab);tabs[target].focus();}});
-$('station-form').addEventListener('input',()=>dirty=true);
+$('station-form').addEventListener('input',markDirty);
 ['lat','lon'].forEach(id=>$(id).addEventListener('input',()=>{$('precision_m').value='';$('gps-status').textContent='Coordenadas manuales · Precisión GPS no aplicable.';}));
-$('station-form').addEventListener('submit',async e=>{e.preventDefault();if(busy||photoBusy||!db)return;const record=collectForm(),errors=validation(record);if(Object.keys(errors).length){showErrors(errors);return;}clearErrors();setBusy(true);try{const id=await saveRecord(record,draftPhotos,editingId);await clearForm();await refresh();notify(id+' guardada en este dispositivo.');switchTab('list');}catch(error){notify(friendlyError(error),true);}finally{setBusy(false);}});
+$('station-form').addEventListener('submit',e=>{e.preventDefault();submitStation();});
+$('save-as-new').onclick=()=>submitStation(true);
+$('confirm-import').onclick=()=>$('import-dialog').close('confirm');$('cancel-import').onclick=()=>$('import-dialog').close('cancel');
 $('reset').onclick=async()=>{if(busy||photoBusy)return;if(dirty&&!confirm('¿Descartar el formulario y las fotos sin guardar?'))return;try{await clearForm();}catch(e){notify(friendlyError(e),true);}};
 $('gps').onclick=takeGPS;$('compass').onclick=readCompass;$('camera').onclick=openCamera;$('capture').onclick=capturePhoto;$('close-camera').onclick=closeCamera;$('camera-dialog').addEventListener('cancel',closeCamera);$('camera-dialog').addEventListener('close',closeCamera);
 $('gallery').onclick=()=>{if(!busy&&!photoBusy){$('photo-input').value='';$('photo-input').click();}};$('photo-input').onchange=()=>addPhotos([...$('photo-input').files]);
@@ -366,8 +534,8 @@ $('install').onclick=async()=>{if(installPrompt){await installPrompt.prompt();aw
 $('update').onclick=async()=>{if(!registration){notify('El modo offline aún no está preparado.',true);return;}try{$('update').disabled=true;await registration.update();waitingUpdate();if(!registration.waiting)$('update-status').textContent=registration.installing?'Descargando una nueva versión…':'Búsqueda completada. Si aparece una versión nueva, se mostrará el botón para aplicarla.';}catch{$('update-status').textContent='No se pudo comprobar. Conéctate a internet e inténtalo de nuevo.';}finally{$('update').disabled=false;}};
 let applyingUpdate=false;$('apply-update').onclick=()=>{if(busy||photoBusy)return;if(dirty){notify('Guarda o descarta los cambios del formulario antes de actualizar.',true);return;}if(registration?.waiting){applyingUpdate=true;registration.waiting.postMessage({type:'SKIP_WAITING'});}};navigator.serviceWorker?.addEventListener('controllerchange',()=>{if(applyingUpdate)location.reload();});
 window.addEventListener('online',updateNetwork);window.addEventListener('offline',updateNetwork);window.addEventListener('beforeunload',event=>{if(dirty||busy||photoBusy){event.preventDefault();event.returnValue='';}});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){closeCamera();stopCompass();}else if(db&&!busy){refresh().catch(e=>notify(friendlyError(e),true));}});
-(async()=>{updateNetwork();switchTab('new');$('save').disabled=true;try{db=await openDatabase();await refresh();await clearForm();$('save').disabled=false;if(navigator.storage?.persist)navigator.storage.persist().then(()=>updateStorage()).catch(()=>{});await prepareOffline();}catch(e){notify(friendlyError(e),true);$('storage').textContent='Almacenamiento no disponible';$('save').disabled=true;['export-csv','export-zip','export-json','import-json'].forEach(id=>$(id).disabled=true);}})();
+document.addEventListener('visibilitychange',()=>{if(document.hidden){persistDraft().catch(()=>{});closeCamera();stopCompass();}else if(db&&!busy){refresh().catch(e=>notify(friendlyError(e),true));}});
+(async()=>{updateNetwork();switchTab('new');$('save').disabled=true;try{db=await openDatabase();await clearForm();await refresh();$('save').disabled=false;if(recoveryDrafts.length)notify('Hay borradores recuperables en Nueva. Sus fotos también se conservaron.');if(navigator.storage?.persist)navigator.storage.persist().then(()=>updateStorage()).catch(()=>{});await prepareOffline();}catch(e){notify(friendlyError(e),true);$('storage').textContent='Almacenamiento no disponible';$('save').disabled=true;['export-csv','export-zip','export-json','import-json'].forEach(id=>$(id).disabled=true);}})();
 </script>
 </body>
 </html>

@@ -29,8 +29,8 @@ Espera **Lista para usar offline** antes de desconectarte. La primera apertura n
 
 1. Abre DevTools y selecciona **Application → Manifest**. Comprueba nombre, `start_url`, `scope`, modo `standalone`, y ambos iconos; no debe haber errores de instalabilidad. No se incluyen capturas promocionales: puede faltar la presentación enriquecida del diálogo de instalación, pero la instalación básica sigue disponible.
 2. En **Service Workers**, comprueba que `sw.js` está activado y controla la página. La primera instalación toma el control mediante `clients.claim()`.
-3. En **Cache Storage**, comprueba una caché `estrato-…-v1.0.0` con la portada, `index.html`, manifiesto e iconos.
-4. En **IndexedDB**, abre la base `estrato-field-notebook` y sus almacenes `stations`, `photos` y `meta`. `photos` contiene objetos **Blob**, nunca rutas de archivos ni localStorage.
+3. En **Cache Storage**, comprueba una caché `estrato-…-v1.1.0` con la portada, `index.html`, manifiesto e iconos.
+4. En **IndexedDB**, abre la base `estrato-field-notebook` (versión 2) y sus almacenes `stations`, `photos`, `meta`, `drafts`, `trash` y `history`. Las fotos se guardan como objetos **Blob**, nunca rutas de archivos ni localStorage.
 5. Crea una estación con una foto, recarga y comprueba su detalle. Marca **Offline** en Service Workers o en Network y recarga: la app y la foto deben seguir funcionando. Crea otra estación y exporta CSV, ZIP y JSON mientras estás offline.
 6. Prueba rumbo 361°, buzamiento 91°, latitud 91° y longitud 181°: deben aparecer errores claros y no guardarse.
 7. Descarga JSON, borra una estación y vuelve a importarlo. Verifica registro y foto. Prueba también JSON inválido: los datos previos deben conservarse.
@@ -56,11 +56,13 @@ Antes de salir: abre desde el icono, activa modo avión, cierra/reabre y registr
 - Brújula: solicita permiso en iOS desde un toque del usuario. Usa `webkitCompassHeading` o eventos absolutos; ignora orientación relativa. Deja de escuchar tras una lectura o 9 segundos. Es una sugerencia: mantén el teléfono plano y comprueba calibración, declinación y sentido con un instrumento de campo. No se aplica corrección de declinación magnética.
 - Cámara: usa la cámara trasera si existe; al cerrar la vista se liberan sus recursos. Denegar el permiso muestra una alternativa. La galería es un selector de archivos del sistema; algunas cancelaciones o permisos del sistema no producen un error que la web pueda detectar.
 - Hasta cinco fotos, reducidas proporcionalmente a **1280 px de lado mayor**, JPEG de calidad 0.82, sin ampliar fotos pequeñas. La orientación se decodifica antes de dibujar. El canvas elimina metadatos EXIF. Archivos de origen de hasta 50 MB; HEIC depende del soporte del navegador. Usa JPEG si falla.
-- El formulario se conserva al cambiar de pestaña, pero **no es un borrador persistente**. Guarda antes de cerrar. Se advierte al salir con cambios donde el navegador lo permite.
+- El formulario tiene **borrador automático en IndexedDB**, incluyendo fotos. Los campos se guardan tras 350 ms sin cambios y al ocultar la app; cada foto se respalda después de comprimirla. Espera «Borrador guardado» antes de cerrar: una interrupción inmediata durante la compresión o antes de completar la escritura aún puede perder el último cambio. Al reabrir, recupera el borrador desde Nueva. «Guardar estación» finaliza el registro y elimina su borrador. «Limpiar» lo descarta con confirmación. Cada pestaña mantiene un borrador separado; recuperar uno lo mueve de forma atómica a la pestaña actual.
 - La app solicita `navigator.storage.persist()` al abrir y permite volver a solicitarlo en Exportar. El navegador decide si concede la persistencia; tampoco protege de un borrado manual de datos. [MDN: almacenamiento persistente](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/persist).
 - El uso estimado incluye IndexedDB y caché del origen y puede incluir otros sitios del mismo dominio. Si el navegador no ofrece una estimación, se muestran bytes de registros/fotos.
 - Se requiere almacenamiento del navegador habilitado. Evita modo privado. Cada navegador/perfil/dispositivo/origen tiene su propia colección. Cambiar de dominio o borrar datos del sitio exige restaurar desde JSON.
-- La edición de la misma estación desde dos pestañas usa el último guardado. Usa una pestaña para editar e importar; no hay sincronización entre dispositivos.
+- Cada estación tiene identidad interna UUID y contador de revisión. Una edición detecta si otra pestaña guardó o eliminó esa estación y conserva tu borrador, en vez de sobrescribirla. Puedes revisar el registro o usar «Guardar como nueva». No hay sincronización entre dispositivos.
+- **Papelera:** «Borrar» mueve estación y fotos a Lista → Papelera. No se vacía automáticamente. Restaurar conserva la identidad y las fotos; si el ID está ocupado se asigna otro. Eliminar definitivamente requiere confirmación y borra también la versión anterior de esa estación.
+- **Versión anterior:** cada edición guarda el registro y sus fotos anteriores. En Ver estación → Recuperar versión anterior puedes intercambiar ambas versiones. Se conserva una versión anterior por estación; no es un historial ilimitado. Recuperar una versión no cambia la identidad ni la fecha original y crea una nueva revisión.
 
 ## Exportaciones y recuperación
 
@@ -74,9 +76,18 @@ Si Excel no separa columnas por su configuración regional, usa Datos → Desde 
 
 **ZIP:** archivo ZIP32 construido inline sin bibliotecas: modo STORE, CRC32, nombres UTF-8, CSV y fotos en la raíz. Las fotos se nombran `EST-001_01.jpg`, `EST-001_02.jpg`, etc. JPEG ya está comprimido. Límites ZIP32: 65 535 archivos y menos de 4 GB; colecciones grandes también pueden agotar memoria del teléfono. El ZIP/CSV son para trabajar con datos y **no se importan** en la app.
 
-**JSON:** respaldo completo de versión 1, incluye fotos como data URLs base64, contador monotónico e información de estaciones. Al exportarlo no modifica el almacenamiento interno de fotos, que continúa usando blobs en IndexedDB. Base64 incrementa el tamaño del archivo aproximadamente un tercio. Exporta después de cada jornada y guarda en Archivos, un disco o un lugar externo al navegador.
+**JSON:** respaldo completo **versión 2**, incluye estaciones, identidades internas, revisiones, fotos, contador monotónico, papelera, versiones anteriores y borradores sin finalizar. Las fotos se codifican como data URLs base64 sólo en el archivo exportado; en IndexedDB siguen siendo blobs. Base64 incrementa el tamaño aproximadamente un tercio. Exporta después de cada jornada y guarda una copia fuera del navegador. CSV y ZIP incluyen únicamente las estaciones finalizadas activas, sin papelera, versiones ni borradores.
 
-**Importación:** acepta únicamente JSON de Estrato versión 1, hasta 250 MB. Valida IDs únicos, fecha, rangos, tipos y contenido real de cada foto (JPEG/PNG/WebP, máximo 1280 px). Primero valida todo; luego solicita confirmación con cantidad de IDs que reemplazará. Combina estaciones y conserva las ausentes del respaldo. Sustituye registros y fotos de IDs coincidentes únicamente al confirmar. La escritura completa es atómica: un error o falta de espacio aborta la transacción. Los IDs futuros respetan el mayor contador local/importado. Haz un respaldo de la colección actual antes de restaurar versiones antiguas.
+**Importación:** acepta JSON de Estrato **v1 y v2**, hasta 250 MB. Valida datos y contenido real de todas las fotos antes de abrir una vista previa. El formulario actual se conserva.
+
+- Dos estaciones de distinta identidad nunca se reemplazan por compartir `EST-001`: se renumera la importada y se conserva el ID de origen.
+- Para la misma identidad con cambios, **Conservar ambas versiones** es la opción predeterminada: crea una copia de identidad nueva. **Actualizar la misma identidad** sustituye sus datos/fotos, mantiene su ID local y guarda el estado actual como versión anterior recuperable.
+- Un registro idéntico ya existente se omite. Volver a importar la misma versión conservada como copia no genera otra copia igual.
+- Los respaldos v1 no contienen identidad: sólo se reconoce como existente un registro con ID/origen, datos y fotos idénticos. Los diferentes se agregan por separado, sin sobrescribir estaciones por su número.
+- La papelera y las versiones se añaden sin borrar las locales. Importar una entrada de papelera nunca elimina una estación activa. Los borradores de clave ya existente se conservan localmente; los demás aparecen para recuperar.
+- El respaldo v2 de otro celular puede contener un borrador de edición cuya base ya no coincide. Se mantiene la comprobación de revisión: si no es posible editar con seguridad, usa «Guardar como nueva».
+- La escritura completa es atómica. Si la colección cambia en otra pestaña durante la vista previa, se rechaza la importación para que vuelvas a revisarla. Un error o falta de espacio revierte toda la escritura.
+- Los IDs futuros respetan el mayor contador local/importado y los números de estaciones importadas. Haz un respaldo antes de restaurar versiones antiguas. Los respaldos v2 requieren Estrato v1.1 o posterior; la app antigua sólo reconoce v1.
 
 ## Publicar en GitHub Pages (HTTPS)
 
@@ -92,7 +103,7 @@ Consulta [GitHub: configurar la fuente de publicación](https://docs.github.com/
 
 ## Actualizaciones y caché
 
-1. Cada vez que cambies HTML, iconos o manifiesto, incrementa `VERSION` en `sw.js` (por ejemplo `v1.0.1`) y publica todos los archivos juntos.
+1. Cada vez que cambies HTML, iconos o manifiesto, incrementa `VERSION` en `sw.js` (la actual es `v1.1.0`; siguiente ejemplo `v1.1.1`) y publica todos los archivos juntos.
 2. La instalación de la nueva caché usa `cache: 'reload'` para evitar archivos antiguos de la caché HTTP. La nueva versión espera; no se fuerza una recarga mientras estás registrando.
 3. Con conexión, abre **Exportar → Buscar actualización**. Cuando esté disponible, guarda o descarta el formulario y pulsa **Aplicar actualización**. La app activa el worker nuevo y recarga. IndexedDB se conserva.
 4. Al activarse, se eliminan solamente cachés antiguas de Estrato para ese alcance; no otras PWAs del mismo dominio.
@@ -121,3 +132,22 @@ Pruebas aprobadas:
 - Sin errores JavaScript no capturados durante las pruebas.
 
 No se ha instalado físicamente en Android/iPhone ni se han probado sensores reales o el diálogo de permisos de iOS. Usa la lista de comprobación anterior en tu teléfono antes de una jornada de campo.
+
+## Actualización v1.1: compatibilidad y pruebas
+
+La base anterior se migra de forma transaccional a versión 2, conservando estaciones, fotos, fechas e IDs; agrega identidad interna y revisión a cada estación. No hace falta borrar datos ni reinstalar. Antes de aplicar, guarda o descarta el formulario. Si otra pestaña impide migrar, ciérrala y vuelve a abrir Estrato. Descarga un respaldo externo antes de cualquier actualización.
+
+Pruebas adicionales aprobadas en Chrome con datos y perfiles de prueba independientes:
+
+- Actualización real desde el shell v1 a v1.1 mediante service worker: foto y estación intactas, contador intacto, identidad añadida y caché anterior retirada.
+- Borrador con cinco fotos comprimidas: recuperación después de recargar; eliminación del borrador al finalizar el registro.
+- Cierre completo y reapertura del navegador: recuperación de borrador y foto.
+- Papelera con fotos y restauración; recuperación de versión anterior con cambio en el número de fotos.
+- Ediciones simultáneas: rechazo de sobrescritura y conservación de borrador; guardar como nueva identidad.
+- Respaldo v2 restaurado en un navegador vacío: estaciones, papelera, versiones, borrador y todas sus fotos.
+- Importación de dos `EST-001` de distintos celulares: ambos registros conservados, ID importado renumerado.
+- Conservar ambas versiones, repetir importación sin duplicados y actualizar explícitamente la misma identidad con recuperación de versión anterior.
+- Respaldos v1 compatibles; datos/fotos inválidos y cancelación sin cambios; rechazo si otra pestaña cambia la colección durante la vista previa.
+- Fallo real de transacción IndexedDB después de escribir datos parciales: estación y contador revertidos, borrador conservado.
+- Offline: recuperar borrador/foto, leer fotos, restaurar papelera y exportar JSON v2.
+- ZIP/CSV verificados con lector independiente; instalación sin errores, interfaz móvil clara/oscura y ausencia de errores JavaScript no capturados.
