@@ -23,7 +23,7 @@ python -m http.server 8000 --bind 127.0.0.1
 
 Abre `http://localhost:8000/` en Chrome. No abras `index.html` con `file://`: el service worker necesita HTTPS o la excepción segura de localhost. Un teléfono que accede a la IP del computador por HTTP **no** tiene esa excepción; para probar sensores desde el teléfono, publica en HTTPS.
 
-Espera **Lista para usar offline** antes de desconectarte. La primera apertura necesita conexión para descargar los archivos. Una vez preparada la caché, crear, editar, ver, borrar, buscar, importar y exportar funcionan sin conexión. No hay mapas, fuentes remotas ni llamadas a API. El indicador online/offline refleja la señal del navegador, no una comprobación de acceso real a internet.
+Espera **Lista para usar offline** antes de desconectarte. La primera apertura necesita conexión para descargar los archivos. Una vez preparada la caché, crear, editar, ver, borrar, buscar, importar y exportar funcionan sin conexión. No hay mapas remotos, fuentes remotas ni llamadas a API. El indicador online/offline refleja la señal del navegador, no una comprobación de acceso real a internet.
 
 ### Chrome DevTools → Application
 
