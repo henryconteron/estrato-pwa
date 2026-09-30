@@ -1,9 +1,9 @@
 /* Increment VERSION on every release that changes any shell file. */
-const VERSION = 'v1.7.0';
+const VERSION = 'v1.8.0';
 // Scope-specific prefix: another PWA on the same origin keeps its own caches.
 const PREFIX = 'estrato-' + encodeURIComponent(self.registration.scope) + '-';
 const CACHE = PREFIX + VERSION;
-const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
+const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './estrato-banner-v2.png', './estrato-logo-v2.png'];
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);

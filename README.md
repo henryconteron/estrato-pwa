@@ -11,6 +11,9 @@ Código fuente: **https://github.com/henryconteron/estrato-pwa**.
 - `manifest.webmanifest`: nombre, identidad, alcance e instalación.
 - `sw.js`: caché versionada del app shell, con estrategia cache-first.
 - `icon-192.png` e `icon-512.png`: iconos PNG generados con Python estándar; el dibujo está dentro de la zona segura para iconos maskable.
+- `estrato-logo-v2.png`: emblema de alta resolución con fondo transparente.
+- `estrato-banner-v2.png`: cabecera de 2172 × 724 px (3:1).
+- `identidad-estrato-prompts.md`: especificaciones de las imágenes.
 - `README.md`: esta guía.
 
 ## Prueba local
@@ -29,7 +32,7 @@ Espera **Lista para usar offline** antes de desconectarte. La primera apertura n
 
 1. Abre DevTools y selecciona **Application → Manifest**. Comprueba nombre, `start_url`, `scope`, modo `standalone`, y ambos iconos; no debe haber errores de instalabilidad. No se incluyen capturas promocionales: puede faltar la presentación enriquecida del diálogo de instalación, pero la instalación básica sigue disponible.
 2. En **Service Workers**, comprueba que `sw.js` está activado y controla la página. La primera instalación toma el control mediante `clients.claim()`.
-3. En **Cache Storage**, comprueba una caché `estrato-…-v1.7.0` con la portada, `index.html`, manifiesto e iconos.
+3. En **Cache Storage**, comprueba una caché `estrato-…-v1.8.0` con la portada, `index.html`, manifiesto, iconos, logo y banner.
 4. En **IndexedDB**, abre la base `estrato-field-notebook` (versión 2) y sus almacenes `stations`, `photos`, `meta`, `drafts`, `trash` y `history`. Las fotos se guardan como objetos **Blob**, nunca rutas de archivos ni localStorage.
 5. Crea una estación con una foto, recarga y comprueba su detalle. Marca **Offline** en Service Workers o en Network y recarga: la app y la foto deben seguir funcionando. Crea otra estación y exporta CSV, ZIP y JSON mientras estás offline.
 6. Prueba rumbo 361°, buzamiento 91°, latitud 91° y longitud 181°: deben aparecer errores claros y no guardarse.
@@ -293,3 +296,12 @@ Concepto de rumbo de un plano: [USGS, Strike](https://www.usgs.gov/media/images/
 La base sigue en IndexedDB **v2**, los respaldos completos en JSON **v4**, y el caché pasa a **v1.7.0**. Actualiza con conexión desde Exportar → Buscar actualización → Aplicar actualización. Los registros e imágenes existentes se conservan. No se añaden datos de demostración automáticamente.
 
 Verificación en Chrome local con perfiles aislados: límites 0/180/360 y bordes de intervalos, valores faltantes, grupos 10/15/30°, filtros campaña/litología/tipo, Otra solo explícita, empates y muestra pequeña. Recuentos e IDs trazables, CSV con BOM, PNG 1200 × 1240 px, actualización tras borrar/restaurar, informe con rosas del snapshot de campaña, recarga y descarga offline con red bloqueada. Diseño claro/oscuro a 320/390/768 px, tabla accesible, instalabilidad sin errores y cero errores JavaScript. Los datos sintéticos se usan solo en perfiles de prueba separados, sin agregarlos al navegador del usuario.
+
+
+## Identidad visual · v1.8
+
+La nueva cabecera usa un banner propio: tres estratos plegados cortados por una falla, curvas de nivel discretas y el nombre Estrato. El emblema transparente se entrega por separado; los iconos instalables de 192 y 512 px se derivan de él con un script de conversión. El símbolo queda dentro de la zona segura central de los iconos maskable.
+
+Logo y banner se generaron con la herramienta integrada de imágenes. Los prompts y dimensiones están en `identidad-estrato-prompts.md`. Son recursos locales incluidos en el shell cache-first, sin fuentes ni imágenes remotas. Añaden aproximadamente 1.8 MB a la descarga inicial.
+
+El caché actual es **v1.8.0**. Con conexión, usa **Exportar → Buscar actualización → Aplicar actualización**. La actualización cambia la interfaz y los recursos; conserva IndexedDB v2 y los respaldos JSON v4. El icono de una instalación existente puede tardar en refrescarse según el navegador o sistema. No borres los datos de la app para refrescar su apariencia.
