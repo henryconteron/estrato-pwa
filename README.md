@@ -305,3 +305,7 @@ La nueva cabecera usa un banner propio: tres estratos plegados cortados por una 
 Logo y banner se generaron con la herramienta integrada de imágenes. Los prompts y dimensiones están en `identidad-estrato-prompts.md`. Son recursos locales incluidos en el shell cache-first, sin fuentes ni imágenes remotas. Añaden aproximadamente 1.8 MB a la descarga inicial.
 
 El caché actual es **v1.8.0**. Con conexión, usa **Exportar → Buscar actualización → Aplicar actualización**. La actualización cambia la interfaz y los recursos; conserva IndexedDB v2 y los respaldos JSON v4. El icono de una instalación existente puede tardar en refrescarse según el navegador o sistema. No borres los datos de la app para refrescar su apariencia.
+
+## Interfaz v1.9
+Navegación lateral en computador, formulario en dos columnas, controles táctiles y nueva paleta azul petróleo. En celular conserva navegación inferior y una columna. La hoja interface.css se incluye en el caché offline. Revisión visual en Chrome a 1440 y 390 píxeles; sensores físicos y flujos de datos no se volvieron a probar en esta actualización.
+

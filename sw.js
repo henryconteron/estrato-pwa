@@ -1,9 +1,9 @@
 /* Increment VERSION on every release that changes any shell file. */
-const VERSION = 'v1.8.0';
+const VERSION = 'v1.9.0';
 // Scope-specific prefix: another PWA on the same origin keeps its own caches.
 const PREFIX = 'estrato-' + encodeURIComponent(self.registration.scope) + '-';
 const CACHE = PREFIX + VERSION;
-const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './estrato-banner-v2.png', './estrato-logo-v2.png'];
+const SHELL = ['./', './index.html', './interface.css', './manifest.webmanifest', './icon-192.png', './icon-512.png', './estrato-banner-v2.png', './estrato-logo-v2.png'];
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
@@ -28,7 +28,7 @@ self.addEventListener('fetch', event => {
     const cache = await caches.open(CACHE);
     // Navigation always uses the same cached shell, including query strings.
     if (event.request.mode === 'navigate') {
-      const shell = await cache.match(new URL('./index.html', self.registration.scope).href);
+      const shell = await cache.match(new URL('./index.html', './interface.css', self.registration.scope).href);
       if (shell) return shell;
     }
     const cached = await cache.match(event.request);
