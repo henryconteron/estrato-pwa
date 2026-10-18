@@ -30,7 +30,7 @@ header{padding:0;background:#202b2d}.identity-banner{position:relative;max-width
 </style><link rel="stylesheet" href="./interface.css">
 </head>
 <body>
-<header><div class="identity-banner"><img src="./estrato-banner-v2.png" width="2172" height="724" alt="Estrato · Geología de campo" fetchpriority="high"><span class="version">v1.9</span></div></header>
+<header><div class="identity-banner"><img src="./estrato-banner-v2.png" width="2172" height="724" alt="Estrato · Geología de campo" fetchpriority="high"><span class="version">v1.11.1</span></div></header>
 <div class="status"><div class="status-inner"><span id="network">Comprobando conexión</span><span id="storage">Abriendo almacenamiento…</span><span id="offline-ready">Preparando uso offline…</span></div></div>
 <main>
 <noscript>Activa JavaScript para registrar y guardar estaciones.</noscript>
@@ -48,18 +48,29 @@ header{padding:0;background:#202b2d}.identity-banner{position:relative;max-width
 <label for="lat">Latitud *</label><input id="lat" name="lat" type="number" inputmode="decimal" step="any" min="-90" max="90" placeholder="Ej. -0.180653" required><p id="err-lat" class="error-text" hidden></p>
 <label for="lon">Longitud *</label><input id="lon" name="lon" type="number" inputmode="decimal" step="any" min="-180" max="180" placeholder="Ej. -78.467834" required><p id="err-lon" class="error-text" hidden></p>
 <label for="alt">Altitud (m)</label><input id="alt" name="alt" type="number" inputmode="decimal" step="any" placeholder="Opcional"><p id="err-alt" class="error-text" hidden></p>
-<label for="precision_m">Precisión GPS (± m)</label><input id="precision_m" type="number" inputmode="decimal" step="any" min="0" readonly placeholder="Sin lectura GPS"><p class="hint">Se vacía si modificas las coordenadas a mano.</p>
+<label for="precision_m">Precisión GPS (± m)</label><input id="precision_m" type="number" inputmode="decimal" step="any" min="0" readonly placeholder="Sin lectura GPS" aria-describedby="precision-hint"><p id="precision-hint" class="hint">Se vacía si modificas las coordenadas a mano.</p><p id="err-precision_m" class="error-text" hidden></p>
 </div>
 <div class="card"><h2><span class="section-number">02</span>Geología y orientación</h2>
-<label for="litologia">Litología *</label><input id="litologia" name="litologia" list="lithologies" maxlength="200" placeholder="Ej. Arenisca" required autocomplete="off"><datalist id="lithologies"></datalist><p id="err-litologia" class="error-text" hidden></p><p class="hint">Las litologías guardadas aparecerán como sugerencias.</p>
-<label for="tipo">Tipo de medida</label><select id="tipo" name="tipo"><option value="estratificación">Estratificación</option><option value="falla">Falla</option><option value="diaclasa">Diaclasa</option><option value="foliación">Foliación</option><option value="otra">Otra</option></select>
+<label for="litologia">Litología *</label><input id="litologia" name="litologia" list="lithologies" maxlength="200" placeholder="Ej. Arenisca" required autocomplete="off" aria-describedby="litologia-hint"><datalist id="lithologies"></datalist><p id="err-litologia" class="error-text" hidden></p><p id="litologia-hint" class="hint">Las litologías guardadas aparecerán como sugerencias.</p>
+<label for="tipo">Estructura de la orientación principal</label><select id="tipo" name="tipo"><option value="estratificación">Estratificación</option><option value="falla">Falla</option><option value="diaclasa">Diaclasa</option><option value="foliación">Foliación</option><option value="otra">Otra</option></select><p id="err-tipo" class="error-text" hidden></p>
 <label for="rumbo">Rumbo (0–360°)</label><input id="rumbo" name="rumbo" type="number" inputmode="decimal" min="0" max="360" step="any" placeholder="Opcional"><p id="err-rumbo" class="error-text" hidden></p>
 <button type="button" id="compass" class="full" style="margin-top:12px">⊕ Leer brújula</button><p id="compass-status" class="hint" role="status">Lectura sugerida. Sostén el teléfono plano y comprueba con tu brújula de campo.</p>
 <label for="buzamiento">Buzamiento (0–90°)</label><input id="buzamiento" name="buzamiento" type="number" inputmode="decimal" min="0" max="90" step="any" placeholder="Opcional"><p id="err-buzamiento" class="error-text" hidden></p>
 <label for="dir_buzamiento">Dirección de buzamiento (0–360°)</label><input id="dir_buzamiento" name="dir_buzamiento" type="number" inputmode="decimal" min="0" max="360" step="any" placeholder="Azimut opcional"><p id="err-dir_buzamiento" class="error-text" hidden></p>
+<div class="measurement-primary-meta">
+<h3>Calidad y evidencia de esta medición</h3><p class="hint">La calidad es tu valoración de campo; Estrato no certifica la precisión del instrumento.</p>
+<label for="primary-measurement-method">Instrumento o método</label><select id="primary-measurement-method"><option value="compass">Brújula / clinómetro</option><option value="phone">Sensor del teléfono</option><option value="map">Mapa o imagen</option><option value="other">Otro método</option><option value="not-recorded">No registrado</option></select>
+<label for="primary-measurement-quality">Calidad de la lectura</label><select id="primary-measurement-quality"><option value="unassessed">Sin evaluar</option><option value="good">Buena exposición / lectura</option><option value="fair">Aceptable con limitaciones</option><option value="poor">Baja confianza</option></select>
+<label for="primary-measurement-notes">Notas de esta medición</label><textarea id="primary-measurement-notes" maxlength="2000" placeholder="Método, corrección aplicada, limitaciones o contexto"></textarea>
+<fieldset class="measurement-evidence"><legend>Fotos asociadas</legend><p class="hint">Añade fotos en «Notas y fotografías» y selecciónalas aquí para vincularlas con esta lectura.</p><div id="primary-measurement-evidence"></div></fieldset>
+</div>
+<section class="additional-measurements" aria-labelledby="additional-measurements-title">
+<div class="measurement-section-heading"><div><h3 id="additional-measurements-title">Otras mediciones en esta estación</h3><p class="hint">Agrega más planos o lineaciones sin sobrescribir la orientación principal.</p></div><span id="measurement-count" class="badge">0 adicionales</span></div>
+<button type="button" id="add-measurement" class="full">＋ Añadir medición</button><p id="measurement-error" class="error-text" role="alert" hidden></p><div id="measurement-list"></div>
+</section>
 </div>
 <div class="card"><h2><span class="section-number">03</span>Notas y fotografías</h2>
-<label for="observaciones">Observaciones</label><textarea id="observaciones" name="observaciones" maxlength="20000" placeholder="Textura, estructuras, alteración, contexto del afloramiento…"></textarea>
+<label for="observaciones">Observaciones</label><textarea id="observaciones" name="observaciones" maxlength="20000" placeholder="Textura, estructuras, alteración, contexto del afloramiento…"></textarea><p id="err-observaciones" class="error-text" hidden></p>
 <div class="buttons"><button type="button" id="camera">▣ Tomar foto</button><button type="button" id="gallery">＋ Añadir desde galería</button></div><input id="photo-input" type="file" accept="image/*" multiple hidden>
 <p class="hint" id="photo-count">0 de 5 fotos · Se reducen a 1280 px y se guardan localmente.</p><p class="hint">Si no se abre la cámara o galería, habilita sus permisos en los ajustes del navegador. Puedes seguir registrando sin fotos.</p><div id="photos"></div>
 </div>
@@ -71,22 +82,22 @@ header{padding:0;background:#202b2d}.identity-banner{position:relative;max-width
 <section id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
 <div class="eyebrow">Tu recorrido de campo</div><h1>Mapa offline</h1><p class="intro">Tus estaciones y capas, disponibles sin conexión.</p>
 <p class="info-strip">Mapa offline. Añade una imagen en «Mapa base offline» y referencias en «Capas guardadas».</p>
-<label for="map-campaign">Filtrar puntos por campaña</label><select id="map-campaign"><option value="">Todas las campañas</option></select>
-<label for="map-filter">Filtrar puntos por litología</label><select id="map-filter"><option value="">Todas las litologías</option></select>
+<div id="map-filters"><label for="map-campaign">Filtrar puntos por campaña</label><select id="map-campaign"><option value="">Todas las campañas</option></select>
+<label for="map-filter">Filtrar puntos por litología</label><select id="map-filter"><option value="">Todas las litologías</option></select></div>
 <div class="map-toolbar"><button id="map-fit" class="primary">Ver estaciones</button><button id="map-gps">◎ Mi ubicación</button></div><p id="map-gps-status" class="hint" role="status">GPS opcional. No modifica tus estaciones.</p>
-<div class="map-frame"><canvas id="field-map" tabindex="0" aria-label="Mapa de estaciones. Usa las flechas para desplazarte y más o menos para acercar o alejar. También puedes seleccionar una estación debajo."></canvas><div class="map-zoom"><button id="map-in" aria-label="Acercar mapa">＋</button><button id="map-out" aria-label="Alejar mapa">−</button></div><span class="map-north" aria-hidden="true">↑ N</span></div>
-<div class="buttons"><button id="map-measure" aria-pressed="false">Medir distancia</button></div><p id="map-measure-status" class="hint" role="status">Distancia entre dos puntos del mapa, en línea recta.</p>
+<div class="map-frame" id="map-frame"><canvas id="field-map" tabindex="0" aria-label="Mapa de estaciones. Usa las flechas para desplazarte y más o menos para acercar o alejar. También puedes seleccionar una estación debajo."></canvas><div id="map-empty" class="map-empty" hidden><span class="map-empty-mark" aria-hidden="true">◎</span><h2>Tu mapa comienza con una estación</h2><p>Registra una ubicación para ver tus puntos aquí. También puedes añadir capas o un mapa base offline.</p><button id="map-new" type="button" class="primary">Registrar estación</button></div><div class="map-zoom"><button id="map-in" aria-label="Acercar mapa">＋</button><button id="map-out" aria-label="Alejar mapa">−</button></div><span class="map-north" aria-hidden="true">↑ N</span></div>
+<div id="map-measure-actions" class="buttons"><button id="map-measure" aria-pressed="false">Medir distancia</button></div><p id="map-measure-status" class="hint" role="status">Distancia entre dos puntos del mapa, en línea recta.</p>
 <p id="map-view" class="hint"></p><p id="map-count" class="count" role="status"></p><div id="map-legend" class="map-legend" aria-label="Colores por litología"></div>
-<p class="hint">Arrastra con un dedo o usa dos para ampliar. Toca un punto para seleccionarlo. La escala es aproximada; las distancias son en línea recta.</p>
-<label for="map-station">Seleccionar estación</label><select id="map-station"><option value="">Selecciona una estación…</option></select><div id="map-selected" hidden class="card" aria-live="polite"></div>
+<p id="map-help" class="hint">Arrastra con un dedo o usa dos para ampliar. Toca un punto para seleccionarlo. La escala es aproximada; las distancias son en línea recta.</p>
+<div id="map-station-choice"><label for="map-station">Seleccionar estación</label><select id="map-station"><option value="">Selecciona una estación…</option></select></div><div id="map-selected" hidden class="card" aria-live="polite"></div>
 <details class="card" id="structural-tools"><summary>Análisis estructural · Rosa de rumbos</summary>
-<p class="hint">Compara los rumbos guardados de la campaña y litología seleccionadas arriba, aunque sus puntos queden fuera de la vista del mapa.</p>
+<p class="hint">Compara las lecturas planares de la campaña y litología seleccionadas arriba, aunque sus puntos queden fuera de la vista del mapa. Cada lectura se identifica con su estación y número.</p>
 <label for="rose-type">Tipo de estructura</label><select id="rose-type"><option value="planar">Todas las estructuras de plano</option><option value="estratificación">Estratificación</option><option value="falla">Falla</option><option value="diaclasa">Diaclasa</option><option value="foliación">Foliación</option><option value="otra">Otra (si representa un plano)</option></select>
 <label for="rose-bin">Agrupar rumbos cada</label><select id="rose-bin"><option value="10">10°</option><option value="15">15°</option><option value="30">30°</option></select>
 <p id="rose-summary" class="info-strip" role="status"></p><canvas id="rose-canvas" role="img" aria-label="Rosa de rumbos; valores disponibles en la tabla inferior."></canvas><p id="rose-result" class="hint"></p>
-<p class="hint">Rosa axial: 0° y 180° representan la misma línea; 360° equivale a 0°. Cada estación cuenta una vez, con su sector reflejado al lado opuesto. El área de cada sector es proporcional al número de medidas. Los intervalos incluyen el inicio y excluyen el final. No representa dirección de buzamiento, esfuerzo ni movimiento de falla.</p>
-<details><summary>Ver recuentos e IDs por intervalo</summary><div class="rose-table-wrap"><table class="rose-table"><thead><tr><th scope="col">Rumbo / opuesto</th><th scope="col">Medidas</th><th scope="col">% del total</th><th scope="col">Estaciones</th></tr></thead><tbody id="rose-table"></tbody></table></div></details>
-<div class="buttons"><button id="export-rose" class="primary">Descargar rosa PNG</button><button id="export-rose-csv">Descargar recuentos CSV</button></div><p class="hint">No se infieren medidas ausentes. El informe de campaña incluye rosas separadas por tipo, con intervalos de 10°.</p>
+<p class="hint">Rosa axial: 0° y 180° representan la misma línea; 360° equivale a 0°. Cada lectura planar cuenta una vez; una estación puede aportar varias. Los sectores opuestos se reflejan. El área es proporcional al número de lecturas. Los intervalos incluyen el inicio y excluyen el final. No representa dirección de buzamiento, esfuerzo ni movimiento de falla.</p>
+<details><summary>Ver recuentos y lecturas por intervalo</summary><div class="rose-table-wrap"><table class="rose-table"><thead><tr><th scope="col">Rumbo / opuesto</th><th scope="col">Lecturas</th><th scope="col">% del total</th><th scope="col">Estación · número</th></tr></thead><tbody id="rose-table"></tbody></table></div></details>
+<div class="buttons"><button id="export-rose" class="primary">Descargar rosa PNG</button><button id="export-rose-csv">Descargar recuentos CSV</button></div><p class="hint">Las lecturas sin rumbo no entran en el conteo. El informe de campaña incluye rosas separadas por tipo, con intervalos de 10°.</p>
 </details>
 
 <details class="card" id="basemap-tools"><summary>Mapa base offline · <span id="basemap-count">0</span></summary>
@@ -116,22 +127,26 @@ header{padding:0;background:#202b2d}.identity-banner{position:relative;max-width
 <div class="card export-card"><span class="badge">SIG / QGIS</span><h2 style="margin-top:12px">Estaciones en GeoJSON</h2><p>Puntos WGS84 con datos geológicos y nombres de fotos. Abre el archivo en QGIS o impórtalo como capa de referencia. No incluye las imágenes.</p><button id="export-geojson" class="full primary">Descargar GeoJSON</button></div>
 <div class="card export-card"><span class="badge">RESPALDO COMPLETO</span><h2 style="margin-top:12px">Protege tu trabajo</h2><p>El JSON contiene campañas, estaciones, muestras, todas sus fotos, borradores, papelera, versiones anteriores y capas y fondos del mapa. Guarda una copia fuera del navegador después de cada jornada.</p><div class="buttons"><button id="export-json" class="accent">Descargar respaldo JSON</button><button id="import-json">Importar respaldo JSON</button></div><input id="backup-input" type="file" accept=".json,application/json" hidden><p class="hint">La importación muestra una vista previa. IDs iguales de distintos celulares se conservan con una numeración nueva. Admite respaldos v1, v2, v3 y v4. El respaldo v4 incluye mapas base y requiere Estrato v1.6 o posterior.</p></div>
 <div class="card export-card"><h2>Este dispositivo</h2><p id="storage-detail">Calculando uso…</p><p id="persistence">Comprobando protección del almacenamiento…</p><div class="buttons"><button id="persist">Pedir almacenamiento persistente</button><button id="install">Cómo instalar la app</button><button id="update">Buscar actualización</button><button id="apply-update" hidden class="accent">Aplicar actualización</button></div><p id="update-status" class="hint" role="status"></p><details><summary>Antes de salir al campo</summary><p>Abre la app con conexión y espera «Lista para usar offline». Instálala y prueba abrirla en modo avión. No borres los datos del sitio ni uses modo privado. El navegador puede negar el almacenamiento persistente; mantén respaldos JSON externos.</p><p>Para instalar en iPhone: abre en Safari, usa Compartir → Añadir a pantalla de inicio. En Android: menú de Chrome → Instalar app.</p></details></div>
-<footer>Estrato v1.9 · Sin cuenta, sin servidor, sin seguimiento.</footer></section>
+<footer>Estrato v1.11.1 · Creado por Henry Conteron · Sin cuenta, sin servidor, sin seguimiento.</footer></section>
 </main>
 <nav role="tablist" aria-label="Secciones del cuaderno"><div class="nav-inner"><button id="tab-new" role="tab" aria-controls="panel-new" aria-selected="true" data-tab="new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nueva</button><button id="tab-list" role="tab" aria-controls="panel-list" aria-selected="false" data-tab="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h1M3 12h1M3 18h1"/></svg>Lista</button><button id="tab-map" role="tab" aria-controls="panel-map" aria-selected="false" data-tab="map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Zm6-3v15M15 6v15"/></svg>Mapa</button><button id="tab-export" role="tab" aria-controls="panel-export" aria-selected="false" data-tab="export"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Exportar</button></div></nav>
 <dialog id="detail-dialog" aria-labelledby="detail-title"><div class="dialog-title"><h2 id="detail-title">Estación</h2><button type="button" id="close-detail" aria-label="Cerrar detalle">Cerrar</button></div><div id="detail-content"></div><div class="buttons"><button id="detail-edit" class="primary">Editar estación</button><button id="restore-history" hidden>Recuperar versión anterior</button></div></dialog>
 <dialog id="camera-dialog" aria-labelledby="camera-title"><h2 id="camera-title">Fotografía de campo</h2><video id="camera-video" autoplay muted playsinline></video><div class="buttons"><button id="capture" class="accent">Capturar foto</button><button id="close-camera">Cancelar</button></div></dialog>
 <dialog id="import-dialog" aria-labelledby="import-title"><h2 id="import-title">Revisar importación</h2><p id="import-summary" class="hint"></p><label for="import-policy">Si la misma estación tiene cambios</label><select id="import-policy"><option value="both">Conservar ambas versiones (recomendado)</option><option value="replace">Actualizar la misma identidad</option></select><p class="hint">Dos estaciones de distinta identidad nunca se reemplazan por compartir EST-001. En respaldos v1, sin identidad, los registros diferentes se añaden por separado.</p><div id="import-preview"></div><div class="buttons"><button id="confirm-import" class="accent">Confirmar importación</button><button id="cancel-import">Cancelar</button></div></dialog>
-<dialog id="campaign-dialog" aria-labelledby="campaign-title"><div class="dialog-title"><h2 id="campaign-title">Campañas de campo</h2><button id="close-campaigns">Cerrar</button></div><p class="hint">Archivar conserva todos los registros. Puedes reactivar o seguir consultando y exportando una campaña archivada.</p><div id="campaign-list"></div><form id="campaign-editor"><h3 id="campaign-editor-title">Nueva campaña</h3><label for="campaign-name">Nombre *</label><input id="campaign-name" required maxlength="120" placeholder="Ej. Río Pastaza · septiembre"><label for="campaign-area">Zona o proyecto</label><input id="campaign-area" maxlength="200"><label for="campaign-start">Fecha de inicio</label><input id="campaign-start" type="date"><label for="campaign-end">Fecha de fin</label><input id="campaign-end" type="date"><label for="campaign-description">Notas de campaña</label><textarea id="campaign-description" maxlength="2000"></textarea><p id="campaign-error" role="status"></p><div class="buttons"><button id="campaign-save" class="primary">Crear campaña</button><button id="campaign-new" type="button">Nueva campaña</button></div></form></dialog>
+<dialog id="campaign-dialog" aria-labelledby="campaign-title"><div class="dialog-title"><h2 id="campaign-title">Campañas de campo</h2><button id="close-campaigns">Cerrar</button></div><p class="hint">Archivar conserva todos los registros. Puedes reactivar o seguir consultando y exportando una campaña archivada.</p><div id="campaign-list"></div><form id="campaign-editor"><h3 id="campaign-editor-title">Nueva campaña</h3><label for="campaign-name">Nombre *</label><input id="campaign-name" required maxlength="120" placeholder="Ej. Río Pastaza · septiembre"><label for="campaign-area">Zona o proyecto</label><input id="campaign-area" maxlength="200"><label for="campaign-start">Fecha de inicio</label><input id="campaign-start" type="date"><label for="campaign-end">Fecha de fin</label><input id="campaign-end" type="date"><label for="campaign-description">Notas de campaña</label><textarea id="campaign-description" maxlength="2000"></textarea><p id="campaign-error" role="alert"></p><div class="buttons"><button id="campaign-save" class="primary">Crear campaña</button><button id="campaign-new" type="button">Nueva campaña</button></div></form></dialog>
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
 const TYPES = ['estratificación','falla','diaclasa','foliación','otra'];
+const LINEAR_FEATURES = ['lineación','eje de pliegue','estría','otra'];
+const MEASUREMENT_METHODS = ['compass','phone','map','other','not-recorded'];
+const MEASUREMENT_QUALITIES = ['unassessed','good','fair','poor'];
 const FIELDS = ['lat','lon','alt','precision_m','litologia','rumbo','buzamiento','dir_buzamiento','tipo','observaciones'];
-const COLUMNS = ['id','fecha',...FIELDS,'nombres_fotos'];
+const COLUMNS = ['id','fecha',...FIELDS,'nombres_fotos','numero_mediciones','mediciones_estructurales_json'];
 const DB_NAME = 'estrato-field-notebook';
 let db, stations = [], draftPhotos = [], editingId = null, draftDate, dirty = false, draftEpoch = 0, busy = false, photoBusy = false, cameraStream, registration, installPrompt, detailId;
-let photoUrls = [], detailUrls = [], stopCompass = () => {};
+let draftMeasurements = [], primaryMeasurementId = null, primaryMeasurementPhotoIds = [];
+let photoUrls = [], detailUrls = [], measurementPhotoUrls = [], stopCompass = () => {};
 function notify(text, error = false) { $('message').textContent = text; $('message').classList.toggle('error', error); $('message').hidden = false; }
 function friendlyError(error) { return error?.name === 'QuotaExceededError' ? 'No queda espacio. Descarga un respaldo y libera espacio antes de volver a guardar.' : error?.name === 'VersionError' ? 'Esta versión de la app es antigua. Actualízala para abrir los datos.' : 'No se pudo completar la operación. Tus registros existentes se conservan. ' + (error?.message || 'Revisa los permisos de almacenamiento del navegador.'); }
 function element(tag, text, cls) { const e = document.createElement(tag); if (text !== undefined) e.textContent = text; if (cls) e.className = cls; return e; }
@@ -143,7 +158,7 @@ function txDone(tx) { return new Promise((resolve,reject) => { tx.oncomplete = r
 function request(req) { return new Promise((resolve,reject) => { req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error); }); }
 
 async function readAll() { const tx = db.transaction('stations','readonly'); const done = txDone(tx); const records = await request(tx.objectStore('stations').getAll()); await done; return records; }
-async function readPhotos(id) { const tx = db.transaction('photos','readonly'); const done = txDone(tx); const result = await request(tx.objectStore('photos').get(id)); await done; return result?.items || []; }
+async function readPhotos(id) { const tx = db.transaction('photos','readonly'); const done = txDone(tx); const result = await request(tx.objectStore('photos').get(id)); await done; return (result?.items||[]).map(photo=>validUID(photo.id)?photo:{...photo,id:newUID()}); }
 
 const STORES = ['stations','photos','meta','drafts','trash','history'];
 let draftKey = newUID(), editingUid = null, editingRevision = null, draftTimer;
@@ -157,6 +172,59 @@ function newUID() {
 const validUID = value => typeof value === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(value);
 const validID = value => typeof value === 'string' && /^EST-\d{3,}$/.test(value) && Number.isSafeInteger(idNumber(value)) && idNumber(value)>0 && value===formatId(idNumber(value));
 const validDate = value => typeof value==='string' && /^\d{4}-\d{2}-\d{2}T/.test(value) && Number.isFinite(Date.parse(value));
+function legacyMeasurement(record) {
+  if (![record.rumbo,record.buzamiento,record.dir_buzamiento].some(Number.isFinite)) return [];
+  return [{id:validUID(record.uid)?record.uid:newUID(),kind:'planar',feature:TYPES.includes(record.tipo)?record.tipo:'otra',strike:record.rumbo??null,dip:record.buzamiento??null,dipDirection:record.dir_buzamiento??null,trend:null,plunge:null,method:'not-recorded',quality:'unassessed',notes:'',photoIds:[]}];
+}
+function measurementHasValues(measurement) {
+  const fields=measurement.kind==='planar'?['strike','dip','dipDirection']:['trend','plunge'];
+  return fields.some(field=>measurement[field]!==null&&measurement[field]!==undefined);
+}
+function validateStationMeasurements(items,record,label='Mediciones') {
+  const measurements=validateStructuralMeasurements(items,label,true);
+  if(measurements.some((m,index)=>!measurementHasValues(m)&&(index!==0||m.kind!=='planar'||m.feature!==record.tipo||m.strike!==record.rumbo||m.dip!==record.buzamiento||m.dipDirection!==record.dir_buzamiento)))throw new Error(label+': una medición adicional necesita al menos un ángulo.');
+  return measurements;
+}
+function validateStructuralMeasurements(items,label='Mediciones',allowEmpty=false) {
+  if(!Array.isArray(items)||items.length>50)throw new Error(label+': máximo 50 mediciones por estación.');
+  const ids=new Set();
+  return items.map((m,index)=>{
+    const prefix=label+' · medición '+(index+1);
+    if(!m||!validUID(m.id)||ids.has(m.id)||!['planar','linear'].includes(m.kind))throw new Error(prefix+': identidad o tipo inválido.');
+    ids.add(m.id);
+    const featureList=m.kind==='planar'?TYPES:LINEAR_FEATURES;
+    if(!featureList.includes(m.feature))throw new Error(prefix+': tipo de estructura inválido.');
+    const values={strike:m.strike??null,dip:m.dip??null,dipDirection:m.dipDirection??null,trend:m.trend??null,plunge:m.plunge??null};
+    const ranges={strike:[0,360],dip:[0,90],dipDirection:[0,360],trend:[0,360],plunge:[0,90]};
+    for(const [field,value] of Object.entries(values)){const [min,max]=ranges[field];if(value!==null&&(typeof value!=='number'||!Number.isFinite(value)||value<min||value>max))throw new Error(prefix+': '+field+' debe estar entre '+min+'° y '+max+'°.');}
+    const axisFields=m.kind==='planar'?['strike','dip','dipDirection']:['trend','plunge'];
+    if(!allowEmpty&&!axisFields.some(field=>values[field]!==null))throw new Error(prefix+': registra al menos un ángulo antes de guardar.');
+    if(!MEASUREMENT_METHODS.includes(m.method)||!MEASUREMENT_QUALITIES.includes(m.quality))throw new Error(prefix+': método o calidad no válido.');
+    if(typeof m.notes!=='string'||m.notes.length>2000)throw new Error(prefix+': las notas admiten hasta 2.000 caracteres.');
+    if(!Array.isArray(m.photoIds)||m.photoIds.length>5||m.photoIds.some(id=>!validUID(id))||new Set(m.photoIds).size!==m.photoIds.length)throw new Error(prefix+': referencias de fotos inválidas.');
+    return {id:m.id,kind:m.kind,feature:m.feature,...values,method:m.method,quality:m.quality,notes:m.notes,photoIds:[...m.photoIds]};
+  });
+}
+function measurementsForRecord(record) {
+  if(Array.isArray(record.measurements)&&record.measurements.length)return record.measurements;
+  return legacyMeasurement(record);
+}
+function measurementPhotoError(measurements,photos,label='Mediciones') {
+  const photoIds=new Set((photos||[]).map(photo=>photo.id).filter(validUID));
+  for(const [index,m] of (measurements||[]).entries())if((m.photoIds||[]).some(id=>!photoIds.has(id)))return label+' · medición '+(index+1)+': una foto vinculada ya no está disponible.';
+  return '';
+}
+function measurementForExport(record,measurement) {
+  const {id,photoIds,...fields}=measurement;
+  return {...fields,evidence_photos:(photoIds||[]).map(photoId=>{const index=(record.photos||[]).findIndex(photo=>photo.id===photoId);return index<0?'':photoName(record.id,index,record.photos[index]);}).filter(Boolean)};
+}
+function validateMeasurementDraft(raw,photos,label='Borrador') {
+  const draft=raw||{},primaryId=draft.primaryId||newUID(),method=draft.method||'not-recorded',quality=draft.quality||'unassessed',notes=draft.notes||'',photoIds=draft.photoIds||[];
+  if(!validUID(primaryId)||!MEASUREMENT_METHODS.includes(method)||!MEASUREMENT_QUALITIES.includes(quality)||typeof notes!=='string'||notes.length>2000||!Array.isArray(photoIds)||photoIds.length>5||photoIds.some(id=>!validUID(id))||new Set(photoIds).size!==photoIds.length)throw new Error(label+': metadatos de la medición principal inválidos.');
+  const additional=validateStructuralMeasurements(draft.additional||[],label+' · mediciones adicionales',true);if(additional.some(m=>m.id===primaryId))throw new Error(label+': identidad de medición repetida.');const all=[{photoIds},...additional],photoError=measurementPhotoError(all,photos,label);
+  if(photoError)throw new Error(photoError);
+  return {primaryId,method,quality,notes,photoIds:[...photoIds],additional};
+}
 async function writeTransaction(names, action) {
   const tx=db.transaction(names,'readwrite'), done=txDone(tx); done.catch(()=>{});
   try { const result=await action(tx); await done; return result; }
@@ -219,7 +287,8 @@ async function saveRecord(record,items,existingId,expected={}) {
 }
 function draftSnapshot() {
   const values={};FIELDS.forEach(key=>values[key]=$(key).value);
-  return {key:draftKey,editingId,editingUid,editingRevision,draftDate,values,campaignUid:$('campaign').value||null,templateKey:$('field-template').value,samples:structuredClone(draftSamples),photos:[...draftPhotos],savedAt:new Date().toISOString()};
+  const measurementDraft={primaryId:primaryMeasurementId||newUID(),method:$('primary-measurement-method').value,quality:$('primary-measurement-quality').value,notes:$('primary-measurement-notes').value,photoIds:[...primaryMeasurementPhotoIds],additional:structuredClone(draftMeasurements)};
+  return {key:draftKey,editingId,editingUid,editingRevision,draftDate,values,campaignUid:$('campaign').value||null,templateKey:$('field-template').value,samples:structuredClone(draftSamples),photos:[...draftPhotos],measurementDraft,savedAt:new Date().toISOString()};
 }
 function persistDraft() {
   clearTimeout(draftTimer);if(!db||!dirty)return draftWrites;
@@ -249,10 +318,10 @@ async function restoreDraft(key) {
   try{
     clearTimeout(draftTimer);await draftWrites.catch(()=>{});const target=newUID(),oldKey=draftKey;
     const d=await writeTransaction('drafts',async tx=>{const store=tx.objectStore('drafts'),source=await request(store.get(key));if(!source)throw new Error('Este borrador ya se recuperó en otra pestaña.');const moved={...source,key:target};store.put(moved);store.delete(key);store.delete(oldKey);return moved;});
-    draftEpoch++;stopCompass();closeCamera();draftKey=target;editingId=d.editingId;editingUid=d.editingUid;editingRevision=d.editingRevision;draftDate=d.draftDate;draftPhotos=d.photos;draftSamples=structuredClone(d.samples||[]);$('field-template').value=d.templateKey||'';renderTemplate();selectFormCampaign(d.campaignUid);renderSamples();dirty=true;
+    draftEpoch++;stopCompass();closeCamera();draftKey=target;editingId=d.editingId;editingUid=d.editingUid;editingRevision=d.editingRevision;draftDate=d.draftDate;draftPhotos=(d.photos||[]).map(photo=>validUID(photo.id)?photo:{...photo,id:newUID()});draftSamples=structuredClone(d.samples||[]);const measurementDraft=d.measurementDraft||{};primaryMeasurementId=validUID(measurementDraft.primaryId)?measurementDraft.primaryId:newUID();primaryMeasurementPhotoIds=[...(measurementDraft.photoIds||[])];draftMeasurements=structuredClone(measurementDraft.additional||[]);$('primary-measurement-method').value=MEASUREMENT_METHODS.includes(measurementDraft.method)?measurementDraft.method:'not-recorded';$('primary-measurement-quality').value=MEASUREMENT_QUALITIES.includes(measurementDraft.quality)?measurementDraft.quality:'unassessed';$('primary-measurement-notes').value=measurementDraft.notes||'';$('field-template').value=d.templateKey||'';renderTemplate();selectFormCampaign(d.campaignUid);renderSamples();dirty=true;
     FIELDS.forEach(field=>$(field).value=d.values[field]??'');$('station-id').value=editingId||await nextId();$('date-display').value=readableDate(draftDate);
     $('form-title').textContent=editingId?'Editar estación':'Nueva estación';$('save').textContent=editingId?'Guardar cambios':'Guardar estación';$('save-as-new').hidden=!editingId;$('reset').textContent=editingId?'Cancelar edición':'Limpiar formulario';
-    clearErrors();renderPhotos();renderQuickEntry();scheduleQuality();$('draft-status').textContent='Borrador recuperado, incluyendo fotos. Pulsa Guardar para finalizar.';await refresh();switchTab('new');notify('Borrador recuperado.');
+    clearErrors();renderPhotos();renderMeasurements();renderQuickEntry();scheduleQuality();$('draft-status').textContent='Borrador recuperado, incluyendo fotos y mediciones. Pulsa Guardar para finalizar.';await refresh();switchTab('new');notify('Borrador recuperado.');
   }finally{setBusy(false);}
 }
 async function discardDraft(key) {
@@ -295,23 +364,25 @@ async function restoreHistory(uid) {
     $('detail-dialog').close();await refresh();notify('Versión anterior de '+id+' recuperada.');
   }finally{setBusy(false);}
 }
-async function encodePhotos(items) {const encoded=[];for(const p of items)encoded.push({data:await toDataURL(p.blob),width:p.width,height:p.height});return encoded;}
+async function encodePhotos(items) {const encoded=[];for(const p of items){if(!validUID(p.id))p.id=newUID();encoded.push({id:p.id,data:await toDataURL(p.blob),width:p.width,height:p.height});}return encoded;}
 async function backupData(snap) {
   const stations=[],trash=[],history=[],drafts=[];
-  for(const r of snap.records)stations.push({...r,samples:await encodeSamples(r.samples),photos:await encodePhotos(r.photos)});
-  for(const e of snap.trash)trash.push({...e,record:{...e.record,samples:await encodeSamples(e.record.samples)},photos:await encodePhotos(e.photos)});
-  for(const e of snap.history)history.push({...e,record:{...e.record,samples:await encodeSamples(e.record.samples)},photos:await encodePhotos(e.photos)});
+  for(const r of snap.records)stations.push({...r,measurements:measurementsForRecord(r),samples:await encodeSamples(r.samples),photos:await encodePhotos(r.photos)});
+  for(const e of snap.trash)trash.push({...e,record:{...e.record,measurements:measurementsForRecord(e.record),samples:await encodeSamples(e.record.samples)},photos:await encodePhotos(e.photos)});
+  for(const e of snap.history)history.push({...e,record:{...e.record,measurements:measurementsForRecord(e.record),samples:await encodeSamples(e.record.samples)},photos:await encodePhotos(e.photos)});
   for(const e of snap.drafts)drafts.push({...e,samples:await encodeSamples(e.samples),photos:await encodePhotos(e.photos)});
-  return {app:'estrato',version:4,exportedAt:new Date().toISOString(),sequence:snap.sequence,stations,trash,history,drafts,mapLayers:snap.mapLayers||[],campaigns:snap.campaigns||[],baseMaps:await encodeBaseMaps(snap.baseMaps)};
+  return {app:'estrato',version:5,exportedAt:new Date().toISOString(),sequence:snap.sequence,stations,trash,history,drafts,mapLayers:snap.mapLayers||[],campaigns:snap.campaigns||[],baseMaps:await encodeBaseMaps(snap.baseMaps)};
 }
 async function decodePhotos(items,label) {
   if(!Array.isArray(items)||items.length>5)throw new Error(label+': se permiten hasta 5 fotos.');
-  const photos=[];
+  const photos=[],ids=new Set();
   for(const p of items){
     if(!p||typeof p.data!=='string'||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]*={0,2}$/.test(p.data)||p.data.length>12*1048576)throw new Error(label+': foto inválida o demasiado grande.');
+    if(p.id!=null&&!validUID(p.id))throw new Error(label+': identidad de foto inválida.');
+    const id=p.id||newUID();if(ids.has(id))throw new Error(label+': identidad de foto repetida.');ids.add(id);
     const [prefix,data]=p.data.split(',');if(!data||data.length%4)throw new Error(label+': foto base64 inválida.');
     const decoded=atob(data),array=Uint8Array.from(decoded,c=>c.charCodeAt(0)),blob=new Blob([array],{type:prefix.slice(5,prefix.indexOf(';'))});
-    let img,url;try{if('createImageBitmap' in window)img=await createImageBitmap(blob);else{url=URL.createObjectURL(blob);img=new Image();img.src=url;await img.decode();}const width=img.width||img.naturalWidth,height=img.height||img.naturalHeight;if(width<1||height<1||Math.max(width,height)>1280)throw new Error(label+': dimensiones inválidas; máximo 1280 px.');photos.push({blob,width,height});}finally{img?.close?.();if(url)URL.revokeObjectURL(url);}
+    let img,url;try{if('createImageBitmap' in window)img=await createImageBitmap(blob);else{url=URL.createObjectURL(blob);img=new Image();img.src=url;await img.decode();}const width=img.width||img.naturalWidth,height=img.height||img.naturalHeight;if(width<1||height<1||Math.max(width,height)>1280)throw new Error(label+': dimensiones inválidas; máximo 1280 px.');photos.push({id,blob,width,height});}finally{img?.close?.();if(url)URL.revokeObjectURL(url);}
   }return photos;
 }
 function validateRecord(r,legacy=false) {
@@ -321,25 +392,28 @@ function validateRecord(r,legacy=false) {
   if(Object.keys(validation(fields)).length)throw new Error(r.id+': datos geológicos o coordenadas inválidos.');
   if(!legacy&&(!validUID(r.uid)||!Number.isSafeInteger(r.revision)||r.revision<1||!validDate(r.updatedAt)))throw new Error(r.id+': identidad o versión inválida.');
   if(r.templateKey!=null&&!validTemplate(r.templateKey))throw new Error('Guía de observación inválida.');
-  return {...fields,templateKey:r.templateKey||'',campaignUid:r.campaignUid||null,uid:legacy?null:r.uid,revision:legacy?1:r.revision,updatedAt:legacy?r.fecha:r.updatedAt,...(validID(r.originalId)?{originalId:r.originalId}:{}),...(validUID(r.copyOfUid)?{copyOfUid:r.copyOfUid}:{})};
+  const measurements=r.measurements===undefined?legacyMeasurement({...fields,uid:r.uid}):validateStationMeasurements(r.measurements,fields,r.id);
+  return {...fields,measurements,templateKey:r.templateKey||'',campaignUid:r.campaignUid||null,uid:legacy?null:r.uid,revision:legacy?1:r.revision,updatedAt:legacy?r.fecha:r.updatedAt,...(validID(r.originalId)?{originalId:r.originalId}:{}),...(validUID(r.copyOfUid)?{copyOfUid:r.copyOfUid}:{})};
 }
 async function validateBackup(raw) {
-  if(!raw||raw.app!=='estrato'||![1,2,3,4].includes(raw.version)||!Array.isArray(raw.stations)||!Number.isSafeInteger(raw.sequence)||raw.sequence<0||raw.sequence>=Number.MAX_SAFE_INTEGER)throw new Error('Se requiere un respaldo JSON de Estrato, versión 1, 2, 3 o 4.');
+  if(!raw||raw.app!=='estrato'||![1,2,3,4,5].includes(raw.version)||!Array.isArray(raw.stations)||!Number.isSafeInteger(raw.sequence)||raw.sequence<0||raw.sequence>=Number.MAX_SAFE_INTEGER)throw new Error('Se requiere un respaldo JSON de Estrato, versión 1, 2, 3, 4 o 5.');
   if(raw.version>=3&&!Array.isArray(raw.campaigns))throw new Error('El respaldo v3 debe incluir las campañas.');
   const legacy=raw.version===1,ids=new Set(),uids=new Set(),records=[],trash=[],history=[],drafts=[];let max=raw.sequence;
-  for(const r of raw.stations){const fields=validateRecord(r,legacy);fields.samples=await decodeSamples(r.samples);if(ids.has(fields.id)||(!legacy&&uids.has(fields.uid)))throw new Error('Identidad o ID repetidos en estaciones.');ids.add(fields.id);if(!legacy)uids.add(fields.uid);max=Math.max(max,idNumber(fields.id));const photos=await decodePhotos(r.photos,r.id);records.push({...fields,photoCount:photos.length,photos});}
+  for(const r of raw.stations){const fields=validateRecord(r,legacy);fields.samples=await decodeSamples(r.samples);if(ids.has(fields.id)||(!legacy&&uids.has(fields.uid)))throw new Error('Identidad o ID repetidos en estaciones.');ids.add(fields.id);if(!legacy)uids.add(fields.uid);max=Math.max(max,idNumber(fields.id));const photos=await decodePhotos(r.photos,r.id),photoError=measurementPhotoError(fields.measurements,photos,r.id);if(photoError)throw new Error(photoError);records.push({...fields,photoCount:photos.length,photos});}
   if(!legacy){
     if(!Array.isArray(raw.trash)||!Array.isArray(raw.history)||!Array.isArray(raw.drafts))throw new Error('El respaldo v2 debe incluir papelera, versiones y borradores.');
-    for(const e of raw.trash){const record=validateRecord(e.record);record.samples=await decodeSamples(e.record.samples);if(e.uid!==record.uid||uids.has(e.uid)||!validDate(e.deletedAt))throw new Error('Entrada de papelera inválida o repetida.');uids.add(e.uid);max=Math.max(max,idNumber(record.id));const photos=await decodePhotos(e.photos,'Papelera '+record.id);trash.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,deletedAt:e.deletedAt});}
-    const historyUids=new Set();for(const e of raw.history){const record=validateRecord(e.record);record.samples=await decodeSamples(e.record.samples);if(e.uid!==record.uid||historyUids.has(e.uid)||!validDate(e.savedAt)||!uids.has(e.uid))throw new Error('Versión anterior inválida o sin estación asociada.');historyUids.add(e.uid);const photos=await decodePhotos(e.photos,'Versión '+record.id);history.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,savedAt:e.savedAt});}
-    const draftKeys=new Set();for(const d of raw.drafts){if(!d||!validUID(d.key)||draftKeys.has(d.key)||!validDate(d.savedAt)||!validDate(d.draftDate)||!d.values||FIELDS.some(key=>typeof d.values[key]!=='string'||d.values[key].length>(key==='observaciones'?20000:key==='litologia'?200:100))||!TYPES.includes(d.values.tipo)||!(d.editingId===null||validID(d.editingId))||!(d.editingUid===null||validUID(d.editingUid))||!(d.editingRevision===null||(Number.isSafeInteger(d.editingRevision)&&d.editingRevision>0)))throw new Error('Borrador inválido.');draftKeys.add(d.key);const values={};FIELDS.forEach(key=>values[key]=d.values[key]);drafts.push({key:d.key,editingId:d.editingId,editingUid:d.editingUid,editingRevision:d.editingRevision,draftDate:d.draftDate,values,templateKey:validTemplate(d.templateKey)?d.templateKey:'',campaignUid:d.campaignUid||null,samples:await decodeSamples(d.samples,true),photos:await decodePhotos(d.photos,'Borrador'),savedAt:d.savedAt});}
+    for(const e of raw.trash){const record=validateRecord(e.record);record.samples=await decodeSamples(e.record.samples);if(e.uid!==record.uid||uids.has(e.uid)||!validDate(e.deletedAt))throw new Error('Entrada de papelera inválida o repetida.');uids.add(e.uid);max=Math.max(max,idNumber(record.id));const photos=await decodePhotos(e.photos,'Papelera '+record.id),photoError=measurementPhotoError(record.measurements,photos,'Papelera '+record.id);if(photoError)throw new Error(photoError);trash.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,deletedAt:e.deletedAt});}
+    const historyUids=new Set();for(const e of raw.history){const record=validateRecord(e.record);record.samples=await decodeSamples(e.record.samples);if(e.uid!==record.uid||historyUids.has(e.uid)||!validDate(e.savedAt)||!uids.has(e.uid))throw new Error('Versión anterior inválida o sin estación asociada.');historyUids.add(e.uid);const photos=await decodePhotos(e.photos,'Versión '+record.id),photoError=measurementPhotoError(record.measurements,photos,'Versión '+record.id);if(photoError)throw new Error(photoError);history.push({uid:e.uid,record:{...record,photoCount:photos.length},photos,savedAt:e.savedAt});}
+    const draftKeys=new Set();for(const d of raw.drafts){if(!d||!validUID(d.key)||draftKeys.has(d.key)||!validDate(d.savedAt)||!validDate(d.draftDate)||!d.values||FIELDS.some(key=>typeof d.values[key]!=='string'||d.values[key].length>(key==='observaciones'?20000:key==='litologia'?200:100))||!TYPES.includes(d.values.tipo)||!(d.editingId===null||validID(d.editingId))||!(d.editingUid===null||validUID(d.editingUid))||!(d.editingRevision===null||(Number.isSafeInteger(d.editingRevision)&&d.editingRevision>0)))throw new Error('Borrador inválido.');draftKeys.add(d.key);const values={};FIELDS.forEach(key=>values[key]=d.values[key]);const samples=await decodeSamples(d.samples,true),photos=await decodePhotos(d.photos,'Borrador'),measurementDraft=validateMeasurementDraft(d.measurementDraft,photos,'Borrador');drafts.push({key:d.key,editingId:d.editingId,editingUid:d.editingUid,editingRevision:d.editingRevision,draftDate:d.draftDate,values,templateKey:validTemplate(d.templateKey)?d.templateKey:'',campaignUid:d.campaignUid||null,samples,photos,measurementDraft,savedAt:d.savedAt});}
   }
-  if(max>=Number.MAX_SAFE_INTEGER)throw new Error('El contador está fuera de rango.');const importedCampaigns=validateCampaigns(raw.campaigns),importedBaseMaps=await decodeBaseMaps(raw.baseMaps);if(raw.version===4&&!Array.isArray(raw.baseMaps))throw new Error('El respaldo v4 debe incluir mapas base.');for(const m of importedBaseMaps)if(m.campaignUid&&!importedCampaigns.some(c=>c.uid===m.campaignUid))throw new Error('Mapa base con campaña inexistente.');for(const r of [...records,...trash.map(e=>e.record),...history.map(e=>e.record),...drafts])if(r.campaignUid&&!importedCampaigns.some(c=>c.uid===r.campaignUid))throw new Error('Una estación o borrador refiere a una campaña inexistente.');return {records,sequence:max,trash,history,drafts,legacy,mapLayers:validateMapLayers(raw.mapLayers),campaigns:importedCampaigns,baseMaps:importedBaseMaps};
+  if(max>=Number.MAX_SAFE_INTEGER)throw new Error('El contador está fuera de rango.');const importedCampaigns=validateCampaigns(raw.campaigns),importedBaseMaps=await decodeBaseMaps(raw.baseMaps);if(raw.version>=4&&!Array.isArray(raw.baseMaps))throw new Error('El respaldo v4 o v5 debe incluir mapas base.');for(const m of importedBaseMaps)if(m.campaignUid&&!importedCampaigns.some(c=>c.uid===m.campaignUid))throw new Error('Mapa base con campaña inexistente.');for(const r of [...records,...trash.map(e=>e.record),...history.map(e=>e.record),...drafts])if(r.campaignUid&&!importedCampaigns.some(c=>c.uid===r.campaignUid))throw new Error('Una estación o borrador refiere a una campaña inexistente.');return {records,sequence:max,trash,history,drafts,legacy,mapLayers:validateMapLayers(raw.mapLayers),campaigns:importedCampaigns,baseMaps:importedBaseMaps};
 }
 async function fingerprint(r) {
   const fields=[r.fecha,...FIELDS.map(k=>r[k])],photos=[];
   for(const p of r.photos){const hash=await crypto.subtle.digest('SHA-256',await p.blob.arrayBuffer());photos.push([...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join(''));}
-  const samples=[];for(const s of r.samples||[]){const hashes=[];for(const p of s.photos){const hash=await crypto.subtle.digest('SHA-256',await p.blob.arrayBuffer());hashes.push([...new Uint8Array(hash)]);}samples.push([s.code,s.description,s.state,hashes]);}return JSON.stringify([fields,photos,r.campaignUid||null,samples,r.templateKey||'']);
+  const samples=[];for(const s of r.samples||[]){const hashes=[];for(const p of s.photos){const hash=await crypto.subtle.digest('SHA-256',await p.blob.arrayBuffer());hashes.push([...new Uint8Array(hash)]);}samples.push([s.code,s.description,s.state,hashes]);}
+  const measurements=measurementsForRecord(r).map(({id,photoIds,...m})=>[m,(photoIds||[]).map(photoId=>(r.photos||[]).findIndex(photo=>photo.id===photoId))]);
+  return JSON.stringify([fields,photos,r.campaignUid||null,samples,r.templateKey||'',measurements]);
 }
 async function importContext(parsed,local) {
   const campaignMerge=mergeCampaigns(local.campaigns||[],parsed.campaigns||[]);const remap=r=>{if(r.campaignUid)r.campaignUid=campaignMerge.mapping.get(r.campaignUid)||r.campaignUid;};parsed.records.forEach(remap);parsed.trash.forEach(e=>remap(e.record));parsed.history.forEach(e=>remap(e.record));parsed.drafts.forEach(remap);parsed.campaigns=campaignMerge.merged;for(const m of parsed.baseMaps||[])remap(m);const mergedBaseMaps=await mergeBaseMaps(local.baseMaps||[],parsed.baseMaps||[]);
@@ -392,7 +466,7 @@ async function importBackup(file) {
   }catch(e){notify('Importación rechazada. '+friendlyError(e),true);}finally{setBusy(false);$('backup-input').value='';}
 }
 async function submitStation(asNew=false) {
-  if(busy||photoBusy||!db)return;const record=collectForm(),sampleProblem=samplesError(draftSamples);if(sampleProblem){notify(sampleProblem,true);$('samples').scrollIntoView();return;}const errors=validation(record);if(Object.keys(errors).length){showErrors(errors);return;}clearErrors();setBusy(true);
+  if(busy||photoBusy||!db)return;const record=collectForm(),sampleProblem=samplesError(draftSamples);if(sampleProblem){notify(sampleProblem,true);$('samples').scrollIntoView();return;}const errors=validation(record);if(Object.keys(errors).length){showErrors(errors);return;}const measurementProblem=measurementEditorError(record);if(measurementProblem){$('measurement-error').textContent=measurementProblem;$('measurement-error').hidden=false;$('measurement-error').scrollIntoView({block:'center'});$('add-measurement').focus();notify('Revisa las mediciones estructurales antes de guardar.',true);return;}clearErrors();setBusy(true);
   try{clearTimeout(draftTimer);await draftWrites.catch(()=>{});const id=await saveRecord(record,draftPhotos,asNew?null:editingId,{uid:editingUid,revision:editingRevision,draftKey});await clearForm();await refresh();const saved=stations.find(s=>s.id===id),count=qualityIssues(saved).length;notify(id+' guardada en este dispositivo.'+(count?' Tiene '+count+' avisos de revisión; puedes consultarlos en Ver estación.':''));switchTab('list');}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}
 }
 
@@ -400,14 +474,15 @@ function setBusy(value) { busy = value; $('station-form').inert = value; ['save'
 function revoke(urls) { urls.splice(0).forEach(url => URL.revokeObjectURL(url)); }
 async function nextId() { const tx = db.transaction('meta','readonly'), done = txDone(tx); const r = await request(tx.objectStore('meta').get('sequence')); await done; return formatId((r?.value||0)+1); }
 async function clearForm() {
-  await forgetCurrentDraft(); draftEpoch++; stopCompass(); revoke(photoUrls); draftPhotos = [];draftSamples=[];renderSamples(); editingId = null; editingUid = null; editingRevision = null; dirty = false; $('save-as-new').hidden = true; $('draft-status').textContent='El borrador se guarda automáticamente al escribir.';
+  await forgetCurrentDraft(); draftEpoch++; stopCompass(); revoke(photoUrls);revoke(measurementPhotoUrls); draftPhotos = [];draftSamples=[];draftMeasurements=[];primaryMeasurementId=newUID();primaryMeasurementPhotoIds=[];renderSamples(); editingId = null; editingUid = null; editingRevision = null; dirty = false; $('save-as-new').hidden = true; $('draft-status').textContent='El borrador se guarda automáticamente al escribir.';
   HTMLFormElement.prototype.reset.call($('station-form')); draftDate = new Date().toISOString(); $('date-display').value = readableDate(draftDate);
   $('form-title').textContent = 'Nueva estación'; $('save').textContent = 'Guardar estación'; $('reset').textContent = 'Limpiar formulario';
   $('gps-status').textContent = 'Coordenadas en grados decimales (WGS84). También puedes escribirlas.';
   $('compass-status').textContent = 'Lectura sugerida. Sostén el teléfono plano y comprueba con tu brújula de campo.';
-  clearErrors(); renderPhotos();renderTemplate();renderQuickEntry();scheduleQuality(); $('station-id').value = await nextId();
+  clearErrors(); renderPhotos();renderMeasurements();renderTemplate();renderQuickEntry();scheduleQuality(); $('station-id').value = await nextId();
 }
-function clearErrors() { ['lat','lon','alt','litologia','rumbo','buzamiento','dir_buzamiento'].forEach(id => { $('err-'+id).hidden = true; $(id).removeAttribute('aria-invalid'); $(id).removeAttribute('aria-describedby'); }); }
+const FIELD_HELP = {lat:'gps-status',lon:'gps-status',precision_m:'precision-hint',litologia:'litologia-hint',rumbo:'compass-status'};
+function clearErrors() { ['lat','lon','alt','precision_m','litologia','tipo','rumbo','buzamiento','dir_buzamiento','observaciones'].forEach(id => { $('err-'+id).hidden = true; $(id).removeAttribute('aria-invalid'); if(FIELD_HELP[id])$(id).setAttribute('aria-describedby',FIELD_HELP[id]);else $(id).removeAttribute('aria-describedby'); });$('measurement-error').hidden=true;$('measurement-error').textContent=''; }
 function validation(r) {
   const errors = {};
   for (const [key,min,max,required] of [['lat',-90,90,true],['lon',-180,180,true],['alt',-Infinity,Infinity,false],['precision_m',0,Infinity,false],['rumbo',0,360,false],['buzamiento',0,90,false],['dir_buzamiento',0,360,false]]) {
@@ -422,11 +497,20 @@ function validation(r) {
 function collectForm() {
   const r = {fecha:draftDate,campaignUid:$('campaign').value||null,templateKey:$('field-template').value,samples:structuredClone(draftSamples)};
   FIELDS.forEach(key => { const input = $(key); r[key] = ['litologia','tipo','observaciones'].includes(key) ? input.value.trim() : input.validity.badInput ? NaN : input.value === '' ? null : Number(input.value); });
+  const method=$('primary-measurement-method').value,quality=$('primary-measurement-quality').value,notes=$('primary-measurement-notes').value.trim(),primaryHasValues=[r.rumbo,r.buzamiento,r.dir_buzamiento].some(value=>value!==null),primaryHasMetadata=method!=='compass'||quality!=='unassessed'||notes.length>0||primaryMeasurementPhotoIds.length>0;
+  r.measurements=primaryHasValues||primaryHasMetadata?[{id:primaryMeasurementId||newUID(),kind:'planar',feature:r.tipo,strike:r.rumbo,dip:r.buzamiento,dipDirection:r.dir_buzamiento,trend:null,plunge:null,method,quality,notes,photoIds:[...primaryMeasurementPhotoIds]},...structuredClone(draftMeasurements)]:structuredClone(draftMeasurements);
   return r;
+}
+function isPrimaryMeasurement(measurement,record) {
+  return measurement.kind==='planar'&&measurement.feature===record.tipo&&measurement.strike===(record.rumbo??null)&&measurement.dip===(record.buzamiento??null)&&measurement.dipDirection===(record.dir_buzamiento??null);
+}
+function measurementEditorError(record) {
+  try{const normalized=validateStationMeasurements(record.measurements,record);return measurementPhotoError(normalized,draftPhotos);}
+  catch(error){return error.message||'Revisa las mediciones estructurales.';}
 }
 function showErrors(errors) {
   clearErrors(); let first;
-  Object.entries(errors).forEach(([key,text]) => { const e = $('err-'+key); if(e) {e.textContent=text; e.hidden=false; $(key).setAttribute('aria-invalid','true'); $(key).setAttribute('aria-describedby','err-'+key); first ||= $(key);} });
+  Object.entries(errors).forEach(([key,text]) => { const e = $('err-'+key); if(e) {e.textContent=text; e.hidden=false; $(key).setAttribute('aria-invalid','true'); $(key).setAttribute('aria-describedby',[FIELD_HELP[key],e.id].filter(Boolean).join(' ')); first ||= $(key);} });
   notify('Revisa los campos marcados antes de guardar.',true); first?.focus();
 }
 async function refresh() {
@@ -449,9 +533,9 @@ function renderList() {
   $('list-count').textContent = found.length + ' de ' + stations.length + ' estaciones'; $('stations').replaceChildren();
   if (!found.length) { const e=element('div',stations.length ? 'No hay estaciones que coincidan con tu búsqueda.' : 'Tu primera estación empieza aquí. Registra un punto en la pestaña Nueva.','empty'); $('stations').append(e); return; }
   for (const s of found) {
-    const card=element('article',undefined,'card'); card.append(element('div',s.id,'station-id'),element('h3',s.litologia),element('span',s.tipo,'badge'),element('p',readableDate(s.fecha),'station-meta'),element('p',s.lat.toFixed(6)+', '+s.lon.toFixed(6)+' · '+s.photoCount+' fotos','station-meta'));
+    const card=element('article',undefined,'card'),measurements=measurementsForRecord(s),planarCount=measurements.filter(m=>m.kind==='planar').length,linearCount=measurements.length-planarCount; card.append(element('div',s.id,'station-id'),element('h3',s.litologia),element('span',s.tipo,'badge'),element('p',readableDate(s.fecha),'station-meta'),element('p',s.lat.toFixed(6)+', '+s.lon.toFixed(6)+' · '+s.photoCount+' fotos','station-meta'));
     card.append(element('p',campaignName(s.campaignUid)+' · '+(s.samples||[]).length+' muestras','badge'));
-    if (s.rumbo!==null || s.buzamiento!==null) card.append(element('p','Rumbo '+(s.rumbo??'—')+'° · Buzamiento '+(s.buzamiento??'—')+'°','station-meta'));
+    if(planarCount||linearCount)card.append(element('p',measurements.length+' mediciones · '+planarCount+' planos · '+linearCount+' lineaciones','station-meta'));
     const issues=issuesById.get(s.id);if(issues.length)card.append(element('p','Revisar · '+issues.length+' avisos'+(issues.some(i=>i.key==='duplicate-code')?' · bolsa repetida':''),'badge quality-tag'));
     const actions=element('div',undefined,'buttons');
     for (const [text,action,cls] of [['Ver estación',()=>showDetail(s.id),'primary'],['Editar',()=>editStation(s.id),''],['Usar geología',()=>reuseGeology(s.id),''],['Borrar',()=>deleteStation(s.id),'danger']]) { const b=element('button',text,cls);b.type='button';b.setAttribute('aria-label',text+' '+s.id);b.onclick=()=>{if(!busy&&!photoBusy) action().catch(e=>notify(friendlyError(e),true));};actions.append(b); }
@@ -470,22 +554,109 @@ async function showDetail(id) {
   $('detail-content').append(qualityBox(qualityIssues(s)));
   const dl=element('dl'), labels={fecha:'Fecha y hora',lat:'Latitud',lon:'Longitud',alt:'Altitud (m)',precision_m:'Precisión (± m)',litologia:'Litología',rumbo:'Rumbo (°)',buzamiento:'Buzamiento (°)',dir_buzamiento:'Dirección de buzamiento (°)',tipo:'Tipo de medida',observaciones:'Observaciones'};
   for(const [key,label] of Object.entries(labels)) dl.append(element('dt',label),element('dd',key==='fecha'?readableDate(s[key]):String(s[key]??'Sin dato')));
-  $('detail-content').append(dl);appendSampleDetail(s);
-  for(const [i,p] of (await readPhotos(id)).entries()) { const url=URL.createObjectURL(p.blob);detailUrls.push(url);const img=element('img');img.src=url;img.alt=id+' · Foto '+(i+1);img.style.marginTop='18px';$('detail-content').append(img); }
+  $('detail-content').append(dl);
+  const photos=await readPhotos(id),measurements=measurementsForRecord(s),section=element('section',undefined,'detail-measurements');section.append(element('h3','Mediciones estructurales · '+measurements.length));
+  if(!measurements.length)section.append(element('p','No hay orientaciones registradas.','hint'));
+  for(const [index,m] of measurements.entries()){
+    const card=element('article',undefined,'measurement-card'),kind=m.kind==='planar'?'Plano':'Lineación',angles=m.kind==='planar'?'Rumbo '+(m.strike??'—')+'° · Buzamiento '+(m.dip??'—')+'° · Dirección '+(m.dipDirection??'—')+'°':'Tendencia '+(m.trend??'—')+'° · Inmersión '+(m.plunge??'—')+'°',methods={compass:'Brújula / clinómetro',phone:'Sensor del teléfono',map:'Mapa o imagen',other:'Otro método','not-recorded':'No registrado'},qualities={unassessed:'Sin evaluar',good:'Buena exposición / lectura',fair:'Aceptable con limitaciones',poor:'Baja confianza'};
+    card.append(element('h4','M'+String(index+1).padStart(2,'0')+' · '+kind+' · '+m.feature),element('p',angles,'station-meta'),element('p','Método: '+(methods[m.method]||m.method)+' · Calidad: '+(qualities[m.quality]||m.quality),'station-meta'));
+    if(m.notes)card.append(element('p',m.notes));
+    const linked=photos.map((photo,photoIndex)=>({photo,photoIndex})).filter(item=>(m.photoIds||[]).includes(item.photo.id));
+    if(linked.length){card.append(element('p','Evidencia fotográfica','badge'));for(const {photo,photoIndex} of linked){const url=URL.createObjectURL(photo.blob);detailUrls.push(url);const img=element('img');img.src=url;img.alt='Foto '+(photoIndex+1)+' asociada a M'+String(index+1).padStart(2,'0');img.style.marginTop='10px';card.append(img);}}
+    section.append(card);
+  }
+  $('detail-content').append(section);appendSampleDetail(s);
+  for(const [i,p] of photos.entries()) { const url=URL.createObjectURL(p.blob);detailUrls.push(url);const img=element('img');img.src=url;img.alt=id+' · Foto '+(i+1);img.style.marginTop='18px';$('detail-content').append(img); }
   $('restore-history').hidden=!previousVersions.some(e=>e.uid===s.uid); $('restore-history').onclick=()=>restoreHistory(s.uid).catch(e=>notify(friendlyError(e),true)); $('detail-dialog').showModal();
 }
 async function editStation(id) {
   if(dirty && !confirm('Hay cambios sin guardar. ¿Descartarlos para editar '+id+'?'))return;
   const s=stations.find(r=>r.id===id);if(!s)return;
-  const items=await readPhotos(id);await forgetCurrentDraft();draftEpoch++;stopCompass();revoke(photoUrls);draftPhotos=items;editingId=id;editingUid=s.uid;editingRevision=s.revision;draftDate=s.fecha;dirty=false;$('save-as-new').hidden=false;clearErrors();
+  const items=await readPhotos(id),measurements=measurementsForRecord(s),primary=measurements.find(m=>isPrimaryMeasurement(m,s));await forgetCurrentDraft();draftEpoch++;stopCompass();revoke(photoUrls);draftPhotos=items;primaryMeasurementId=primary?.id||newUID();primaryMeasurementPhotoIds=[...(primary?.photoIds||[])];draftMeasurements=measurements.filter(m=>m!==primary).map(m=>structuredClone(m));$('primary-measurement-method').value=MEASUREMENT_METHODS.includes(primary?.method)?primary.method:'not-recorded';$('primary-measurement-quality').value=MEASUREMENT_QUALITIES.includes(primary?.quality)?primary.quality:'unassessed';$('primary-measurement-notes').value=primary?.notes||'';editingId=id;editingUid=s.uid;editingRevision=s.revision;draftDate=s.fecha;dirty=false;$('save-as-new').hidden=false;clearErrors();
   draftSamples=structuredClone(s.samples||[]);fillCampaignSelect('campaign');if(s.campaignUid&&!$('campaign').querySelector('option[value="'+s.campaignUid+'"]')){const o=element('option',campaignName(s.campaignUid)+' · archivada');o.value=s.campaignUid;$('campaign').append(o);}$('campaign').value=s.campaignUid||'';renderSamples();
   $('field-template').value=s.templateKey||'';renderTemplate();renderQuickEntry();scheduleQuality();
-  FIELDS.forEach(key=>$(key).value=s[key]??'');$('station-id').value=id;$('date-display').value=readableDate(s.fecha);$('form-title').textContent='Editar estación';$('save').textContent='Guardar cambios';$('reset').textContent='Cancelar edición';renderPhotos();switchTab('new');
+  FIELDS.forEach(key=>$(key).value=s[key]??'');$('station-id').value=id;$('date-display').value=readableDate(s.fecha);$('form-title').textContent='Editar estación';$('save').textContent='Guardar cambios';$('reset').textContent='Cancelar edición';renderPhotos();renderMeasurements();switchTab('new');
+}
+
+function measurementEvidence(container,measurementIndex=null,photoIds=[]) {
+  container.replaceChildren();
+  if(!draftPhotos.length){container.append(element('p','Aún no hay fotos para vincular. Añade una en «Notas y fotografías».','hint'));return;}
+  const list=element('div',undefined,'measurement-evidence-list');
+  draftPhotos.forEach((photo,index)=>{
+    const id=(measurementIndex===null?'primary':'extra-'+measurementIndex)+'-photo-'+photo.id,label=element('label',undefined,'measurement-evidence-choice'),input=element('input');
+    input.type='checkbox';input.id=id;input.checked=photoIds.includes(photo.id);input.dataset.photoId=photo.id;
+    if(measurementIndex===null)input.dataset.primaryPhoto='true';else{input.dataset.measureIndex=String(measurementIndex);input.dataset.measurePhoto='true';}
+    label.htmlFor=id;label.append(input,element('span','Foto '+String(index+1).padStart(2,'0')+' · '+bytes(photo.blob.size)));list.append(label);
+  });
+  container.append(list);
+}
+function renderMeasurements(options={}) {
+  const list=$('measurement-list');if(!list)return;
+  $('measurement-count').textContent=draftMeasurements.length+' adicionales';
+  measurementEvidence($('primary-measurement-evidence'),null,primaryMeasurementPhotoIds);
+  list.replaceChildren();
+  for(const [index,m] of draftMeasurements.entries()){
+    const card=element('article',undefined,'measurement-card'),header=element('div',undefined,'measurement-card-header'),heading=element('div'),number=element('span','Medición adicional '+(index+1),'measurement-number'),title=element('h4',m.kind==='planar'?'Orientación planar':'Orientación lineal'),remove=element('button','Quitar');
+    remove.type='button';remove.className='danger';remove.setAttribute('aria-label','Quitar medición adicional '+(index+1));remove.onclick=()=>{draftMeasurements.splice(index,1);markDirty();renderMeasurements();};
+    heading.append(number,title);header.append(heading,remove);card.append(header);
+    const grid=element('div',undefined,'measurement-grid');
+    const addSelect=(field,labelText,choices,wide=false)=>{
+      const wrap=element('div',undefined,wide?'measurement-full':''),label=element('label',labelText),select=element('select');select.id='measurement-'+m.id+'-'+field;select.dataset.measureIndex=String(index);select.dataset.measureField=field;
+      for(const [value,text] of choices){const option=element('option',text);option.value=value;select.append(option);}select.value=m[field];label.htmlFor=select.id;wrap.append(label,select);grid.append(wrap);
+    };
+    const addAngle=(field,labelText,min,max,wide=false)=>{
+      const wrap=element('div',undefined,wide?'measurement-full':''),label=element('label',labelText),input=element('input');input.type='number';input.inputMode='decimal';input.step='any';input.min=String(min);input.max=String(max);input.placeholder='Opcional';input.value=m[field]??'';input.id='measurement-'+m.id+'-'+field;input.dataset.measureIndex=String(index);input.dataset.measureField=field;label.htmlFor=input.id;wrap.append(label,input);grid.append(wrap);
+    };
+    addSelect('kind','Tipo de medición',[['planar','Plano · rumbo y buzamiento'],['linear','Lineación · tendencia e inmersión']],true);
+    const features=m.kind==='planar'?TYPES:LINEAR_FEATURES;
+    addSelect('feature','Elemento geológico',features.map(value=>[value,value.charAt(0).toUpperCase()+value.slice(1)]),true);
+    if(m.kind==='planar'){
+      addAngle('strike','Rumbo (0–360°)',0,360);addAngle('dip','Buzamiento (0–90°)',0,90);addAngle('dipDirection','Dirección de buzamiento (0–360°)',0,360,true);
+    }else{
+      addAngle('trend','Tendencia (0–360°)',0,360);addAngle('plunge','Inmersión (0–90°)',0,90);
+    }
+    addSelect('method','Instrumento o método',[['compass','Brújula / clinómetro'],['phone','Sensor del teléfono'],['map','Mapa o imagen'],['other','Otro método'],['not-recorded','No registrado']]);
+    addSelect('quality','Calidad de la lectura',[['unassessed','Sin evaluar'],['good','Buena exposición / lectura'],['fair','Aceptable con limitaciones'],['poor','Baja confianza']]);
+    const notesWrap=element('div',undefined,'measurement-full'),notesLabel=element('label','Notas de esta medición'),notes=element('textarea');notes.id='measurement-'+m.id+'-notes';notes.maxLength=2000;notes.value=m.notes||'';notes.placeholder='Contexto, corrección aplicada o limitaciones';notes.dataset.measureIndex=String(index);notes.dataset.measureField='notes';notesLabel.htmlFor=notes.id;notesWrap.append(notesLabel,notes);grid.append(notesWrap);
+    card.append(grid);
+    const evidence=element('fieldset',undefined,'measurement-evidence'),legend=element('legend','Fotos asociadas');evidence.append(legend,element('p','Selecciona fotos de la estación que documenten esta lectura.','hint'));const choices=element('div');measurementEvidence(choices,index,m.photoIds||[]);evidence.append(choices);card.append(evidence);list.append(card);
+  }
+  if(options.focusId)document.getElementById(options.focusId)?.focus();
+}
+function syncMeasurementInput(event,phase) {
+  const input=event.target;
+  if(input.dataset.primaryPhoto==='true'){
+    if(phase!=='change')return false;
+    primaryMeasurementPhotoIds=input.checked?[...new Set([...primaryMeasurementPhotoIds,input.dataset.photoId])]:primaryMeasurementPhotoIds.filter(id=>id!==input.dataset.photoId);return true;
+  }
+  if(input.dataset.measurePhoto==='true'){
+    if(phase!=='change')return false;
+    const index=Number(input.dataset.measureIndex),measurement=draftMeasurements[index];if(!measurement)return false;
+    measurement.photoIds=input.checked?[...new Set([...measurement.photoIds,input.dataset.photoId])]:measurement.photoIds.filter(id=>id!==input.dataset.photoId);return true;
+  }
+  if(input.dataset.measureIndex===undefined)return false;
+  const index=Number(input.dataset.measureIndex),measurement=draftMeasurements[index],field=input.dataset.measureField;if(!measurement||!field)return false;
+  if(field==='kind'){
+    if(phase!=='change')return false;
+    const kind=input.value;if(kind===measurement.kind)return false;
+    const oldFields=measurement.kind==='planar'?['strike','dip','dipDirection']:['trend','plunge'];
+    if(oldFields.some(key=>measurement[key]!==null)&&!confirm('Cambiar el tipo de medición eliminará los ángulos incompatibles. ¿Continuar?')){input.value=measurement.kind;return false;}
+    oldFields.forEach(key=>measurement[key]=null);measurement.kind=kind;const options=kind==='planar'?TYPES:LINEAR_FEATURES;if(measurement.feature==='otra'||!options.includes(measurement.feature))measurement.feature=kind==='planar'?'otra':'lineación';renderMeasurements({focusId:input.id});return true;
+  }
+  if(['feature','method','quality'].includes(field)&&phase!=='change')return false;
+  if(['strike','dip','dipDirection','trend','plunge'].includes(field))measurement[field]=input.validity.badInput?NaN:input.value===''?null:Number(input.value);
+  else measurement[field]=input.value;
+  return true;
+}
+function addMeasurement() {
+  if(busy||photoBusy)return;
+  if(draftMeasurements.length>=49){notify('Máximo 50 mediciones estructurales por estación.',true);return;}
+  const measurement={id:newUID(),kind:'planar',feature:'otra',strike:null,dip:null,dipDirection:null,trend:null,plunge:null,method:'compass',quality:'unassessed',notes:'',photoIds:[]};draftMeasurements.push(measurement);markDirty();renderMeasurements({focusId:'measurement-'+measurement.id+'-kind'});
 }
 
 function renderPhotos() {
   revoke(photoUrls);$('photos').replaceChildren();$('photo-count').textContent=draftPhotos.length+' de 5 fotos · Se reducen a 1280 px y se guardan localmente.';
-  draftPhotos.forEach((p,i)=>{const card=element('div',undefined,'photo'),img=element('img'),url=URL.createObjectURL(p.blob);photoUrls.push(url);img.src=url;img.alt='Foto '+(i+1)+' de la estación';const row=element('div',undefined,'photo-footer');row.append(element('span','Foto '+(i+1)+' · '+bytes(p.blob.size)));const b=element('button','Quitar');b.type='button';b.disabled=photoBusy;b.setAttribute('aria-label','Quitar foto '+(i+1));b.onclick=()=>{draftPhotos.splice(i,1);markDirty();renderPhotos();};row.append(b);card.append(img,row);$('photos').append(card);});
+  draftPhotos.forEach((p,i)=>{const card=element('div',undefined,'photo'),img=element('img'),url=URL.createObjectURL(p.blob);photoUrls.push(url);img.src=url;img.alt='Foto '+(i+1)+' de la estación';const row=element('div',undefined,'photo-footer');row.append(element('span','Foto '+(i+1)+' · '+bytes(p.blob.size)));const b=element('button','Quitar');b.type='button';b.disabled=photoBusy;b.setAttribute('aria-label','Quitar foto '+(i+1));b.onclick=()=>{const removed=draftPhotos[i].id;draftPhotos.splice(i,1);primaryMeasurementPhotoIds=primaryMeasurementPhotoIds.filter(id=>id!==removed);for(const measurement of draftMeasurements)measurement.photoIds=measurement.photoIds.filter(id=>id!==removed);markDirty();renderPhotos();renderMeasurements();};row.append(b);card.append(img,row);$('photos').append(card);});
   $('camera').disabled = $('gallery').disabled = photoBusy || draftPhotos.length >= 5;
 }
 function canvasBlob(canvas) { return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('No se pudo comprimir la imagen.')),'image/jpeg',.82)); }
@@ -499,7 +670,7 @@ async function compressImage(blob) {
     const width=image.width||image.naturalWidth,height=image.height||image.naturalHeight;
     if(!width||!height)throw new Error('Imagen sin dimensiones válidas.');
     const scale=Math.min(1,1280/Math.max(width,height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(width*scale));canvas.height=Math.max(1,Math.round(height*scale));const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(image,0,0,canvas.width,canvas.height);
-    return {blob:await canvasBlob(canvas),width:canvas.width,height:canvas.height};
+    return {id:newUID(),blob:await canvasBlob(canvas),width:canvas.width,height:canvas.height};
   } catch(e){throw new Error('No se pudo leer la foto. Prueba JPEG, PNG o WebP; algunos teléfonos no permiten HEIC. '+(e.message||''));}
   finally{image?.close?.();if(url)URL.revokeObjectURL(url);}
 }
@@ -508,7 +679,7 @@ async function addPhotos(files) {
   let added=0,errors=[];
   try{for(const file of files){if(draftPhotos.length>=5){errors.push('Se permiten hasta 5 fotos por estación.');break;}try{const p=await compressImage(file);if(epoch!==draftEpoch)break;draftPhotos.push(p);markDirty();await persistDraft();added++;}catch(e){errors.push(e.message);}}}
   finally{photoBusy=false;$('save').disabled=busy;$('reset').disabled=busy;renderPhotos();}
-  if(errors.length)notify((added?added+' foto(s) añadidas. ':'')+errors.join(' '),true);else if(added)notify(added+' foto(s) listas. Guarda la estación para conservarlas.');
+  renderMeasurements();if(errors.length)notify((added?added+' foto(s) añadidas. ':'')+errors.join(' '),true);else if(added)notify(added+' foto(s) listas. Guarda la estación para conservarlas.');
 }
 function closeCamera(){cameraStream?.getTracks().forEach(t=>t.stop());cameraStream=null;$('camera-video').srcObject=null;if($('camera-dialog').open)$('camera-dialog').close();}
 async function openCamera(){
@@ -544,7 +715,7 @@ async function readCompass(){
 function photoName(id,i,p){const ext=p.blob.type==='image/png'?'png':p.blob.type==='image/webp'?'webp':'jpg';return id+'_'+String(i+1).padStart(2,'0')+'.'+ext;}
 // Quote every value; neutralize spreadsheet formulas only in free-text fields.
 function csvCell(value,text=false){let s=String(value??'');if(text&&/^[\s]*[=+\-@\t\r\n]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}
-function makeCSV(records){return '\uFEFF'+COLUMNS.join(',')+'\r\n'+records.map(r=>COLUMNS.map(key=>csvCell(key==='nombres_fotos'?r.photos.map((p,i)=>photoName(r.id,i,p)).join(';'):r[key],['litologia','observaciones','tipo'].includes(key))).join(',')).join('\r\n')+(records.length?'\r\n':'');}
+function makeCSV(records){return '\uFEFF'+COLUMNS.join(',')+'\r\n'+records.map(r=>{const measurements=measurementsForRecord(r),values={...r,nombres_fotos:r.photos.map((p,i)=>photoName(r.id,i,p)).join(';'),numero_mediciones:measurements.length,mediciones_estructurales_json:JSON.stringify(measurements.map(m=>measurementForExport(r,m)))};return COLUMNS.map(key=>csvCell(values[key],['litologia','observaciones','tipo','mediciones_estructurales_json'].includes(key))).join(',');}).join('\r\n')+(records.length?'\r\n':'');}
 function download(blob,name){const url=URL.createObjectURL(blob),a=element('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
 function fileStamp(){return new Date().toISOString().replace(/[:.]/g,'-');}
 // ZIP32, STORE (no compression), UTF-8 names, CRC32; JPEGs are already compressed.
@@ -621,6 +792,11 @@ function drawMap(){
   const dpr=Math.min(2,window.devicePixelRatio||1);if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}mapState.w=w;mapState.h=h;
   if(!mapReady){mapReady=true;fitStations();}
   const ctx=canvas.getContext('2d'),css=getComputedStyle(document.documentElement),ink=css.getPropertyValue('--ink').trim(),paper=css.getPropertyValue('--paper').trim(),line=css.getPropertyValue('--line').trim();ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=paper;ctx.fillRect(0,0,w,h);ctx.font='12px system-ui';ctx.textAlign='left';ctx.textBaseline='top';
+  const empty=!stations.length&&!selectedBaseMap()&&!mapLayers.some(layer=>layer.visible)&&!mapLocation;
+  $('map-frame').classList.toggle('is-empty',empty);$('map-empty').hidden=!empty;canvas.tabIndex=empty?-1:0;canvas.setAttribute('aria-hidden',String(empty));
+  $('map-filters').hidden=!stations.length;$('map-fit').hidden=!stations.length;$('map-station-choice').hidden=!stations.length;
+  $('map-measure-actions').hidden=empty;$('map-measure-status').hidden=empty;$('map-help').hidden=empty;
+  if(empty){$('map-view').textContent='Sin estaciones, capas ni mapa base.';$('map-count').textContent='0 estaciones guardadas';return;}
   const background=selectedBaseMap();if(background)drawRaster(ctx,background,mapProject,Number($('basemap-opacity').value)/100);
   const lonStep=niceStep(100/(mapState.scale*mapState.cos)),latStep=niceStep(85/mapState.scale),west=mapState.lon-w/2/(mapState.scale*mapState.cos),east=mapState.lon+w/2/(mapState.scale*mapState.cos),south=Math.max(-90,mapState.lat-h/2/mapState.scale),north=Math.min(90,mapState.lat+h/2/mapState.scale);
   ctx.strokeStyle=line;ctx.lineWidth=.7;ctx.fillStyle=ink;
@@ -665,7 +841,7 @@ function renderMapLayers(){
   $('map-layer-count').textContent=mapLayers.length;$('map-layers').replaceChildren();for(const l of mapLayers){const item=element('div',undefined,'map-layer'),label=element('label'),check=element('input');check.type='checkbox';check.checked=l.visible;check.setAttribute('aria-label','Mostrar capa '+l.name);check.onchange=async()=>{if(busy){check.checked=l.visible;return;}try{mapLayers=await mutateMapLayers(current=>current.map(x=>x.id===l.id?{...x,visible:check.checked}:x));queueMap();}catch(e){check.checked=l.visible;notify(friendlyError(e),true);}};const dot=element('i',undefined,'map-dot');dot.style.backgroundColor=l.color;label.append(check,dot,document.createTextNode(l.name));item.append(label,element('p',l.data.features.length+' elementos · '+l.count.toLocaleString('es')+' coordenadas','hint'));const actions=element('div',undefined,'buttons');for(const [text,action] of [['Ver zona',()=>fitLayer(l)],['Exportar capa',()=>download(new Blob([JSON.stringify(l.data)],{type:'application/geo+json'}),'capa-'+l.id+'.geojson')],['Retirar capa',async()=>{if(busy)return;if(!confirm('¿Retirar «'+l.name+'» del dispositivo? Guarda un respaldo o exporta la capa primero. No se borran estaciones.'))return;try{mapLayers=await mutateMapLayers(current=>current.filter(x=>x.id!==l.id));renderMapLayers();queueMap();await updateStorage();}catch(e){notify(friendlyError(e),true);}}]]){const b=element('button',text);b.onclick=action;actions.append(b);}item.append(actions);$('map-layers').append(item);}queueMap();
 }
 async function locateOnMap(){if(!navigator.geolocation){$('map-gps-status').textContent='Este navegador no ofrece GPS. Puedes ver las estaciones igualmente.';return;}const button=$('map-gps');button.disabled=true;$('map-gps-status').textContent='Buscando posición GPS…';navigator.geolocation.getCurrentPosition(p=>{button.disabled=false;const c=p.coords;if(!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude)||Math.abs(c.latitude)>90||Math.abs(c.longitude)>180){$('map-gps-status').textContent='El dispositivo devolvió coordenadas inválidas.';return;}mapLocation={lat:c.latitude,lon:c.longitude,accuracy:Math.max(0,c.accuracy||0),time:p.timestamp};mapState.lon=c.longitude;mapState.lat=c.latitude;mapState.cos=Math.max(.02,Math.cos(c.latitude*Math.PI/180));mapState.scale=Math.max(mapState.scale,Math.min(1e7,(mapState.h-90)/Math.max(.005,c.accuracy/111195*5)));mapReady=true;$('map-gps-status').textContent='Última lectura: '+new Date(p.timestamp).toLocaleTimeString('es')+' · Precisión ±'+Math.round(mapLocation.accuracy)+' m. No se actualiza automáticamente.';renderMapSelection();queueMap();},e=>{button.disabled=false;$('map-gps-status').textContent=e.code===1?'Permiso de ubicación denegado. Habilítalo en los ajustes del navegador para mostrar tu posición.':e.code===3?'El GPS tardó demasiado. Busca cielo abierto y vuelve a intentarlo.':'No se pudo obtener tu posición. Las estaciones guardadas siguen disponibles.';},{enableHighAccuracy:true,timeout:25000,maximumAge:0});}
-function makeGeoJSON(records,source=campaigns){return {type:'FeatureCollection',features:records.map(({photos,samples,...r})=>({type:'Feature',id:r.uid,geometry:{type:'Point',coordinates:r.alt===null?[r.lon,r.lat]:[r.lon,r.lat,r.alt]},properties:{...r,campana:campaignName(r.campaignUid,source),muestras:(samples||[]).map(s=>({codigo:s.code,descripcion:s.description,estado:s.state,nombres_fotos:s.photos.map((p,i)=>samplePhotoName({...r,samples},s,i,p))})),nombres_fotos:(photos||[]).map((p,i)=>photoName(r.id,i,p)).join(';')}}))};}
+function makeGeoJSON(records,source=campaigns){return {type:'FeatureCollection',features:records.map(({photos,samples,measurements,...r})=>({type:'Feature',id:r.uid,geometry:{type:'Point',coordinates:r.alt===null?[r.lon,r.lat]:[r.lon,r.lat,r.alt]},properties:{...r,mediciones_estructurales:measurementsForRecord({...r,measurements,photos}).map(m=>measurementForExport({...r,photos},m)),campana:campaignName(r.campaignUid,source),muestras:(samples||[]).map(s=>({codigo:s.code,descripcion:s.description,estado:s.state,nombres_fotos:s.photos.map((p,i)=>samplePhotoName({...r,samples},s,i,p))})),nombres_fotos:(photos||[]).map((p,i)=>photoName(r.id,i,p)).join(';')}}))};}
 function initMap(){
   const canvas=$('field-map'),pointers=new Map();let gesture=null,pinch=null,tap=null;
   const local=e=>{const r=canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};};
@@ -675,7 +851,7 @@ function initMap(){
   const end=e=>{if(e.type==='pointerup'&&tap&&!tap.moved&&pointers.size===1){const p=local(e);if(measureMode){measureAt(p.x,p.y);}else{const hits=mapState.hits.filter(h=>Math.hypot(h.x-p.x,h.y-p.y)<24).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y));if(hits.length){const previous=hits.findIndex(h=>h.id===mapSelected);selectMapStation(hits[(previous+1)%hits.length].id);}}}pointers.delete(e.pointerId);tap=null;pinch=null;gesture=pointers.size===1?[...pointers.values()][0]:null;};for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,end);
   canvas.addEventListener('wheel',e=>{e.preventDefault();const p=local(e);zoomMap(e.deltaY<0?1.3:1/1.3,p.x,p.y);},{passive:false});
   canvas.addEventListener('keydown',e=>{let handled=true;if(measureMode&&e.key==='Enter')measureAt(mapState.w/2,mapState.h/2);else if(['+','=','Add'].includes(e.key))zoomMap(1.5);else if(['-','Subtract'].includes(e.key))zoomMap(1/1.5);else if(e.key==='Home')fitStations();else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){if(e.key==='ArrowLeft')mapState.lon=wrapLon(mapState.lon-60/(mapState.cos*mapState.scale));if(e.key==='ArrowRight')mapState.lon=wrapLon(mapState.lon+60/(mapState.cos*mapState.scale));if(e.key==='ArrowUp')mapState.lat=Math.min(90,mapState.lat+60/mapState.scale);if(e.key==='ArrowDown')mapState.lat=Math.max(-90,mapState.lat-60/mapState.scale);queueMap();}else handled=false;if(handled)e.preventDefault();});
-  $('map-in').onclick=()=>zoomMap(1.5);$('map-out').onclick=()=>zoomMap(1/1.5);$('map-fit').onclick=fitStations;$('map-gps').onclick=locateOnMap;$('map-filter').onchange=()=>{renderMapChoices();fitStations();};$('map-station').onchange=()=>selectMapStation($('map-station').value,true);$('map-import').onclick=()=>{if(!busy&&db){$('map-file').value='';$('map-file').click();}};$('map-file').onchange=()=>importMapLayer($('map-file').files[0]);
+  $('map-in').onclick=()=>zoomMap(1.5);$('map-out').onclick=()=>zoomMap(1/1.5);$('map-fit').onclick=fitStations;$('map-new').onclick=()=>switchTab('new');$('map-gps').onclick=locateOnMap;$('map-filter').onchange=()=>{renderMapChoices();fitStations();};$('map-station').onchange=()=>selectMapStation($('map-station').value,true);$('map-import').onclick=()=>{if(!busy&&db){$('map-file').value='';$('map-file').click();}};$('map-file').onchange=()=>importMapLayer($('map-file').files[0]);
   new ResizeObserver(()=>queueMap()).observe(canvas);matchMedia('(prefers-color-scheme: dark)').addEventListener('change',queueMap);
 }
 
@@ -702,13 +878,17 @@ function renderCampaignManager(){
     const edit=element('button','Editar campaña');edit.onclick=()=>editCampaign(c);const archive=element('button',c.archived?'Reactivar campaña':'Archivar campaña');archive.onclick=()=>archiveCampaign(c).catch(e=>notify(friendlyError(e),true));row.append(edit,archive);card.append(row);$('campaign-list').append(card);}
   if(!campaigns.length)$('campaign-list').append(element('p','Crea una campaña para separar tus jornadas o proyectos.','hint'));
 }
-function editCampaign(c=null){$('campaign-error').textContent='';campaignEditing=c?{...c}:null;$('campaign-editor').reset();if(c)for(const key of ['name','area','start','end','description'])$('campaign-'+key).value=c[key]||'';$('campaign-save').textContent=c?'Guardar cambios de campaña':'Crear campaña';$('campaign-editor-title').textContent=c?'Editar campaña':'Nueva campaña';$('campaign-name').focus();}
-function openCampaignManager(){if(busy||photoBusy||!db)return;renderCampaignManager();editCampaign();$('campaign-dialog').showModal();}
+function clearCampaignError(){$('campaign-error').textContent='';for(const id of ['campaign-name','campaign-end']){$(id).removeAttribute('aria-invalid');$(id).removeAttribute('aria-describedby');}}
+function showCampaignError(message,id){$('campaign-error').textContent=message;if(id){$(id).setAttribute('aria-invalid','true');$(id).setAttribute('aria-describedby','campaign-error');$(id).focus();}}
+function editCampaign(c=null){clearCampaignError();campaignEditing=c?{...c}:null;$('campaign-editor').reset();if(c)for(const key of ['name','area','start','end','description'])$('campaign-'+key).value=c[key]||'';$('campaign-save').textContent=c?'Guardar cambios de campaña':'Crear campaña';$('campaign-editor-title').textContent=c?'Editar campaña':'Nueva campaña';$('campaign-name').focus();}
+function openCampaignManager(){if(busy||photoBusy||!db)return;renderCampaignManager();$('campaign-dialog').showModal();editCampaign();}
 async function saveCampaign(event){
   event.preventDefault();if(busy||photoBusy)return;const data={};for(const key of ['name','area','start','end','description'])data[key]=$('campaign-'+key).value.trim();
-  if(!data.name||data.name.length>120||data.area.length>200||data.description.length>2000||(data.start&&data.end&&data.start>data.end)){$('campaign-error').textContent='Escribe un nombre (hasta 120 caracteres) y un intervalo de fechas válido.';return;}
-  $('campaign-error').textContent='';$('campaign-save').disabled=true;
-  try{const expected=campaignEditing,uid=expected?.uid||newUID();await writeTransaction('meta',async tx=>{const meta=tx.objectStore('meta'),row=await request(meta.get('campaigns')),items=row?.value||[],old=items.find(c=>c.uid===uid);if(expected&&old?.revision!==expected.revision)throw new Error('La campaña cambió en otra pestaña. Cierra y vuelve a abrir Campañas.');if(items.some(c=>c.uid!==uid&&normalized(c.name)===normalized(data.name)))throw new Error('Ya existe una campaña con ese nombre.');const c={...old,...data,uid,archived:old?.archived||false,revision:(old?.revision||0)+1,updatedAt:new Date().toISOString()};meta.put({key:'campaigns',value:[...items.filter(c=>c.uid!==uid),c]});await bumpGeneration(meta);});await refresh();renderCampaignManager();editCampaign();if(!expected){$('campaign').value=uid;renderQuickEntry();markDirty();}notify('Campaña guardada en este dispositivo.');}catch(e){$('campaign-error').textContent=e.message;}finally{$('campaign-save').disabled=false;}
+  if(!data.name||data.name.length>120){showCampaignError('Escribe un nombre de hasta 120 caracteres.','campaign-name');return;}
+  if(data.start&&data.end&&data.start>data.end){showCampaignError('La fecha de fin debe ser igual o posterior a la de inicio.','campaign-end');return;}
+  if(data.area.length>200||data.description.length>2000){showCampaignError('Revisa la longitud de la zona y las notas de campaña.');return;}
+  clearCampaignError();$('campaign-save').disabled=true;
+  try{const expected=campaignEditing,uid=expected?.uid||newUID();await writeTransaction('meta',async tx=>{const meta=tx.objectStore('meta'),row=await request(meta.get('campaigns')),items=row?.value||[],old=items.find(c=>c.uid===uid);if(expected&&old?.revision!==expected.revision)throw new Error('La campaña cambió en otra pestaña. Cierra y vuelve a abrir Campañas.');if(items.some(c=>c.uid!==uid&&normalized(c.name)===normalized(data.name)))throw new Error('Ya existe una campaña con ese nombre.');const c={...old,...data,uid,archived:old?.archived||false,revision:(old?.revision||0)+1,updatedAt:new Date().toISOString()};meta.put({key:'campaigns',value:[...items.filter(c=>c.uid!==uid),c]});await bumpGeneration(meta);});await refresh();renderCampaignManager();editCampaign();if(!expected){$('campaign').value=uid;renderQuickEntry();markDirty();}notify('Campaña guardada en este dispositivo.');}catch(e){showCampaignError(e.message,e.message.includes('ese nombre')?'campaign-name':null);}finally{$('campaign-save').disabled=false;}
 }
 async function archiveCampaign(c){
   if(!confirm((c.archived?'¿Reactivar ':'¿Archivar ')+c.name+'? Sus estaciones y muestras se conservan.'))return;
@@ -785,7 +965,8 @@ function qualityIssues(r,context=qualityContext()){
   if(!Number.isFinite(r.lat)||!Number.isFinite(r.lon)||Math.abs(r.lat)>90||Math.abs(r.lon)>180)issues.push({key:'coordinates',text:'Faltan coordenadas válidas. Son obligatorias para guardar.'});
   if(!r.litologia?.trim())issues.push({key:'lithology',text:'Falta la litología. Es obligatoria para guardar.'});
   if(Number.isFinite(r.precision_m)&&r.precision_m>GPS_REVIEW_METERS)issues.push({key:'gps',text:'Precisión GPS ±'+Math.round(r.precision_m)+' m: supera el umbral de revisión de '+GPS_REVIEW_METERS+' m. Puedes intentar otra lectura.'});
-  if(r.tipo!=='otra'&&(r.rumbo==null||r.buzamiento==null))issues.push({key:'orientation',text:r.rumbo==null&&r.buzamiento==null?'Sin rumbo ni buzamiento registrados. Completa la medida si la tomaste.':'Orientación parcial: falta '+(r.rumbo==null?'rumbo':'buzamiento')+'.'});
+  const planar=measurementsForRecord(r).filter(m=>m.kind==='planar'&&m.feature===r.tipo),complete=planar.some(m=>Number.isFinite(m.strike)&&Number.isFinite(m.dip));
+  if(r.tipo!=='otra'&&!complete){const partial=planar.find(m=>Number.isFinite(m.strike)||Number.isFinite(m.dip));issues.push({key:'orientation',text:partial?'Orientación parcial: falta '+(!Number.isFinite(partial.strike)?'rumbo':'buzamiento')+'.':'Sin rumbo ni buzamiento registrados para la estructura principal. Completa la medida si la tomaste.'});}
   if(!hasFieldNotes(r.observaciones))issues.push({key:'notes',text:'Sin observaciones propias. Una guía vacía todavía requiere completar notas.'});
   for(const [i,s] of (r.samples||[]).entries()){
     if(!s.description.trim())issues.push({key:'sample-notes',text:'Muestra '+(s.code.trim()||i+1)+': sin descripción.'});
@@ -841,21 +1022,22 @@ const htmlEscape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 async function reportMap(records,m){const c=document.createElement('canvas');c.width=1100;c.height=760;const ctx=c.getContext('2d'),coords=records.map(r=>[r.lon,r.lat]);if(m){const b=m.bounds;coords.push([b.west,b.south],[b.east,b.north]);}const xs=coords.map(p=>((p[0]%360)+360)%360).sort((a,b)=>a-b);let gap=-1,start=xs[0];xs.forEach((x,i)=>{const next=xs[(i+1)%xs.length]+(i===xs.length-1?360:0);if(next-x>gap){gap=next-x;start=next%360;}});const span=360-gap,lon=wrapLon(start+span/2),south=Math.min(...coords.map(p=>p[1])),north=Math.max(...coords.map(p=>p[1])),lat=(south+north)/2,cos=Math.max(.02,Math.cos(lat*Math.PI/180)),scale=Math.min(950/Math.max(.005,span*cos),610/Math.max(.005,north-south)),project=(x,y)=>[550+wrapLon(x-lon)*cos*scale,380-(y-lat)*scale];ctx.fillStyle='#fbf7ec';ctx.fillRect(0,0,c.width,c.height);if(m){const img=await loadRaster(m.blob);const b=m.bounds,[x,y]=project(b.west,b.north),[x2,y2]=project(b.east,b.south);const width=(b.east-b.west)*cos*scale,world=360*cos*scale;for(const dx of [-world,0,world])if(x+dx+width>=0&&x+dx<=1100)ctx.drawImage(img,x+dx,y,width,y2-y);}ctx.strokeStyle='#9b9d8f';ctx.lineWidth=1;for(let i=0;i<11;i++){ctx.beginPath();ctx.moveTo(i*110,0);ctx.lineTo(i*110,760);ctx.stroke();}for(let i=0;i<8;i++){ctx.beginPath();ctx.moveTo(0,i*110);ctx.lineTo(1100,i*110);ctx.stroke();}ctx.textBaseline='middle';ctx.font='bold 23px monospace';for(const r of records){const [x,y]=project(r.lon,r.lat);ctx.fillStyle=lithologyColor(r.litologia);ctx.strokeStyle='#fbf7ec';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.lineWidth=6;ctx.strokeText(r.id,x+18,y-17);ctx.fillStyle='#222b2c';ctx.fillText(r.id,x+18,y-17);}ctx.fillStyle='#222b2c';ctx.font='bold 24px monospace';ctx.fillText('N ↑',1010,30);const meters=distanceMeters({lon,lat},{lon:wrapLon(lon+150/(cos*scale)),lat});ctx.fillStyle='#fbf7ec';ctx.fillRect(15,680,280,65);ctx.strokeStyle='#222b2c';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(30,700);ctx.lineTo(180,700);ctx.stroke();ctx.fillStyle='#222b2c';ctx.font='20px monospace';ctx.fillText('≈ '+mapDistance(meters),30,726);return c.toDataURL('image/png');}
 async function buildReport(snap,selection){const records=snap.records.filter(r=>campaignMatch(r,selection));if(!records.length)throw new Error('No hay estaciones guardadas para este informe.');const selectedCampaign=snap.campaigns.find(c=>c.uid===selection),title=selectedCampaign?.name||(selection==='none'?'Estaciones sin campaña':'Colección de campo'),demo=snap.campaigns.some(c=>c.description?.includes('[ESTRATO-DEMO]')&&records.some(r=>r.campaignUid===c.uid)),chosen=snap.baseMaps.find(m=>m.id===activeBaseMap&&(!m.campaignUid||selection===m.campaignUid||!selection))||snap.baseMaps.find(m=>m.campaignUid===selection),map=await reportMap(records,chosen),context=qualityContext(records),bagCount=records.reduce((n,r)=>n+(r.samples||[]).length,0),warnings=records.reduce((n,r)=>n+qualityIssues(r,context).length,0),esc=htmlEscape;
 const photosHTML=async(items,label)=>{const figs=[];for(let i=0;i<items.length;i++)figs.push('<figure><img alt="'+esc(label+' · Foto '+(i+1))+'" src="'+await toDataURL(items[i].blob)+'"><figcaption>'+esc(label+' · Foto '+(i+1))+'</figcaption></figure>');return figs.join('');};let details='';for(const r of records){const issues=qualityIssues(r,context),samples=[];for(const s of r.samples||[])samples.push('<section class="sample"><h3>'+esc(s.code)+' · '+esc(s.state)+'</h3><p class="notes">'+esc(s.description)+'</p><div class="photos">'+await photosHTML(s.photos,s.code)+'</div></section>');details+='<article class="station"><p class="eyebrow">'+esc(campaignName(r.campaignUid,snap.campaigns))+'</p><h2>'+esc(r.id)+' / '+esc(r.litologia)+'</h2><dl>'+[['Fecha',new Date(r.fecha).toLocaleString('es')],['Coordenadas WGS84',r.lat.toFixed(6)+', '+r.lon.toFixed(6)],['Altitud',r.alt==null?'Sin dato':r.alt+' m'],['Precisión GPS',r.precision_m==null?'Sin lectura GPS':'±'+r.precision_m+' m'],['Medida',r.tipo],['Rumbo / buzamiento',(r.rumbo??'—')+'° / '+(r.buzamiento??'—')+'°'],['Dirección de buzamiento',r.dir_buzamiento==null?'Sin dato':r.dir_buzamiento+'°']].map(([k,v])=>'<div><dt>'+esc(k)+'</dt><dd>'+esc(v)+'</dd></div>').join('')+'</dl><h3>Observaciones</h3><p class="notes">'+esc(r.observaciones||'Sin observaciones')+'</p>'+(issues.length?'<aside><b>Pendiente de revisar</b><ul>'+issues.map(i=>'<li>'+esc(i.text)+'</li>').join('')+'</ul></aside>':'')+'<div class="photos">'+await photosHTML(r.photos,r.id)+'</div>'+samples.join('')+'</article>';}
-return '<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+' · Estrato</title><style>'+REPORT_CSS+'</style><link rel="stylesheet" href="./interface.css"><body><div class="print-bar"><button onclick="window.print()">Imprimir / Guardar PDF</button><span>Informe autónomo · funciona sin conexión</span></div><main><header><p class="eyebrow">ESTRATO / CUADERNO DE CAMPO</p><h1>'+esc(title)+'</h1><p>Generado: '+esc(new Date().toLocaleString('es'))+'</p>'+((demo)?'<aside><b>DEMOSTRACIÓN</b> · Incluye datos, fotografías y mapa ficticios de entrenamiento. No usar los registros DEMO para navegación ni interpretación geológica.</aside>':'')+'<p>'+esc(selectedCampaign?.area||'Estaciones seleccionadas')+'</p><p class="notes">'+esc((selectedCampaign?.description||'').replace('[ESTRATO-DEMO]',''))+'</p></header><section class="overview"><p class="stats">'+records.length+' estaciones / '+bagCount+' muestras / '+warnings+' avisos</p><h2>Ubicación de estaciones</h2><img class="map" src="'+map+'" alt="Mapa de las estaciones del informe"><p class="small">WGS84 · Norte arriba · Escala aproximada · '+(chosen?'Fondo: '+esc(chosen.name)+' · Fuente: '+esc(chosen.source)+'<br>Bordes O/E/S/N: '+esc([chosen.bounds.west,chosen.bounds.east,chosen.bounds.south,chosen.bounds.north].join(' / ')):'Sin mapa base; distribución de puntos sobre cuadrícula.')+' · Las capas GeoJSON de referencia no se incluyen.</p><h2>Índice de estaciones</h2><table><thead><tr><th>ID</th><th>Litología</th><th>Medida</th><th>Muestras</th></tr></thead><tbody>'+records.map(r=>'<tr><td>'+esc(r.id)+'</td><td>'+esc(r.litologia)+'</td><td>'+esc(r.tipo)+'<br>'+esc(r.rumbo??'—')+' / '+esc(r.buzamiento??'—')+'°</td><td>'+esc((r.samples||[]).map(s=>s.code).join(', ')||'—')+'</td></tr>').join('')+'</tbody></table><p class="small">Solo incluye estaciones guardadas de la selección. Borradores, papelera y versiones anteriores quedan en el respaldo JSON. Los avisos orientan la revisión y no certifican exactitud. Se incluyen todas las fotografías de estaciones y muestras.</p></section>'+reportRoses(records)+details+'<footer>Estrato v1.9 · Informe local · Sin servicios externos</footer></main></body></html>';
+return '<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+' · Estrato</title><style>'+REPORT_CSS+'</style><body><div class="print-bar"><button onclick="window.print()">Imprimir / Guardar PDF</button><span>Informe autónomo · funciona sin conexión</span></div><main><header><p class="eyebrow">ESTRATO / CUADERNO DE CAMPO</p><h1>'+esc(title)+'</h1><p>Generado: '+esc(new Date().toLocaleString('es'))+'</p>'+((demo)?'<aside><b>DEMOSTRACIÓN</b> · Incluye datos, fotografías y mapa ficticios de entrenamiento. No usar los registros DEMO para navegación ni interpretación geológica.</aside>':'')+'<p>'+esc(selectedCampaign?.area||'Estaciones seleccionadas')+'</p><p class="notes">'+esc((selectedCampaign?.description||'').replace('[ESTRATO-DEMO]',''))+'</p></header><section class="overview"><p class="stats">'+records.length+' estaciones / '+bagCount+' muestras / '+warnings+' avisos</p><h2>Ubicación de estaciones</h2><img class="map" src="'+map+'" alt="Mapa de las estaciones del informe"><p class="small">WGS84 · Norte arriba · Escala aproximada · '+(chosen?'Fondo: '+esc(chosen.name)+' · Fuente: '+esc(chosen.source)+'<br>Bordes O/E/S/N: '+esc([chosen.bounds.west,chosen.bounds.east,chosen.bounds.south,chosen.bounds.north].join(' / ')):'Sin mapa base; distribución de puntos sobre cuadrícula.')+' · Las capas GeoJSON de referencia no se incluyen.</p><h2>Índice de estaciones</h2><table><thead><tr><th>ID</th><th>Litología</th><th>Mediciones</th><th>Muestras</th></tr></thead><tbody>'+records.map(r=>'<tr><td>'+esc(r.id)+'</td><td>'+esc(r.litologia)+'</td><td>'+measurementsForRecord(r).length+'<br>'+esc(r.tipo)+' · '+esc(r.rumbo??'—')+' / '+esc(r.buzamiento??'—')+'°</td><td>'+esc((r.samples||[]).map(s=>s.code).join(', ')||'—')+'</td></tr>').join('')+'</tbody></table><p class="small">Solo incluye estaciones guardadas de la selección. Borradores, papelera y versiones anteriores quedan en el respaldo JSON. Los avisos orientan la revisión y no certifican exactitud. Se incluyen todas las fotografías de estaciones y muestras.</p></section>'+reportRoses(records)+details+'<footer>Estrato v1.11 · Informe local · Sin servicios externos</footer></main></body></html>';
 }
 const REPORT_CSS=`*{box-sizing:border-box}body{margin:0;background:#e9e2d2;color:#222b2c;font:16px/1.5 system-ui,sans-serif}.print-bar{padding:14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:#202b2d;color:#fbf7ec}.print-bar button{min-height:52px;padding:10px 20px;font:700 16px system-ui;background:#fbf7ec;color:#222b2c;border:0}main{max-width:850px;margin:20px auto;padding:36px;background:#fbf7ec}h1,h2,h3{font-family:Georgia,serif;line-height:1.2}h1{font-size:38px;overflow-wrap:anywhere}h2{font-size:26px;overflow-wrap:anywhere}h3{font-size:20px}.eyebrow{font:700 12px monospace;letter-spacing:1px;color:#9f3d25}.stats{padding:18px;border-top:3px solid #9f3d25;border-bottom:1px solid #222b2c;font:700 18px monospace}.map{width:100%;height:auto;display:block;border:1px solid #222b2c}table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:10px 6px;border-bottom:1px solid #cabfa7;text-align:left;overflow-wrap:anywhere}th{background:#dfdecd}dl{display:grid;grid-template-columns:1fr 1fr;gap:12px}dl>div{border-bottom:1px solid #cabfa7;padding-bottom:8px}dt{font:700 11px monospace;text-transform:uppercase}dd{margin:5px 0;overflow-wrap:anywhere}.notes{white-space:pre-wrap;overflow-wrap:anywhere}.small,figcaption,footer{font-size:11px;overflow-wrap:anywhere}aside{border-left:4px solid #9f3d25;background:#dfdecd;padding:15px;margin:20px 0}aside li{overflow-wrap:anywhere}.station{margin-top:40px;padding-top:16px;border-top:3px solid #9f3d25}.sample{margin:25px 0;border-left:4px solid #d5ac59;padding-left:16px}.photos{display:grid;grid-template-columns:1fr 1fr;gap:16px}figure{margin:12px 0;break-inside:avoid}figure img{max-width:100%;max-height:260px;display:block;object-fit:contain}.overview{margin-bottom:30px}.analysis{break-before:page}.report-rose{break-inside:avoid;margin:24px 0}.rose-img{width:100%;max-height:105mm;object-fit:contain;display:block}footer{margin-top:30px;border-top:1px solid #cabfa7;padding-top:15px}@media(max-width:500px){main{padding:20px}dl,.photos{grid-template-columns:1fr}table{table-layout:fixed;font-size:11px}}@page{size:A4;margin:16mm}@media print{body{background:white;font-size:11pt;print-color-adjust:exact;-webkit-print-color-adjust:exact}.print-bar{display:none}main{margin:0;padding:0;max-width:none;background:white}.station{break-before:page;margin-top:0}h1,h2,h3,dt{break-after:avoid}dl>div,thead,tr,figure,aside{break-inside:avoid}.map{max-height:110mm;object-fit:contain}.photos{grid-template-columns:1fr 1fr}figure img{max-height:65mm}table{font-size:9pt}.stats{font-size:12pt}}`;
 async function exportReport(){if(busy||photoBusy||!db)return;setBusy(true);notify('Preparando informe con mapa y fotos…');try{await persistDraft();const html=await buildReport(await snapshot(),$('export-campaign').value);download(new Blob([html],{type:'text/html;charset=utf-8'}),'informe-estrato-'+fileStamp()+'.html');notify('Informe descargado. Ábrelo y usa «Imprimir / Guardar PDF». Conserva también el respaldo JSON.');}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}}
 
 // Explicit, additive demo: never clears records, drafts, history or photos.
-// Axial strike frequencies: each record counted once; opposite petals are mirrors.
+// Axial strike frequencies: each planar reading counts once; opposite petals are mirrors.
 const PLANAR_TYPES=TYPES.filter(t=>t!=='otra');
 function roseData(records,binSize=10,type='planar'){
   if(![10,15,30].includes(binSize))throw new Error('Intervalo de rosa inválido.');
   if(type!=='planar'&&!TYPES.includes(type))throw new Error('Tipo de estructura inválido.');
-  const considered=records.filter(r=>type==='planar'?PLANAR_TYPES.includes(r.tipo):r.tipo===type),valid=considered.filter(r=>typeof r.rumbo==='number'&&Number.isFinite(r.rumbo)&&r.rumbo>=0&&r.rumbo<=360),bins=Array.from({length:180/binSize},(_,i)=>({start:i*binSize,end:(i+1)*binSize,count:0,ids:[]}));
-  for(const r of valid){const angle=r.rumbo%180,bin=bins[Math.min(bins.length-1,Math.floor(angle/binSize))];bin.count++;bin.ids.push(r.id);}
+  const considered=[];for(const record of records)measurementsForRecord(record).forEach((measurement,index)=>{if(measurement.kind==='planar'&&(type==='planar'?PLANAR_TYPES.includes(measurement.feature):measurement.feature===type))considered.push({record,measurement,index});});
+  const valid=considered.filter(item=>typeof item.measurement.strike==='number'&&Number.isFinite(item.measurement.strike)&&item.measurement.strike>=0&&item.measurement.strike<=360),bins=Array.from({length:180/binSize},(_,i)=>({start:i*binSize,end:(i+1)*binSize,count:0,ids:[]}));
+  for(const item of valid){const angle=item.measurement.strike%180,bin=bins[Math.min(bins.length-1,Math.floor(angle/binSize))];bin.count++;bin.ids.push(item.record.id+' · M'+String(item.index+1).padStart(2,'0'));}
   for(const bin of bins)bin.ids.sort((a,b)=>a.localeCompare(b,'es',{numeric:true}));
-  return {bins,binSize,type,n:valid.length,missing:considered.length-valid.length,considered:considered.length,excludedType:records.length-considered.length,max:Math.max(0,...bins.map(b=>b.count))};
+  const represented=new Set(considered.map(item=>item.record.id));return {bins,binSize,type,n:valid.length,missing:considered.length-valid.length,considered:considered.length,excludedType:records.length-represented.size,max:Math.max(0,...bins.map(b=>b.count))};
 }
 function roseTypeLabel(type){return type==='planar'?'Todas las estructuras de plano':type.charAt(0).toUpperCase()+type.slice(1);}
 function roseInterval(b){return b.start+'–'+b.end+'° / '+(b.start+180)+'–'+(b.end+180)+'°';}
@@ -873,11 +1055,13 @@ function drawRose(canvas,data,caption='',palette=null){
 function roseConclusion(data){if(!data.n)return 'Registra un rumbo válido para empezar. Los campos vacíos no se cuentan como 0°.';const winners=data.bins.filter(b=>b.count===data.max),names=winners.slice(0,3).map(roseInterval);return (winners.length===1?'Intervalo con más medidas: ':'Intervalos empatados: ')+names.join('; ')+(winners.length>3?' y '+(winners.length-3)+' más':'')+' · '+data.max+' de '+data.n+' medidas por intervalo.'+(data.n<5?' Pocas medidas: úsalo como descripción del registro, sin inferir una tendencia regional.':' Cambiar el ancho de los intervalos puede cambiar el pico.');}
 function roseCaption(){const value=$('map-campaign').value;return (value?campaignName(value==='none'?null:value):'Todas las campañas')+' / '+($('map-filter').value||'Todas las litologías');}
 function currentRose(){return roseData(mapPoints(),Number($('rose-bin').value),$('rose-type').value);}
-function renderRose(){const data=currentRose(),canvas=$('rose-canvas');canvas.width=600;canvas.height=620;drawRose(canvas,data);canvas.setAttribute('aria-label','Rosa de rumbos axial. '+roseTypeLabel(data.type)+'. '+data.n+' medidas; '+data.missing+' sin rumbo válido. '+roseConclusion(data));$('rose-summary').textContent=data.n+' rumbos válidos · '+data.missing+' sin rumbo válido · '+data.excludedType+' fuera del tipo elegido';$('rose-result').textContent=roseConclusion(data);const rows=data.bins.map(b=>{const tr=element('tr');for(const v of [roseInterval(b),b.count,data.n?(100*b.count/data.n).toLocaleString('es',{maximumFractionDigits:1})+' %':'—',b.ids.join(', ')||'—'])tr.append(element('td',String(v)));return tr;});$('rose-table').replaceChildren(...rows);$('export-rose').disabled=!data.n||busy;$('export-rose-csv').disabled=!data.n||busy;}
-function roseCSV(data,caption){return '\uFEFF'+[['seleccion','tipo','intervalo_grados','desde_grados','hasta_grados_excluido','opuesto_desde','opuesto_hasta_excluido','recuento','porcentaje','estaciones'],...data.bins.map(b=>[caption,roseTypeLabel(data.type),data.binSize,b.start,b.end,b.start+180,b.end+180,b.count,data.n?(100*b.count/data.n).toFixed(6):0,b.ids.join(';')])].map(row=>row.map(v=>csvCell(v,true)).join(',')).join('\r\n');}
+function renderRose(){const data=currentRose(),canvas=$('rose-canvas');canvas.width=600;canvas.height=620;drawRose(canvas,data);canvas.setAttribute('aria-label','Rosa de rumbos axial. '+roseTypeLabel(data.type)+'. '+data.n+' lecturas; '+data.missing+' sin rumbo válido. '+roseConclusion(data));$('rose-summary').textContent=data.n+' rumbos válidos · '+data.missing+' sin rumbo válido · '+data.excludedType+' estaciones sin lecturas del tipo';$('rose-result').textContent=roseConclusion(data);const rows=data.bins.map(b=>{const tr=element('tr');for(const v of [roseInterval(b),b.count,data.n?(100*b.count/data.n).toLocaleString('es',{maximumFractionDigits:1})+' %':'—',b.ids.join(', ')||'—'])tr.append(element('td',String(v)));return tr;});$('rose-table').replaceChildren(...rows);$('export-rose').disabled=!data.n||busy;$('export-rose-csv').disabled=!data.n||busy;}
+function roseCSV(data,caption){return '\uFEFF'+[['seleccion','tipo','intervalo_grados','desde_grados','hasta_grados_excluido','opuesto_desde','opuesto_hasta_excluido','recuento','porcentaje','lecturas'],...data.bins.map(b=>[caption,roseTypeLabel(data.type),data.binSize,b.start,b.end,b.start+180,b.end+180,b.count,data.n?(100*b.count/data.n).toFixed(6):0,b.ids.join(';')])].map(row=>row.map(v=>csvCell(v,true)).join(',')).join('\r\n');}
 async function exportRose(kind){if(busy||photoBusy||!db)return;setBusy(true);try{const data=currentRose(),caption=roseCaption();if(!data.n)throw new Error('No hay rumbos para exportar.');if(kind==='csv')download(new Blob([roseCSV(data,caption)],{type:'text/csv;charset=utf-8'}),'rumbos-'+fileStamp()+'.csv');else{const c=document.createElement('canvas');c.width=1200;c.height=1240;drawRose(c,data,caption,{paper:'#fbf7ec',ink:'#222b2c',line:'#9b9d8f',accent:'#9f3d25',muted:'#58605a'});download(await rasterBlob(c),'rosa-rumbos-'+fileStamp()+'.png');}notify('Rosa exportada con '+data.n+' medidas de la selección actual.');}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);renderRose();}}
 function reportRoses(records){let content='';for(const type of PLANAR_TYPES){const data=roseData(records,10,type);if(!data.considered)continue;const c=document.createElement('canvas');c.width=900;c.height=930;drawRose(c,data,'',{paper:'#ffffff',ink:'#222b2c',line:'#9b9d8f',accent:'#9f3d25',muted:'#58605a'});content+='<section class="report-rose"><h3>'+htmlEscape(roseTypeLabel(type))+'</h3><img class="rose-img" src="'+c.toDataURL('image/png')+'" alt="'+htmlEscape('Rosa axial de '+type+', '+data.n+' rumbos válidos')+'"><p class="small">'+data.n+' rumbos válidos / '+data.missing+' sin rumbo válido. '+htmlEscape(roseConclusion(data))+'</p></section>';}
-  return content?'<section class="analysis"><h2>Distribución de rumbos</h2><p class="small">Rosas axiales por tipo de plano; intervalos de 10°. Cada estación cuenta una vez. Sectores opuestos reflejados: 0° y 180° equivalen. Área proporcional al recuento. Sin datos inventados ni interpretación de esfuerzos; Otra no se incluye.</p>'+content+'</section>':'';
+  let measurementContent='';for(const record of records){const readings=measurementsForRecord(record);if(!readings.length)continue;measurementContent+='<article class="sample"><h3>'+htmlEscape(record.id)+' · '+htmlEscape(record.litologia)+'</h3>';for(const [index,m] of readings.entries()){const kind=m.kind==='planar'?'Plano':'Lineación',angles=m.kind==='planar'?'Rumbo '+(m.strike??'—')+'° · Buzamiento '+(m.dip??'—')+'° · Dirección '+(m.dipDirection??'—')+'°':'Tendencia '+(m.trend??'—')+'° · Inmersión '+(m.plunge??'—')+'°',methods={compass:'Brújula / clinómetro',phone:'Sensor del teléfono',map:'Mapa o imagen',other:'Otro método','not-recorded':'No registrado'},qualities={unassessed:'Sin evaluar',good:'Buena exposición / lectura',fair:'Aceptable con limitaciones',poor:'Baja confianza'},evidence=(m.photoIds||[]).map(id=>record.photos.findIndex(p=>p.id===id)+1).filter(n=>n>0).map(n=>'Foto '+String(n).padStart(2,'0')).join(', ');measurementContent+='<div class="sample"><b>M'+String(index+1).padStart(2,'0')+' · '+htmlEscape(kind+' · '+m.feature)+'</b><p>'+htmlEscape(angles)+'</p><p class="small">'+htmlEscape((methods[m.method]||m.method)+' · '+(qualities[m.quality]||m.quality)+(evidence?' · Evidencia: '+evidence:''))+'</p>'+(m.notes?'<p class="notes">'+htmlEscape(m.notes)+'</p>':'')+'</div>'; }measurementContent+='</article>';}
+  const roses=content?'<section class="analysis"><h2>Distribución de rumbos</h2><p class="small">Rosas axiales por tipo de plano; intervalos de 10°. Cada lectura planar cuenta una vez; una estación puede aportar varias. Sectores opuestos reflejados: 0° y 180° equivalen. Área proporcional al recuento. Sin datos inventados ni interpretación de esfuerzos; Otra no se incluye.</p>'+content+'</section>':'';
+  return roses+(measurementContent?'<section class="analysis"><h2>Mediciones estructurales por estación</h2><p class="small">Las referencias de evidencia apuntan a la galería de fotografías incluida en cada ficha.</p>'+measurementContent+'</section>':'');
 }
 $('rose-type').onchange=$('rose-bin').onchange=renderRose;$('structural-tools').addEventListener('toggle',()=>{if($('structural-tools').open)renderRose();});$('export-rose').onclick=()=>exportRose('png');$('export-rose-csv').onclick=()=>exportRose('csv');matchMedia('(prefers-color-scheme: dark)').addEventListener('change',renderRose);
 
@@ -887,7 +1071,9 @@ async function loadDemo(){if(busy||photoBusy||!db)return;setBusy(true);try{const
 $('basemap-form').onsubmit=importBaseMap;$('basemap-select').onchange=()=>{activeBaseMap=$('basemap-select').value;renderBaseMaps();saveBaseMapView();};$('basemap-opacity').oninput=queueMap;$('basemap-opacity').onchange=saveBaseMapView;$('basemap-fit').onclick=fitBaseMap;$('basemap-remove').onclick=async()=>{const m=selectedBaseMap();if(!m||busy||photoBusy||!confirm('¿Retirar «'+m.name+'»? Guarda un respaldo primero. Las estaciones se conservan.'))return;setBusy(true);try{await mutateBaseMaps(items=>items.filter(x=>x.id!==m.id));await readBaseMaps();await saveBaseMapView();await updateStorage();}catch(e){notify(friendlyError(e),true);}finally{setBusy(false);}};$('map-measure').onclick=setMeasureMode;$('export-report').onclick=exportReport;$('load-demo').onclick=loadDemo;
 
 $('reuse-last').onclick=()=>{const source=previousFieldStation();if(source)reuseGeology(source.id);};$('field-template').onchange=()=>{renderTemplate();markDirty();};$('insert-guide').onclick=insertTemplateGuide;$('quality-filter').onchange=renderList;$('campaign').addEventListener('change',()=>{renderQuickEntry();scheduleQuality();});
-$('station-form').addEventListener('input',markDirty);
+$('station-form').addEventListener('input',event=>{syncMeasurementInput(event,'input');markDirty();});
+$('station-form').addEventListener('change',event=>{syncMeasurementInput(event,'change');markDirty();});
+$('add-measurement').onclick=addMeasurement;
 ['lat','lon'].forEach(id=>$(id).addEventListener('input',()=>{$('precision_m').value='';$('gps-status').textContent='Coordenadas manuales · Precisión GPS no aplicable.';}));
 $('station-form').addEventListener('submit',e=>{e.preventDefault();submitStation();});
 $('save-as-new').onclick=()=>submitStation(true);
