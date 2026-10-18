@@ -308,4 +308,3 @@ El caché actual es **v1.8.0**. Con conexión, usa **Exportar → Buscar actuali
 
 ## Interfaz v1.9
 Navegación lateral en computador, formulario en dos columnas, controles táctiles y nueva paleta azul petróleo. En celular conserva navegación inferior y una columna. La hoja interface.css se incluye en el caché offline. Revisión visual en Chrome a 1440 y 390 píxeles; sensores físicos y flujos de datos no se volvieron a probar en esta actualización.
-
