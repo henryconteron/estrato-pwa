@@ -1,0 +1,9 @@
+# Entornos y resultados locales; no forman parte de la publicación.
+node_modules/
+work/
+tmp/
+test-results/
+playwright-report/
+__pycache__/
+*.log
+estrato-pwa.zip

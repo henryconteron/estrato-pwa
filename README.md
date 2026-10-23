@@ -59,6 +59,18 @@ Abre `http://127.0.0.1:8000/`. El modo offline y los sensores requieren HTTPS o 
 
 El recorrido automatizado está en [`tests/field-workflow.e2e.cjs`](./tests/field-workflow.e2e.cjs). Requiere Chrome y `playwright-core`, un servidor local en el puerto 8767 y un perfil de navegador aislado. La app en sí no depende de Playwright.
 
+## Actualizar la app
+
+Con conexión, abre **Exportar → Buscar actualización → Aplicar actualización**. Guarda primero los cambios del formulario y espera **«Lista para usar offline»** antes de desconectarte. El caché actual es **v1.11.1**; actualizar la interfaz conserva los registros de IndexedDB. Mantén un respaldo JSON externo.
+
+## Publicación y archivos vigentes
+
+GitHub Pages publica la rama `main` desde la raíz del repositorio, con HTTPS. Los archivos actuales de la app son `index.html`, `interface.css`, `manifest.webmanifest`, `sw.js`, los iconos de 192/512 px, `estrato-banner-v2.png` y `estrato-logo-v2.png`. El sufijo `v2` de las imágenes identifica los recursos vigentes y sigue referenciado por la app.
+
+Se conservan las pruebas y la documentación actuales; las copias de versiones anteriores, perfiles de navegador, capturas y resultados temporales quedan fuera de la entrega. El historial de Git permite consultar cambios anteriores sin duplicar archivos en la versión publicada.
+
+Verificación del 23 de octubre de 2026: el recorrido automatizado pasó carga, validación, varias mediciones con evidencia fotográfica, edición, CSV, GeoJSON, ZIP, informe, respaldo/restauración, persistencia, recarga offline y ancho móvil. Estas pruebas usan datos sintéticos en perfiles aislados.
+
 ## Autor y créditos
 
 **Henry Conteron** — idea, dirección del producto y desarrollo de Estrato. [Perfil de GitHub](https://github.com/henryconteron).
